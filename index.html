@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frontend Lecture</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f8f9fc;
+  --card: #ffffff;
+  --primary: #4361ee;
+  --primary-light: #eef2ff;
+  --primary-dark: #3730a3;
+  --text: #1e293b;
+  --sub: #64748b;
+  --muted: #94a3b8;
+  --border: #e2e8f0;
+  --radius: 14px;
+}
+body {
+  font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* 헤더 */
+header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  text-align: center;
+  padding: 60px 20px 50px;
+}
+header h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
+header p  { font-size: 15px; opacity: 0.85; }
+.header-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-top: 16px;
+  font-weight: 500;
+}
+
+/* 메인 */
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+
+/* 섹션 타이틀 */
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+/* 카드 그리드 */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--primary);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.card:hover::before { opacity: 1; }
+
+.card-icon { font-size: 28px; }
+.card-title { font-size: 16px; font-weight: 700; }
+.card-desc  { font-size: 13px; color: var(--sub); line-height: 1.6; }
+.card-tags  { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.tag {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-weight: 500;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+/* 준비중 카드 */
+.card.soon {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.card.soon::after {
+  content: '준비중';
+  position: absolute;
+  top: 14px; right: 14px;
+  font-size: 11px;
+  background: var(--border);
+  color: var(--muted);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* 푸터 */
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 24px;
+  border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Frontend Lecture</h1>
+  <p>HTML/CSS 프론트엔드 강의자료 & 퀴즈 모음</p>
+  <div class="header-badge">imjinhee · GitHub Pages</div>
+</header>
+
+<main>
+
+  <!-- CSS Grid -->
+  <div class="section-label">CSS GRID</div>
+  <div class="card-grid">
+    <a class="card" href="grid/grid-lecture.html">
+      <div class="card-icon">📐</div>
+      <div class="card-title">CSS Grid 강의자료</div>
+      <div class="card-desc">display: grid부터 grid-template-areas, auto-fill/fit, 실습 예제까지 인터랙티브 슬라이더로 배워요.</div>
+      <div class="card-tags">
+        <span class="tag">강의자료</span>
+        <span class="tag">인터랙티브</span>
+        <span class="tag">9 챕터</span>
+      </div>
+    </a>
+    <a class="card" href="grid/css-grid-quiz.html">
+      <div class="card-icon">📝</div>
+      <div class="card-title">CSS Grid 퀴즈</div>
+      <div class="card-desc">오늘 배운 Grid 개념을 15문제로 확인해보세요. 힌트, 해설, 점수까지 제공해요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+        <span class="tag">15문제</span>
+        <span class="tag">해설 포함</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- CSS Flex -->
+  <div class="section-label">CSS FLEX</div>
+  <div class="card-grid">
+    <a class="card" href="flex/flex-lecture.html">
+      <div class="card-icon">🎯</div>
+      <div class="card-title">CSS Flex 강의자료</div>
+      <div class="card-desc">1차원 레이아웃의 모든 것. flex-direction, justify-content, align-items 등을 인터랙티브하게 배워요.</div>
+      <div class="card-tags">
+        <span class="tag">강의자료</span>
+        <span class="tag">인터랙티브</span>
+      </div>
+    </a>
+    <a class="card" href="flex/css-flex-quiz.html">
+      <div class="card-icon">📝</div>
+      <div class="card-title">CSS Flex 퀴즈</div>
+      <div class="card-desc">Flex 핵심 개념을 문제로 확인해보세요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+        <span class="tag">해설 포함</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- CSS Position -->
+  <div class="section-label">CSS POSITION</div>
+  <div class="card-grid">
+    <a class="card" href="position/position-lecture.html">
+      <div class="card-icon">📌</div>
+      <div class="card-title">CSS Position 강의자료</div>
+      <div class="card-desc">static, relative, absolute, fixed, sticky의 차이를 시각적으로 이해해요.</div>
+      <div class="card-tags">
+        <span class="tag">강의자료</span>
+        <span class="tag">인터랙티브</span>
+      </div>
+    </a>
+    <a class="card" href="position/css-position-quiz.html">
+      <div class="card-icon">📝</div>
+      <div class="card-title">CSS Position 퀴즈</div>
+      <div class="card-desc">Position 핵심 개념을 문제로 확인해보세요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+        <span class="tag">해설 포함</span>
+      </div>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  © 2025 imjinhee · Frontend Lecture
+</footer>
+
+</body>
+</html>
