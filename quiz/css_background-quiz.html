@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Background CSS 퀴즈</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f0f4f8;
+      color: #1e293b;
+      min-height: 100vh;
+      padding: 40px 20px 80px;
+    }
+
+    header {
+      max-width: 680px;
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+
+    header .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #4361ee, #3a0ca3);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 99px;
+      margin-bottom: 14px;
+    }
+
+    header h1 {
+      font-size: clamp(20px, 4vw, 30px);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #0f172a;
+    }
+
+    header h1 span {
+      background: linear-gradient(90deg, #4361ee, #7209b7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 300;
+    }
+
+    .progress-wrap {
+      max-width: 680px;
+      margin: 0 auto 20px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .prog-bg {
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .prog-fill {
+      height: 100%;
+      background: #4361ee;
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    .card {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px 32px 24px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      border: 1px solid #e2e8f0;
+    }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .q-num {
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .q-cat {
+      font-size: 11px;
+      color: #3730a3;
+      background: #eef2ff;
+      border-radius: 99px;
+      padding: 2px 10px;
+      font-weight: 600;
+    }
+
+    .q-text {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      word-break: keep-all;
+      color: #0f172a;
+    }
+
+    .q-text code {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      padding: 1px 7px;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+      color: #4361ee;
+    }
+
+    .hint-box {
+      border-left: 3px solid #4361ee;
+      background: #eef2ff;
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #3730a3;
+      line-height: 1.6;
+      margin-bottom: 18px;
+      word-break: keep-all;
+    }
+
+    .hint-box strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #4361ee;
+    }
+
+    .code-block {
+      background: #1e1e2e;
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #cdd6f4;
+      line-height: 1.7;
+      margin-bottom: 18px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .opt-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Noto Sans KR', sans-serif;
+      color: #1e293b;
+      text-align: left;
+      transition: all 0.18s;
+      width: 100%;
+    }
+
+    .opt-btn:hover:not(:disabled) { background: #eef2ff; border-color: #4361ee; }
+    .opt-btn.correct { background: #f0fdf4; border-color: #16a34a; color: #15803d; }
+    .opt-btn.wrong   { background: #fef2f2; border-color: #dc2626; color: #b91c1c; }
+    .opt-btn:disabled { cursor: default; }
+
+    .opt-key {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      font-size: 11px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      color: #475569;
+      transition: background 0.18s;
+    }
+
+    .opt-btn.correct .opt-key { background: #16a34a; color: #fff; }
+    .opt-btn.wrong   .opt-key { background: #dc2626; color: #fff; }
+
+    .explanation {
+      display: none;
+      padding: 14px 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #475569;
+      margin-bottom: 20px;
+      word-break: keep-all;
+    }
+
+    .explanation.show { display: block; }
+    .explanation strong { display: block; margin-bottom: 4px; color: #1e293b; }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-center {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .nav-btn {
+      padding: 10px 22px;
+      border-radius: 10px;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .nav-btn:hover:not(:disabled) { border-color: #4361ee; color: #ffffff;  }
+    .nav-btn:disabled { opacity: 0.35; cursor: default; }
+
+    .nav-btn.primary {
+      background: #4361ee;
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .nav-btn.primary:hover:not(:disabled) { opacity: 0.88; }
+
+    .score-box {
+      display: none;
+      max-width: 680px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px 32px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+
+    .score-box h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: #0f172a; }
+
+    .score-pct {
+      font-size: 56px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #4361ee, #7209b7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+
+    .score-msg { color: #64748b; margin-top: 8px; font-size: 15px; }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 28px 0;
+    }
+
+    .score-grid div {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 8px;
+    }
+
+    .score-grid .num { font-size: 28px; font-weight: 700; }
+    .score-grid .lbl { font-size: 12px; color: #64748b; margin-top: 4px; }
+    .score-grid .num.c { color: #16a34a; }
+    .score-grid .num.w { color: #dc2626; }
+    .score-grid .num.s { color: #f59e0b; }
+
+    .retry-btn {
+      padding: 13px 36px;
+      background: linear-gradient(135deg, #4361ee, #7209b7);
+      color: #fff;
+      border: none;
+      border-radius: 99px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .retry-btn:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">CSS Background Quiz</div>
+  <h1><span>Background</span> 속성 퀴즈</h1>
+  <p>background-image · repeat · position · size · attachment · 단축표기</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-info">
+    <span id="prog-label">1 / 10</span>
+    <span id="prog-pct">0%</span>
+  </div>
+  <div class="prog-bg"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<div class="card" id="qa"></div>
+<div class="score-box" id="score-box"></div>
+
+<script>
+const Q = [
+  {
+    cat: 'background-repeat',
+    q: '<code>background-repeat: repeat-x</code>를 적용하면 배경 이미지가 어떻게 반복되나요?',
+    hint: 'x축은 가로 방향, y축은 세로 방향입니다.',
+    code: null,
+    opts: [
+      '가로 방향으로만 반복된다',
+      '세로 방향으로만 반복된다',
+      '가로, 세로 모두 반복된다',
+      '반복 없이 한 번만 표시된다'
+    ],
+    ans: 0,
+    ex: 'repeat-x는 x축(가로) 방향으로만 반복됩니다. 세로 반복은 repeat-y, 반복 없음은 no-repeat, 기본값은 repeat(가로세로 모두 반복)입니다.'
+  },
+  {
+    cat: 'background-attachment',
+    q: '<code>background-attachment: fixed</code>와 기본값의 차이는?',
+    hint: '스크롤할 때 배경 이미지가 어떻게 움직이는지 생각해보세요.',
+    code: 'body {\n  background-attachment: fixed;\n  /* 기본값은 scroll */\n}',
+    opts: [
+      'fixed는 배경이 요소에 고정되어 스크롤해도 움직이지 않고, scroll은 페이지와 함께 움직인다',
+      'fixed는 배경이 페이지와 함께 스크롤되고, scroll은 고정된다',
+      'fixed는 배경 이미지를 고정 크기로 만들고, scroll은 반응형으로 만든다',
+      '차이가 없다'
+    ],
+    ans: 0,
+    ex: 'background-attachment: fixed는 배경이 뷰포트에 고정되어 스크롤해도 배경이 움직이지 않는 패럴랙스 효과를 만듭니다. 기본값인 scroll은 배경이 콘텐츠와 함께 스크롤됩니다.'
+  },
+  {
+    cat: 'background-size',
+    q: '<code>background-size: cover</code>의 동작으로 올바른 것은?',
+    hint: 'cover는 요소를 빈틈없이 덮는 것이 목표입니다.',
+    code: 'div {\n  width: 500px;\n  height: 500px;\n  background-size: cover;\n}',
+    opts: [
+      '이미지를 원본 크기로 표시한다',
+      '이미지 전체가 요소 안에 들어오도록 축소한다',
+      '이미지가 잘리더라도 요소를 빈틈없이 채운다',
+      '이미지를 요소 너비에 맞게 늘리고 세로는 auto로 처리한다'
+    ],
+    ans: 2,
+    ex: 'cover는 가로세로 비율을 유지하면서 요소를 빈틈없이 채웁니다. 이미지 비율과 요소 비율이 다르면 이미지 일부가 잘릴 수 있습니다. 썸네일이나 배경 이미지에 가장 많이 쓰이는 값입니다.'
+  },
+  {
+    cat: 'background-size',
+    q: '<code>background-size: contain</code>의 동작으로 올바른 것은?',
+    hint: 'contain은 이미지 전체가 보이는 것이 목표입니다.',
+    code: null,
+    opts: [
+      '이미지가 잘리더라도 요소를 빈틈없이 채운다',
+      '이미지 전체가 요소 안에 보이도록 맞추며 빈 공간이 생길 수 있다',
+      '이미지를 요소 크기에 맞게 강제로 늘린다',
+      '이미지를 원본 크기 그대로 표시한다'
+    ],
+    ans: 1,
+    ex: 'contain은 이미지 비율을 유지하면서 이미지 전체가 요소 안에 보이도록 맞춥니다. cover와 달리 이미지가 잘리지 않지만, 요소와 이미지 비율이 다르면 여백(빈 공간)이 생길 수 있습니다.'
+  },
+  {
+    cat: 'background-position',
+    q: '<code>background-position: 50% 50%</code>과 동일한 값은?',
+    hint: '키워드로도 같은 위치를 표현할 수 있습니다.',
+    code: '.bg {\n  background-position: 50% 50%;\n  /* 이것과 동일한 표현은? */\n}',
+    opts: [
+      'left top',
+      'right bottom',
+      'center center',
+      'left center'
+    ],
+    ans: 2,
+    ex: 'background-position에서 50% 50%는 가로 50%, 세로 50% 위치, 즉 정중앙을 의미합니다. 이는 center center와 동일합니다. left=0%, center=50%, right=100%로 대응됩니다.'
+  },
+  {
+    cat: 'background 단축',
+    q: 'background 단축 표기에서 <code>background-size</code>를 포함할 때 반드시 함께 써야 하는 속성은?',
+    hint: '슬래시(/)를 사이에 두고 함께 작성합니다.',
+    code: 'div {\n  background: url(img/cat1.jpg) no-repeat scroll 0 0 / auto;\n  /*                                        ↑position / ↑size */\n}',
+    opts: [
+      'background-repeat',
+      'background-attachment',
+      'background-position',
+      'background-color'
+    ],
+    ans: 2,
+    ex: 'background 단축 표기에서 background-size를 쓰려면 반드시 background-position을 먼저 쓰고 슬래시(/)로 구분해야 합니다. 예: center / 60px → position: center, size: 60px.'
+  },
+  {
+    cat: 'background 단축',
+    q: '아래 단축 표기에서 생략 가능한 속성끼리 묶인 것은?',
+    hint: '기본값인 속성은 생략할 수 있습니다.',
+    code: 'background: transparent url(img/cat1.jpg) no-repeat scroll 0 0 / auto;',
+    opts: [
+      'url(img/cat1.jpg), no-repeat',
+      'transparent, scroll, 0 0, auto',
+      'no-repeat, url(img/cat1.jpg)',
+      'transparent, url(img/cat1.jpg)'
+    ],
+    ans: 1,
+    ex: 'background의 기본값은 color: transparent, repeat: repeat, attachment: scroll, position: 0 0, size: auto 입니다. 이 기본값들은 생략 가능합니다. 수업 코드처럼 background: url(img/cat1.jpg) no-repeat; 처럼 필요한 것만 써도 됩니다.'
+  },
+  {
+    cat: 'background-image',
+    q: '배경 이미지와 배경 색상을 동시에 지정하면 어떻게 표시되나요?',
+    hint: '이미지가 색상보다 위 레이어에 존재합니다.',
+    code: 'div {\n  background-color: rgb(168, 142, 211);\n  background-image: url(img/figma_logo.svg);\n}',
+    opts: [
+      'background-color만 표시되고 이미지는 무시된다',
+      'background-image가 background-color 위에 표시된다',
+      'background-color가 background-image 위에 표시된다',
+      '두 속성이 충돌해서 아무것도 표시되지 않는다'
+    ],
+    ans: 1,
+    ex: 'background-image는 background-color보다 위 레이어에 렌더링됩니다. 배경 이미지가 투명한 영역이 있거나 no-repeat일 때 이미지가 없는 부분에 배경 색상이 보이게 됩니다. 수업의 원형 프로필 예제처럼 함께 활용하면 좋습니다.'
+  },
+  {
+    cat: '접근성',
+    q: 'CSS background-image로 넣은 이미지의 접근성 문제는?',
+    hint: '스크린리더기는 CSS 배경 이미지를 어떻게 처리할까요?',
+    code: '<!-- CSS 배경 이미지 -->\n<a href="#" class="bg"></a>\n\n<!-- img 태그 -->\n<img src="img/logo.svg" alt="피그마로고">',
+    opts: [
+      '배경 이미지도 alt 속성을 쓸 수 있어 접근성 문제가 없다',
+      '스크린리더기가 배경 이미지를 읽을 수 없어 시각 장애인이 내용을 파악하기 어렵다',
+      'background-image는 img 태그보다 로딩이 느려 성능 문제가 생긴다',
+      '배경 이미지는 모바일에서만 접근성 문제가 발생한다'
+    ],
+    ans: 1,
+    ex: '스크린리더기(화면 낭독 프로그램)는 CSS background-image를 읽지 못합니다. 따라서 의미 있는 이미지(로고, 아이콘 등)는 <img> 태그에 alt 속성을 붙여 사용해야 합니다. 장식용 이미지에만 배경 이미지를 사용하는 것이 권장됩니다.'
+  },
+  {
+    cat: 'background-size',
+    q: '원형 프로필 영역에 로고 이미지를 배경으로 넣되, 이미지 크기를 <code>60px</code>로 고정하고 정중앙에 배치하려면?',
+    hint: '단축 표기로 position과 size를 함께 쓸 수 있습니다.',
+    code: '.profile {\n  width: 120px;\n  height: 120px;\n  border-radius: 50%;\n  background: rgb(168, 142, 211) url(img/logo.svg) no-repeat ??? / ???;\n}',
+    opts: [
+      'left top / 60px',
+      'center / 60px',
+      '50px 50px / auto',
+      'center / cover'
+    ],
+    ans: 1,
+    ex: '정중앙 배치는 position: center(= 50% 50%), 크기 고정은 size: 60px을 사용합니다. 단축 표기로 center / 60px처럼 position / size 순서로 씁니다. 수업 코드의 .bg 예제와 동일한 패턴입니다.'
+  }
+];
+
+let cur = 0;
+let answered = new Array(Q.length).fill(null);
+let sel = new Array(Q.length).fill(null);
+
+function render() {
+  const item = Q[cur];
+  const done = answered[cur] !== null;
+  const total = Q.length;
+
+  const answeredCount = answered.filter(a => a !== null).length;
+  document.getElementById('prog-label').textContent = `${cur + 1} / ${total}`;
+  document.getElementById('prog-pct').textContent = Math.round(answeredCount / total * 100) + '%';
+  document.getElementById('prog-fill').style.width = (answeredCount / total * 100) + '%';
+
+  const hintHtml = item.hint
+    ? `<div class="hint-box"><strong>💡 Hint</strong>${item.hint}</div>` : '';
+
+  const codeHtml = item.code
+    ? `<div class="code-block">${item.code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : '';
+
+  const optsHtml = item.opts.map((opt, i) => {
+    let cls = 'opt-btn';
+    if (done) {
+      if (i === item.ans) cls += ' correct';
+      else if (i === sel[cur] && answered[cur] === 'wrong') cls += ' wrong';
+    }
+    return `<button class="${cls}" onclick="choose(${i})" ${done ? 'disabled' : ''}>
+      <span class="opt-key">${['A','B','C','D'][i]}</span>
+      <span>${opt}</span>
+    </button>`;
+  }).join('');
+
+  const exHtml = `<div class="explanation ${done ? 'show' : ''}">
+    <strong>${answered[cur] === 'correct' ? '✅ 정답입니다!' : done ? '❌ 오답입니다.' : ''}</strong>
+    ${item.ex}
+  </div>`;
+
+  const isLast = cur === total - 1;
+  const navHtml = `<div class="nav">
+    <button class="nav-btn" onclick="go(-1)" ${cur === 0 ? 'disabled' : ''}>← 이전</button>
+    <span class="nav-center">${answeredCount}문제 완료</span>
+    ${isLast
+      ? `<button class="nav-btn primary" onclick="showScore()">결과 보기</button>`
+      : `<button class="nav-btn primary" onclick="go(1)">다음 →</button>`}
+  </div>`;
+
+  document.getElementById('qa').innerHTML = `
+    <div class="q-meta">
+      <span class="q-num">${cur + 1} / ${total}</span>
+      <span class="q-cat">${item.cat}</span>
+    </div>
+    <div class="q-text">${item.q}</div>
+    ${hintHtml}
+    ${codeHtml}
+    <div class="options">${optsHtml}</div>
+    ${exHtml}
+    ${navHtml}
+  `;
+}
+
+function choose(i) {
+  if (answered[cur] !== null) return;
+  sel[cur] = i;
+  answered[cur] = i === Q[cur].ans ? 'correct' : 'wrong';
+  render();
+}
+
+function go(d) {
+  cur = Math.max(0, Math.min(Q.length - 1, cur + d));
+  render();
+}
+
+function showScore() {
+  document.getElementById('qa').style.display = 'none';
+  document.querySelector('.progress-wrap').style.display = 'none';
+
+  const correct = answered.filter(a => a === 'correct').length;
+  const wrong = answered.filter(a => a === 'wrong').length;
+  const skip = answered.filter(a => a === null).length;
+  const pct = Math.round(correct / Q.length * 100);
+
+  const msgs = [
+    [90, '🏆 완벽해요! Background 마스터!'],
+    [70, '🎯 훌륭합니다! 거의 다 맞혔어요.'],
+    [50, '👍 잘 하셨어요! 조금만 더 복습해봐요.'],
+    [0,  '💪 한 번 더 도전해봐요!']
+  ];
+  const msg = msgs.find(([min]) => pct >= min)[1];
+
+  const sb = document.getElementById('score-box');
+  sb.style.display = 'block';
+  sb.innerHTML = `
+    <h2>🎉 퀴즈 완료!</h2>
+    <div class="score-pct">${pct}%</div>
+    <p class="score-msg">${msg}</p>
+    <div class="score-grid">
+      <div><div class="num c">${correct}</div><div class="lbl">정답</div></div>
+      <div><div class="num w">${wrong}</div><div class="lbl">오답</div></div>
+      <div><div class="num s">${skip}</div><div class="lbl">미응답</div></div>
+    </div>
+    <button class="retry-btn" onclick="resetQuiz()">처음부터 다시 풀기</button>
+  `;
+  sb.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  cur = 0;
+  answered = new Array(Q.length).fill(null);
+  sel = new Array(Q.length).fill(null);
+  document.getElementById('qa').style.display = 'block';
+  document.querySelector('.progress-wrap').style.display = 'block';
+  document.getElementById('score-box').style.display = 'none';
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+render();
+</script>
+</body>
+</html>
