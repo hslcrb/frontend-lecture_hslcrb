@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS 폰트 단위 퀴즈</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+    :root {
+      --bg: #0f0f13;
+      --surface: #1a1a22;
+      --surface2: #22222e;
+      --border: #2e2e3e;
+      --accent: #6c63ff;
+      --accent2: #ff6584;
+      --text: #e8e8f0;
+      --text-muted: #7a7a9a;
+      --correct: #3ecf8e;
+      --wrong: #ff4d6d;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 20px 80px;
+    }
+
+    header {
+      max-width: 720px;
+      margin: 0 auto 48px;
+      text-align: center;
+    }
+
+    header .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 99px;
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      font-size: clamp(22px, 5vw, 34px);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.5px;
+    }
+
+    header h1 span {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      margin-top: 10px;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    .quiz-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 28px 20px;
+      transition: border-color 0.3s;
+    }
+
+    .card.correct { border-color: var(--correct); }
+    .card.wrong   { border-color: var(--wrong); }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .q-num {
+      background: linear-gradient(135deg, var(--accent), #9b59b6);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .q-type {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 2px 10px;
+    }
+
+    .q-text {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.7;
+      margin-bottom: 18px;
+      word-break: keep-all;
+    }
+
+    .q-text code {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1px 7px;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+      color: #b0a8ff;
+    }
+
+    /* 객관식 */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .opt {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .opt:hover { border-color: var(--accent); background: #1e1e2e; }
+    .opt.selected { border-color: var(--accent); background: rgba(108,99,255,0.12); }
+    .opt.correct  { border-color: var(--correct); background: rgba(62,207,142,0.1); color: var(--correct); }
+    .opt.wrong-sel{ border-color: var(--wrong);   background: rgba(255,77,109,0.1);  color: var(--wrong); }
+
+    .opt-key {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--border);
+      font-size: 11px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .opt.selected  .opt-key { background: var(--accent); color: #fff; }
+    .opt.correct   .opt-key { background: var(--correct); color: #fff; }
+    .opt.wrong-sel .opt-key { background: var(--wrong);   color: #fff; }
+
+    /* 단답형 */
+    .short-wrap {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .short-input {
+      flex: 1;
+      min-width: 180px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-family: 'Noto Sans KR', sans-serif;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .short-input:focus { border-color: var(--accent); }
+    .short-input.correct { border-color: var(--correct); color: var(--correct); }
+    .short-input.wrong   { border-color: var(--wrong);   color: var(--wrong); }
+
+    .check-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--accent), #9b59b6);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .check-btn:hover { opacity: 0.85; }
+    .check-btn:disabled { opacity: 0.4; cursor: default; }
+
+    /* 피드백 */
+    .feedback {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 9px;
+      font-size: 13px;
+      line-height: 1.7;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+    .feedback.correct { background: rgba(62,207,142,0.1); border: 1px solid rgba(62,207,142,0.3); color: #5df0a8; }
+    .feedback.wrong   { background: rgba(255,77,109,0.1);  border: 1px solid rgba(255,77,109,0.3);  color: #ff7a94; }
+
+    .feedback strong { display: block; margin-bottom: 4px; }
+
+    /* 결과 */
+    #result-section {
+      display: none;
+      max-width: 720px;
+      margin: 32px auto 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 28px;
+      text-align: center;
+    }
+
+    #result-section h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    #score-text {
+      font-size: 52px;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+
+    #result-msg {
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-size: 15px;
+    }
+
+    .retry-btn {
+      margin-top: 28px;
+      padding: 13px 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border: none;
+      border-radius: 99px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .retry-btn:hover { opacity: 0.85; }
+
+    .submit-wrap {
+      max-width: 720px;
+      margin: 32px auto 0;
+      text-align: right;
+    }
+
+    .submit-btn {
+      padding: 14px 40px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border: none;
+      border-radius: 99px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      box-shadow: 0 4px 24px rgba(108,99,255,0.35);
+    }
+
+    .submit-btn:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">CSS Quiz</div>
+  <h1>폰트 <span>단위</span> 퀴즈</h1>
+  <p>px · em · rem · vw · vh · min() · max() · clamp() · 10문제 혼합</p>
+</header>
+
+<div class="quiz-wrap" id="quiz"></div>
+
+<div class="submit-wrap">
+  <button class="submit-btn" onclick="submitAll()">채점하기</button>
+</div>
+
+<div id="result-section">
+  <h2>🎉 최종 결과</h2>
+  <div id="score-text"></div>
+  <div id="result-msg"></div>
+  <button class="retry-btn" onclick="location.reload()">다시 풀기</button>
+</div>
+
+<script>
+const questions = [
+  {
+    type: 'mc',
+    q: '<code>em</code> 단위의 기준은 무엇인가요?',
+    opts: [
+      'html(root) 요소의 font-size',
+      '브라우저 기본 font-size(16px) 고정값',
+      '부모 요소의 font-size',
+      '현재 요소 자신의 font-size'
+    ],
+    answer: 2,
+    explain: '<code>em</code>은 <strong>부모 요소의 font-size</strong>를 1로 기준 삼는 상대 단위입니다. 부모가 20px일 때 <code>2em</code>은 40px이 됩니다. 중첩 구조에서는 부모→자식→손자 순으로 계속 곱해지므로 주의가 필요합니다.'
+  },
+  {
+    type: 'mc',
+    q: '<code>rem</code> 단위의 기준이 되는 요소는?',
+    opts: [
+      'body 태그의 font-size',
+      'html(root) 태그의 font-size',
+      '부모 요소의 font-size',
+      '브라우저 뷰포트 너비'
+    ],
+    answer: 1,
+    explain: '<code>rem</code>은 <strong>문서 최상위(root) 태그인 <code>html</code>의 font-size</strong>를 1로 기준 삼습니다. 중첩 구조와 관계없이 항상 html의 font-size만 참조하므로 em보다 예측이 쉽습니다.'
+  },
+  {
+    type: 'mc',
+    q: '수업 코드에서 <code>html { font-size: 62.5%; }</code>로 설정한 이유는?',
+    opts: [
+      'html의 기본 폰트를 10px로 맞춰 rem 계산을 편하게 하기 위해',
+      '브라우저 기본 글자를 더 크게 보이도록 하기 위해',
+      'em 단위의 중첩 문제를 해결하기 위해',
+      'vw 단위와 충돌을 방지하기 위해'
+    ],
+    answer: 0,
+    explain: '브라우저 기본 font-size는 16px입니다. <code>62.5%</code>를 적용하면 16px × 0.625 = <strong>10px</strong>이 됩니다. 이렇게 하면 <code>1.4rem = 14px</code>처럼 rem 값을 직관적으로 계산할 수 있습니다.'
+  },
+  {
+    type: 'mc',
+    q: '<code>em</code> 단위를 중첩 구조에서 사용할 때 발생하는 문제는?',
+    opts: [
+      '브라우저마다 결과값이 달라진다',
+      '부모 크기가 자식·손자에게 계속 곱해져(복리) 글자가 점점 커지거나 작아진다',
+      'vw 단위와 충돌이 일어난다',
+      'html의 font-size를 덮어써 rem 계산이 틀어진다'
+    ],
+    answer: 1,
+    explain: '<code>em</code>은 부모를 기준으로 하므로, 중첩 구조에서는 <strong>복리이자처럼 계속 곱해집니다.</strong> 예를 들어 각 단계가 <code>0.5em</code>이면 자식은 50%, 손자는 25%가 되어 예상과 다른 크기가 됩니다. 이를 피하려면 <code>rem</code>을 사용합니다.'
+  },
+  {
+    type: 'mc',
+    q: '<code>1vw</code>가 나타내는 크기는?',
+    opts: [
+      '부모 요소 너비의 1%',
+      '브라우저 화면(뷰포트) 가로 폭의 1%',
+      'html font-size의 1%',
+      '화면 대각선 길이의 1%'
+    ],
+    answer: 1,
+    explain: '<code>vw</code>는 <strong>viewport width</strong>의 약자로, 브라우저 화면 가로 폭의 1%입니다. 부모 요소 크기와 전혀 관계없고 오직 브라우저(뷰포트) 기준입니다.'
+  },
+  {
+    type: 'mc',
+    q: '수업 코드의 <code>font-size: max(20px, 5vw)</code>의 동작으로 올바른 것은?',
+    opts: [
+      '항상 20px과 5vw 중 더 작은 값을 사용한다',
+      '화면이 커질 땐 5vw를 따르고, 5vw가 20px보다 작아지면 20px로 고정된다',
+      '화면이 커질 땐 20px로 고정되고, 작아지면 5vw를 따른다',
+      '20px와 5vw의 평균값을 사용한다'
+    ],
+    answer: 1,
+    explain: '<code>max(20px, 5vw)</code>는 두 값 중 <strong>더 큰 값</strong>을 선택합니다. 화면이 넓을 때는 5vw가 20px보다 크므로 5vw를 사용하고, 화면이 좁아져 5vw가 20px 아래로 떨어지면 20px로 고정됩니다. → <strong>최솟값 보장</strong>이 목적입니다.'
+  },
+  {
+    type: 'mc',
+    q: '수업 코드의 <code>font-size: min(40px, 8vw)</code>의 목적으로 올바른 것은?',
+    opts: [
+      '아무리 화면이 커져도 글자가 40px을 넘지 않도록 방어한다',
+      '아무리 화면이 작아져도 글자가 40px 이하로 줄어들지 않게 한다',
+      '모바일에선 40px, 데스크탑에선 8vw를 사용한다',
+      '화면 너비에 상관없이 항상 40px을 유지한다'
+    ],
+    answer: 0,
+    explain: '<code>min(40px, 8vw)</code>는 두 값 중 <strong>더 작은 값</strong>을 선택합니다. 화면이 작을 때는 8vw가 작으므로 8vw를 따르고, 화면이 커져서 8vw가 40px을 초과하면 40px로 고정됩니다. → <strong>최댓값 방어</strong>가 목적입니다.'
+  },
+  {
+    type: 'short',
+    q: '최솟값과 최댓값을 동시에 설정할 수 있는 CSS 함수를 영문으로 쓰시오.<br>사용 형태: <code>font-size: ?(최소, 반응형값, 최대)</code>',
+    answer: 'clamp',
+    explain: '<code>clamp(최소, 선호값, 최대)</code>는 세 값을 받아 선호값이 최솟값보다 작으면 최솟값을, 최댓값보다 크면 최댓값을 반환합니다. 반응형 타이포그래피에 매우 유용합니다.'
+  },
+  {
+    type: 'mc',
+    q: '<code>100vw</code>와 <code>100%</code>의 차이로 올바른 것은?',
+    opts: [
+      '둘은 완전히 동일하다',
+      '100%는 부모 요소 너비, 100vw는 스크롤바 두께까지 포함한 브라우저 전체 가로 폭이다',
+      '100vw는 뷰포트 높이, 100%는 뷰포트 너비다',
+      '100%는 화면 전체, 100vw는 콘텐츠 영역만 포함한다'
+    ],
+    answer: 1,
+    explain: '수업 설명에 따르면, <code>100%</code>는 <strong>스크롤바를 제외한 순수 콘텐츠 영역</strong>이고, <code>100vw</code>는 <strong>스크롤바 두께까지 포함한 브라우저 화면 전체 가로 폭</strong>입니다. 스크롤바가 생기면 두 값이 달라질 수 있습니다.'
+  },
+  {
+    type: 'mc',
+    q: '다음 중 <code>clamp(24px, 4vw, 48px)</code>를 적용했을 때 동작 설명으로 올바른 것은?',
+    opts: [
+      '항상 4vw를 사용하며, 24px과 48px은 무시된다',
+      '화면이 아주 작으면 24px, 평소엔 4vw, 화면이 아주 크면 48px로 고정된다',
+      '24px~48px 범위를 랜덤하게 선택한다',
+      '모바일에서는 48px, 데스크탑에서는 24px이 된다'
+    ],
+    answer: 1,
+    explain: '<code>clamp(24px, 4vw, 48px)</code>: 뷰포트가 좁아 4vw가 24px보다 작으면 → <strong>24px</strong>. 4vw가 24px~48px 사이이면 → <strong>4vw</strong>. 뷰포트가 넓어 4vw가 48px을 초과하면 → <strong>48px</strong>. 최소·최대를 동시에 보장합니다.'
+  }
+];
+
+const quizEl = document.getElementById('quiz');
+
+questions.forEach((q, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = `card-${i}`;
+
+  const typeLabel = q.type === 'mc' ? '객관식' : '단답형';
+
+  let bodyHTML = '';
+
+  if (q.type === 'mc') {
+    bodyHTML = `<div class="options">` +
+      q.opts.map((opt, oi) =>
+        `<div class="opt" data-q="${i}" data-o="${oi}" onclick="selectOpt(this)">
+          <span class="opt-key">${String.fromCharCode(65+oi)}</span>
+          <span>${opt}</span>
+        </div>`
+      ).join('') +
+    `</div>`;
+  } else {
+    bodyHTML = `<div class="short-wrap">
+      <input class="short-input" id="short-${i}" type="text" placeholder="답을 입력하세요" autocomplete="off">
+    </div>`;
+  }
+
+  card.innerHTML = `
+    <div class="q-meta">
+      <div class="q-num">${i+1}</div>
+      <div class="q-type">${typeLabel}</div>
+    </div>
+    <div class="q-text">${q.q}</div>
+    ${bodyHTML}
+    <div class="feedback" id="fb-${i}"></div>
+  `;
+
+  quizEl.appendChild(card);
+});
+
+function selectOpt(el) {
+  const qi = el.dataset.q;
+  document.querySelectorAll(`.opt[data-q="${qi}"]`).forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function submitAll() {
+  let score = 0;
+
+  questions.forEach((q, i) => {
+    const card = document.getElementById(`card-${i}`);
+    const fb = document.getElementById(`fb-${i}`);
+    let isCorrect = false;
+
+    if (q.type === 'mc') {
+      const selected = document.querySelector(`.opt[data-q="${i}"].selected`);
+      const opts = document.querySelectorAll(`.opt[data-q="${i}"]`);
+
+      opts.forEach(o => o.style.pointerEvents = 'none');
+
+      if (selected) {
+        const oi = parseInt(selected.dataset.o);
+        isCorrect = oi === q.answer;
+        if (isCorrect) {
+          selected.classList.add('correct');
+        } else {
+          selected.classList.add('wrong-sel');
+          opts[q.answer].classList.add('correct');
+        }
+      } else {
+        opts[q.answer].classList.add('correct');
+      }
+
+    } else {
+      const input = document.getElementById(`short-${i}`);
+      input.disabled = true;
+      const val = input.value.trim().toLowerCase().replace(/\s/g, '');
+      const ans = q.answer.toLowerCase().replace(/\s/g, '');
+      isCorrect = val === ans;
+      input.classList.add(isCorrect ? 'correct' : 'wrong');
+    }
+
+    if (isCorrect) score++;
+
+    card.classList.add(isCorrect ? 'correct' : 'wrong');
+    fb.className = `feedback show ${isCorrect ? 'correct' : 'wrong'}`;
+    fb.innerHTML = isCorrect
+      ? `<strong>✅ 정답!</strong>${q.explain}`
+      : `<strong>❌ 오답</strong>정답: <code>${q.type === 'mc' ? q.opts[q.answer] : q.answer}</code><br>${q.explain}`;
+  });
+
+  document.querySelector('.submit-wrap').style.display = 'none';
+
+  const resultEl = document.getElementById('result-section');
+  resultEl.style.display = 'block';
+  document.getElementById('score-text').textContent = `${score} / ${questions.length}`;
+
+  const pct = (score / questions.length) * 100;
+  let msg = '';
+  if (pct === 100) msg = '🏆 완벽합니다! 모든 문제를 맞혔어요.';
+  else if (pct >= 80) msg = '🌟 훌륭해요! 핵심 개념을 잘 이해하고 있어요.';
+  else if (pct >= 60) msg = '📚 잘 했어요! 틀린 문제를 다시 복습해보세요.';
+  else msg = '💪 조금 더 공부가 필요해요. 오답 해설을 꼭 확인하세요!';
+  document.getElementById('result-msg').textContent = msg;
+
+  resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+</body>
+</html>
