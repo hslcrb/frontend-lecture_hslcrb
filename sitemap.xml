@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- 메인 -->
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/index.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- CSS Grid -->
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/grid/grid-lecture.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/grid/css-grid-quiz.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- CSS Flex -->
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/flex/flex-lecture.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/flex/css-flex-quiz.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- CSS Position -->
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/position/position-lecture.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/position/css-position-quiz.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- HTML 퀴즈 -->
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/html_quiz1.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/html_quiz2.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- CSS 퀴즈 -->
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css-text-color-quiz.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css-font-quiz.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css-unit-quiz.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css-boxmodel-quiz.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css_background-quiz.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css_combinator_quiz.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css_priority_quiz.html</loc>
+    <lastmod>2025-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>
