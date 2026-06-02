@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS 결합 선택자 퀴즈</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: #1a1a1a; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+  .card { background: #fff; border-radius: 16px; border: 1px solid #dde3ea; padding: 2rem; width: 100%; max-width: 740px; }
+
+  .prog-bg { background: #e2e8f0; border-radius: 99px; height: 6px; margin-bottom: 1.5rem; }
+  .prog-fill { height: 6px; border-radius: 99px; background: #4361ee; transition: width .3s; }
+
+  .q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: .6rem; }
+  .q-num { font-size: 13px; color: #94a3b8; }
+  .q-cat { font-size: 12px; padding: 2px 10px; border-radius: 99px; background: #eef2ff; color: #3730a3; }
+
+  .q-text { font-size: 15px; font-weight: 600; margin-bottom: 1rem; line-height: 1.65; }
+
+  /* 가계도 */
+  .tree-wrap { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px 20px; margin-bottom: 1rem; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.9; overflow-x: auto; }
+  .tree-wrap .tree-title { font-family: inherit; font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: .08em; margin-bottom: 6px; }
+  .t-root  { color: #1e40af; font-weight: 700; }
+  .t-child { color: #0f766e; font-weight: 600; }
+  .t-grand { color: #7c3aed; }
+  .t-sib   { color: #b45309; }
+  .t-hl    { background: #fef9c3; border-radius: 3px; padding: 0 3px; }
+
+  /* 힌트 */
+  .hint-box { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #4361ee; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 1rem; font-size: 13px; line-height: 1.75; color: #475569; }
+  .hint-title { font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: .07em; margin-bottom: 5px; }
+
+  /* 코드 블록 */
+  pre.code-block { background: #1e1e2e; color: #cdd6f4; border-radius: 10px; padding: 14px 18px; font-family: 'Courier New', monospace; font-size: 13px; margin-bottom: 1rem; white-space: pre; overflow-x: auto; line-height: 1.75; }
+
+  /* 선택지 */
+  .options { display: flex; flex-direction: column; gap: 9px; margin-bottom: 1.4rem; }
+  .opt-btn { text-align: left; background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 11px 16px; font-size: 13.5px; font-family: inherit; color: #1a1a1a; cursor: pointer; line-height: 1.5; transition: border-color .15s, background .15s; width: 100%; }
+  .opt-btn:hover:not(:disabled) { border-color: #4361ee; background: #eef2ff; color: #3730a3; }
+  .opt-btn.correct { background: #f0fdf4; border-color: #16a34a; color: #14532d; }
+  .opt-btn.wrong   { background: #fef2f2; border-color: #dc2626; color: #7f1d1d; }
+  .opt-btn:disabled { cursor: default; }
+
+  /* 해설 */
+  .explanation { background: #f8fafc; border-left: 3px solid #4361ee; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; color: #334155; line-height: 1.75; margin-bottom: 1.4rem; }
+
+  /* 네비 */
+  .nav-row { display: flex; justify-content: space-between; align-items: center; }
+  .nav-btn { padding: 8px 22px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #1a1a1a; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .nav-btn:hover:not(:disabled) { background: #f1f5f9; }
+  .nav-btn:disabled { opacity: .4; cursor: default; }
+  .nav-btn.primary { background: #4361ee; color: #fff; border-color: #4361ee; }
+  .nav-btn.primary:hover { background: #3730a3; }
+  .nav-count { font-size: 13px; color: #94a3b8; }
+
+  /* 결과 */
+  .score-box { text-align: center; padding: 2rem 1rem; }
+  .score-num { font-size: 52px; font-weight: 700; color: #4361ee; }
+  .score-label { font-size: 16px; color: #64748b; margin: .3rem 0 1.5rem; }
+  .score-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .score-card { background: #f8fafc; border-radius: 10px; padding: 14px; }
+  .sc-val { font-size: 22px; font-weight: 700; }
+  .sc-label { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="card"><div id="qa"></div></div>
+<script>
+
+var Q = [
+
+  /* ── 1. 가계도 읽기 ── */
+  {
+    cat: '가계도 이해',
+    q: '아래 HTML 구조에서 ul의 직계 자식(child) 요소만 모두 고른 것은?',
+    tree:
+'ul  ←─ 부모(parent)\n' +
+'├── li  ←─ 자식(child) ★\n' +
+'│   ├── span  ←─ 손자(grandchild)\n' +
+'│   └── a     ←─ 손자(grandchild)\n' +
+'├── li  ←─ 자식(child) ★\n' +
+'│   └── span  ←─ 손자(grandchild)\n' +
+'└── li  ←─ 자식(child) ★',
+    code: null,
+    hint: '자식(child) = 바로 한 단계 아래 요소\n손자(grandchild) = 두 단계 아래 요소\n자손(descendant) = 자식 + 손자 + 그 아래 모두',
+    opts: ['li, span, a 모두', 'li 세 개만', 'span, a만', 'ul 자신'],
+    ans: 1,
+    ex: 'ul의 직계 자식은 바로 한 단계 아래인 li 세 개입니다. span과 a는 li의 자식이므로 ul 기준으로는 손자(grandchild)입니다.'
+  },
+
+  /* ── 2. 자손 선택자 개념 ── */
+  {
+    cat: '자손 선택자',
+    q: '자손 선택자 "ul span"이 선택하는 요소는?',
+    tree:
+'ul\n' +
+'├── li\n' +
+'│   └── span  ←─ ✅ 선택됨\n' +
+'├── li\n' +
+'│   ├── span  ←─ ✅ 선택됨\n' +
+'│   └── ul\n' +
+'│       └── li\n' +
+'│           └── span  ←─ ✅ 선택됨 (손자의 손자도 포함!)',
+    code: 'ul span { color: red; }',
+    hint: '자손 선택자(공백): A B\n→ A 안에 있는 B를 깊이와 상관없이 모두 선택\n→ 자식이든 손자든 그 아래든 전부!',
+    opts: [
+      'ul 바로 아래 li 안의 span만',
+      'ul 안에 있는 모든 span (깊이 무관)',
+      'ul 바로 아래에 있는 span만',
+      'ul과 같은 레벨의 span'
+    ],
+    ans: 1,
+    ex: '자손 선택자(공백)는 깊이와 상관없이 해당 요소 안에 포함된 모든 대상을 선택합니다. ul span은 ul 안에 있는 모든 span을 선택합니다.'
+  },
+
+  /* ── 3. 자식 선택자 개념 ── */
+  {
+    cat: '자식 선택자',
+    q: '자식 선택자 "ul > li"가 선택하는 요소는?',
+    tree:
+'ul  ←─ 기준\n' +
+'├── li  ←─ ✅ 선택 (직계 자식)\n' +
+'│   └── ul\n' +
+'│       └── li  ←─ ❌ 미선택 (손자)\n' +
+'├── li  ←─ ✅ 선택 (직계 자식)\n' +
+'└── li  ←─ ✅ 선택 (직계 자식)',
+    code: 'ul > li { background-color: navy; }',
+    hint: '자식 선택자(>): A > B\n→ A의 바로 한 단계 아래 B만 선택\n→ 손자는 포함 안 됨!',
+    opts: [
+      'ul 안의 모든 li (깊이 무관)',
+      'ul 바로 아래 li만 (한 단계)',
+      'ul 다음에 오는 li 형제',
+      'ul과 li 사이에 있는 요소'
+    ],
+    ans: 1,
+    ex: '자식 선택자(>)는 바로 한 단계 아래 요소만 선택합니다. 중첩된 ul 안의 li는 선택하지 않습니다.'
+  },
+
+  /* ── 4. 자손 vs 자식 차이 ── */
+  {
+    cat: '자손 vs 자식',
+    q: '아래 구조에서 "ul span"과 "ul > span"의 차이는?',
+    tree:
+'ul\n' +
+'├── span  ←─ 직계 자식 span\n' +
+'└── li\n' +
+'    └── span  ←─ 손자 span',
+    code:
+'ul span   { color: red; }   /* 자손 */\n' +
+'ul > span { color: blue; }  /* 자식 */',
+    hint: 'ul span  → ul 안 모든 span 선택 (2개 다)\n ul > span → ul 바로 아래 span만 선택 (1개)',
+    opts: [
+      '"ul span"은 2개, "ul > span"은 1개 선택',
+      '둘 다 동일하게 2개 선택',
+      '"ul span"은 1개, "ul > span"은 2개 선택',
+      '둘 다 li 안의 span만 선택'
+    ],
+    ans: 0,
+    ex: '"ul span"(자손)은 ul 안 모든 span 2개를 선택합니다. "ul > span"(자식)은 ul 바로 아래의 span 1개만 선택합니다.'
+  },
+
+  /* ── 5. 인접 형제 선택자 ── */
+  {
+    cat: '인접 형제 선택자',
+    q: '"li + li" 선택자가 선택되는 요소는?',
+    tree:
+'ul\n' +
+'├── li  "메뉴1"  ←─ ❌ (앞에 li 형제 없음)\n' +
+'├── li  "메뉴2"  ←─ ✅ (메뉴1 바로 다음 형제)\n' +
+'├── li  "메뉴3"  ←─ ✅ (메뉴2 바로 다음 형제)\n' +
+'└── li  "메뉴4"  ←─ ✅ (메뉴3 바로 다음 형제)',
+    code: 'li + li { color: navy; }',
+    hint: '인접 형제 선택자(+): A + B\n→ A 바로 다음에 오는 첫 번째 형제 B 선택\n→ 형제란? 같은 부모를 가진 같은 레벨 요소',
+    opts: [
+      '첫 번째 li만',
+      '첫 번째 li를 제외한 나머지 li',
+      '모든 li',
+      '마지막 li만'
+    ],
+    ans: 1,
+    ex: 'li + li는 li 바로 다음에 오는 li 형제를 선택합니다. 첫 번째 li 앞에는 li 형제가 없으므로 선택되지 않고, 나머지 li는 모두 "앞에 li가 있는" 상태이므로 선택됩니다.'
+  },
+
+  /* ── 6. 일반 형제 선택자 ── */
+  {
+    cat: '일반 형제 선택자',
+    q: '아래에서 "h2 ~ p"가 선택하는 요소는?',
+    tree:
+'div\n' +
+'├── p    "단락0"  ←─ ❌ (h2 앞에 있음)\n' +
+'├── h2   "제목"\n' +
+'├── p    "단락1"  ←─ ✅\n' +
+'├── span "설명"\n' +
+'├── p    "단락2"  ←─ ✅\n' +
+'└── p    "단락3"  ←─ ✅',
+    code: 'h2 ~ p { background-color: red; }',
+    hint: '일반 형제 선택자(~): A ~ B\n→ A 뒤에 오는 모든 형제 B 선택\n→ 바로 뒤가 아니어도 됨, 앞에 있는 건 제외',
+    opts: [
+      'h2 바로 다음 단락1만',
+      'h2 앞의 단락0만',
+      'h2 뒤에 오는 모든 p (단락1, 2, 3)',
+      '모든 p (단락0, 1, 2, 3)'
+    ],
+    ans: 2,
+    ex: '일반 형제(~)는 기준 요소 뒤에 오는 같은 레벨의 모든 형제를 선택합니다. h2 앞의 단락0은 포함되지 않고, 뒤의 단락1·2·3이 선택됩니다. 사이에 span이 있어도 상관없습니다.'
+  },
+
+  /* ── 7. + vs ~ 차이 ── */
+  {
+    cat: '인접 vs 일반 형제',
+    q: '"li + li"와 "li ~ li"의 차이로 올바른 것은?',
+    tree:
+'ul\n' +
+'├── li "A"  ←─ 기준\n' +
+'├── li "B"  ←─ + 도 선택, ~ 도 선택\n' +
+'├── li "C"  ←─ + 는 ❌,  ~ 는 ✅\n' +
+'└── li "D"  ←─ + 는 ❌,  ~ 는 ✅',
+    code:
+'li.A + li { color: red; }   /* B만 */\n' +
+'li.A ~ li { color: blue; }  /* B, C, D */',
+    hint: '+ : 바로 다음 형제 딱 하나만\n~ : 뒤에 오는 모든 형제',
+    opts: [
+      '+ 는 모든 형제, ~ 는 첫 번째 형제만',
+      '+ 는 바로 다음 형제 하나, ~ 는 뒤 모든 형제',
+      '둘 다 동일하다',
+      '+ 는 자식, ~ 는 손자를 선택한다'
+    ],
+    ans: 1,
+    ex: '"li + li"는 li 바로 다음에 오는 li 하나만 선택합니다. "li ~ li"는 li 뒤에 오는 모든 li 형제를 선택합니다.'
+  },
+
+  /* ── 8. 선택자 기호 매칭 ── */
+  {
+    cat: '선택자 기호',
+    q: '결합 선택자 기호와 의미가 잘못 연결된 것은?',
+    tree: null,
+    code:
+'A B    /* 공백 */\n' +
+'A > B  /* 꺽쇠 */\n' +
+'A + B  /* 플러스 */\n' +
+'A ~ B  /* 물결 */',
+    hint: '공백 = 자손 / > = 자식 / + = 인접형제 / ~ = 일반형제',
+    opts: [
+      'A B (공백) → 자손 선택자',
+      'A > B (꺽쇠) → 자식 선택자',
+      'A + B (플러스) → 일반 형제 선택자',
+      'A ~ B (물결) → 일반 형제 선택자'
+    ],
+    ans: 2,
+    ex: 'A + B는 인접 형제 선택자(바로 다음 형제 하나)입니다. 일반 형제 선택자는 A ~ B(물결)입니다.'
+  },
+
+  /* ── 9. 실전 코드 예측 ── */
+  {
+    cat: '결과 예측',
+    q: '아래 CSS에서 색상이 변하는 요소는?',
+    tree:
+'ul\n' +
+'├── li  "메뉴1"\n' +
+'│   └── span  "하위메뉴1"\n' +
+'└── li  "메뉴2"\n' +
+'    └── span  "하위메뉴2"',
+    code: 'ul > li > span { color: crimson; }',
+    hint: 'ul > li > span\n= ul의 자식 li의 자식 span\n→ 딱 이 경로에 해당하는 span만 선택',
+    opts: [
+      'ul만',
+      'li 두 개만',
+      'span 두 개 (하위메뉴1, 하위메뉴2)',
+      'ul, li, span 모두'
+    ],
+    ans: 2,
+    ex: 'ul > li > span은 ul → li → span 순서로 직계 자식 관계인 span을 선택합니다. 여기서 span은 하위메뉴1과 하위메뉴2 두 개이므로 둘 다 crimson 색상이 적용됩니다.'
+  },
+
+  /* ── 10. 주어진 HTML 적용 ── */
+  {
+    cat: '결과 예측',
+    q: '아래 HTML에서 "ul li span" 선택자가 선택하는 span은 몇 개인가?',
+    tree:
+'ul#gnb\n' +
+'├── li\n' +
+'│   ├── span "메뉴1"         ←─ ?\n' +
+'│   └── ul\n' +
+'│       └── li\n' +
+'│           └── span "하위메뉴1"  ←─ ?\n' +
+'├── li\n' +
+'│   ├── span "메뉴2"         ←─ ?\n' +
+'│   └── ul\n' +
+'│       ├── li\n' +
+'│       │   └── span "하위메뉴1" ←─ ?\n' +
+'│       └── li\n' +
+'│           └── span "하위메뉴2" ←─ ?\n' +
+'└── li  "메뉴3" (텍스트만, span 없음)',
+    code: 'ul li span { color: red; }',
+    hint: 'ul li span = 자손 선택자\n→ ul 안 어떤 li 안의 span이든 깊이 무관하게 모두 선택',
+    opts: ['1개', '2개', '3개', '5개'],
+    ans: 3,
+    ex: 'ul li span(자손 선택자)은 ul 안 어떤 깊이의 span이든 모두 선택합니다. 메뉴1, 메뉴2, 하위메뉴1(두 개), 하위메뉴2 총 5개의 span이 선택됩니다.'
+  },
+
+  /* ── 11. ul > li 적용 범위 ── */
+  {
+    cat: '자식 선택자 적용',
+    q: '"ul#gnb > li" 선택자가 아래 HTML에서 선택하는 li는 몇 개인가?',
+    tree:
+'ul#gnb  ←─ 기준\n' +
+'├── li "메뉴1"  ←─ 직계 자식\n' +
+'│   └── ul\n' +
+'│       └── li "하위메뉴1"  ←─ 손자 li\n' +
+'├── li "메뉴2"  ←─ 직계 자식\n' +
+'│   └── ul\n' +
+'│       ├── li "하위메뉴1"  ←─ 손자 li\n' +
+'│       └── li "하위메뉴2"  ←─ 손자 li\n' +
+'└── li "메뉴3"  ←─ 직계 자식',
+    code: 'ul > li { background-color: navy; }',
+    hint: '자식 선택자(>)는 바로 한 단계 아래만!\n→ ul#gnb 바로 아래 li만 선택\n→ 중첩 ul 안의 li는 선택 안 됨',
+    opts: ['3개 (메뉴1, 메뉴2, 메뉴3만)', '6개 (모든 li)', '5개', '1개'],
+    ans: 0,
+    ex: 'ul > li(자식 선택자)는 ul#gnb 바로 아래의 li만 선택합니다. 메뉴1, 메뉴2, 메뉴3 총 3개입니다. 중첩 ul 안의 하위메뉴 li들은 선택되지 않습니다.'
+  },
+
+  /* ── 12. :has() ── */
+  {
+    cat: ':has() 선택자',
+    q: '아래 CSS에서 :has()가 하는 역할로 올바른 것은?',
+    tree: null,
+    code:
+'/* ul 중에서 li를 자식으로 가진 ul만 선택 */\n' +
+'ul:has(> li) { border: 2px solid red; }\n' +
+'\n' +
+'/* li 중에서 span을 포함한 li만 선택 */\n' +
+'li:has(span) { background: yellow; }',
+    hint: ':has() = "~을 포함하는 부모"를 선택하는 선택자\n→ 기존 CSS는 자식→부모 방향으로 선택 불가였으나\n  :has()로 가능해짐 (2023년 주요 브라우저 지원)',
+    opts: [
+      '자식 요소를 숨기는 선택자',
+      '특정 자식/자손을 포함한 부모 요소를 선택',
+      '형제 요소를 선택하는 선택자',
+      'id가 있는 요소만 선택'
+    ],
+    ans: 1,
+    ex: ':has()는 괄호 안의 조건을 만족하는 자식/자손을 가진 부모 요소를 선택합니다. 예를 들어 li:has(span)은 span을 포함하는 li만 선택합니다. 기존 CSS에서 불가능했던 "부모 선택"이 가능해진 선택자입니다.'
+  },
+
+  /* ── 13. 인접 형제 실전 ── */
+  {
+    cat: '인접 형제 선택자',
+    q: '아래 CSS 적용 후 색상이 바뀌지 않는 요소는?',
+    tree:
+'ul\n' +
+'├── li "첫째"   ←─ ?\n' +
+'├── li "둘째"   ←─ ?\n' +
+'└── li "셋째"   ←─ ?',
+    code: 'li + li { color: crimson; }',
+    hint: 'li + li → "li 바로 다음에 오는 li"\n→ 첫째 li 앞에는 li가 없으므로 선택 안 됨',
+    opts: ['"첫째" li (앞에 li 형제 없음)', '"둘째" li', '"셋째" li', '모두 바뀐다'],
+    ans: 0,
+    ex: '"첫째" li 앞에는 li 형제가 없으므로 "li + li" 조건을 만족하지 않아 선택되지 않습니다. "둘째"와 "셋째"는 각각 앞에 li가 있으므로 선택되어 crimson 색상이 적용됩니다.'
+  },
+
+  /* ── 14. 종합 선택자 매칭 ── */
+  {
+    cat: '종합',
+    q: '아래 상황에 맞는 선택자를 올바르게 연결한 것은?',
+    tree: null,
+    code:
+'상황 A: nav 안의 모든 a 태그 색 변경\n' +
+'상황 B: nav 바로 아래 ul만 선택\n' +
+'상황 C: h1 바로 다음 p만 선택\n' +
+'상황 D: h1 뒤의 모든 p 선택',
+    hint: '공백=자손 / >=자식 / +=인접형제 / ~=일반형제',
+    opts: [
+      'A: nav a / B: nav > ul / C: h1 + p / D: h1 ~ p',
+      'A: nav > a / B: nav ul / C: h1 ~ p / D: h1 + p',
+      'A: nav a / B: nav > ul / C: h1 ~ p / D: h1 + p',
+      'A: nav > a / B: nav ul / C: h1 + p / D: h1 ~ p'
+    ],
+    ans: 0,
+    ex: 'A: nav a (자손-모든 a) / B: nav > ul (자식-바로 아래) / C: h1 + p (인접형제-바로 다음) / D: h1 ~ p (일반형제-뒤 모두). 이것이 네 가지 결합 선택자의 대표 사용 사례입니다.'
+  },
+
+  /* ── 15. 최종 종합 ── */
+  {
+    cat: '종합 문제',
+    q: '아래 HTML에서 CSS 적용 후 배경이 빨간색이 되는 요소는?',
+    tree:
+'div\n' +
+'├── h2  "제목"\n' +
+'├── p   "단락1"  ←─ ?\n' +
+'├── p   "단락2"  ←─ ?\n' +
+'└── ul\n' +
+'    └── li\n' +
+'        └── p  "단락3"  ←─ ?',
+    code:
+'h2 ~ p { background-color: red; }',
+    hint: 'h2 ~ p → h2와 같은 레벨(div의 자식)에서 h2 뒤에 오는 모든 p\n→ ul 안의 p는 h2와 레벨이 다름 (형제 아님!)',
+    opts: [
+      '단락1, 단락2, 단락3 모두',
+      '단락1, 단락2만 (ul 안의 단락3은 형제 아님)',
+      '단락3만',
+      '단락1만'
+    ],
+    ans: 1,
+    ex: 'h2 ~ p는 h2와 같은 부모(div)를 가진 형제 p를 선택합니다. 단락1과 단락2는 div의 직계 자식으로 h2의 형제이므로 선택됩니다. 단락3은 ul > li 안에 있어 h2와 레벨이 다른 자손이므로 선택되지 않습니다.'
+  }
+
+];
+
+/* ── 상태 ── */
+var cur = 0;
+var answered = new Array(Q.length).fill(null);
+var sel = new Array(Q.length).fill(null);
+
+/* ── DOM 헬퍼 ── */
+function el(tag, cls) { var e = document.createElement(tag); if (cls) e.className = cls; return e; }
+function txt(node, t) { node.textContent = t; }
+
+/* ── 렌더 ── */
+function render() {
+  var root = document.getElementById('qa');
+  while (root.firstChild) root.removeChild(root.firstChild);
+  if (cur >= Q.length) { renderScore(root); return; }
+
+  var q = Q[cur];
+  var done = answered[cur] !== null;
+  var pct = Math.round(cur / Q.length * 100);
+
+  /* 진행 바 */
+  var pb = el('div','prog-bg'); var pf = el('div','prog-fill'); pf.style.width = pct+'%'; pb.appendChild(pf); root.appendChild(pb);
+
+  /* 메타 */
+  var meta = el('div','q-meta');
+  var qn = el('span','q-num'); txt(qn, (cur+1)+' / '+Q.length);
+  var qc = el('span','q-cat'); txt(qc, q.cat);
+  meta.appendChild(qn); meta.appendChild(qc); root.appendChild(meta);
+
+  /* 질문 */
+  var qt = el('div','q-text'); txt(qt, q.q); root.appendChild(qt);
+
+  /* 가계도 */
+  if (q.tree) {
+    var tw = el('div','tree-wrap');
+    var tt = el('div','tree-title'); txt(tt, '📂 HTML 구조 (가계도)'); tw.appendChild(tt);
+    var tp = el('pre'); tp.style.cssText = 'font-family:Courier New,monospace;font-size:13px;line-height:1.9;white-space:pre;';
+    txt(tp, q.tree); tw.appendChild(tp); root.appendChild(tw);
+  }
+
+  /* 힌트 */
+  if (q.hint) {
+    var hb = el('div','hint-box');
+    var ht = el('div','hint-title'); txt(ht, '💡 핵심 개념'); hb.appendChild(ht);
+    var hc = el('pre'); hc.style.cssText = 'font-family:inherit;font-size:13px;white-space:pre-wrap;color:#475569;';
+    txt(hc, q.hint); hb.appendChild(hc); root.appendChild(hb);
+  }
+
+  /* 코드 블록 */
+  if (q.code) {
+    var pre = el('pre','code-block'); txt(pre, q.code); root.appendChild(pre);
+  }
+
+  /* 선택지 */
+  var opts = el('div','options');
+  q.opts.forEach(function(o, i) {
+    var btn = el('button','opt-btn');
+    if (done) {
+      if (i === q.ans) btn.classList.add('correct');
+      else if (i === sel[cur] && i !== q.ans) btn.classList.add('wrong');
+      btn.disabled = true;
+    }
+    txt(btn, o);
+    btn.addEventListener('click', (function(idx){ return function(){ choose(idx); }; })(i));
+    opts.appendChild(btn);
+  });
+  root.appendChild(opts);
+
+  /* 해설 */
+  if (done) {
+    var exp = el('div','explanation');
+    var b = el('strong'); txt(b, '해설 '); exp.appendChild(b);
+    var ep = el('pre'); ep.style.cssText = 'font-family:inherit;font-size:13px;white-space:pre-wrap;margin-top:4px;color:#334155;';
+    txt(ep, q.ex); exp.appendChild(ep); root.appendChild(exp);
+  }
+
+  /* 네비 */
+  var nav = el('div','nav-row');
+  var prev = el('button','nav-btn'); txt(prev,'← 이전'); if(cur===0) prev.disabled=true;
+  prev.addEventListener('click', function(){ go(-1); });
+  var cnt = el('span','nav-count'); txt(cnt, answered.filter(function(a){return a!==null;}).length+'문제 완료');
+  var next = el('button','nav-btn primary');
+  if (cur < Q.length-1) { txt(next,'다음 →'); next.addEventListener('click', function(){ go(1); }); }
+  else { txt(next,'결과 보기'); next.addEventListener('click', function(){ cur=Q.length; render(); }); }
+  nav.appendChild(prev); nav.appendChild(cnt); nav.appendChild(next); root.appendChild(nav);
+}
+
+function choose(i) {
+  if (answered[cur] !== null) return;
+  sel[cur] = i; answered[cur] = i===Q[cur].ans ? 'correct' : 'wrong'; render();
+}
+function go(d) { cur = Math.max(0, Math.min(Q.length-1, cur+d)); render(); }
+
+function renderScore(root) {
+  var c = answered.filter(function(a){return a==='correct';}).length;
+  var w = answered.filter(function(a){return a==='wrong';}).length;
+  var sk = answered.filter(function(a){return a===null;}).length;
+  var pct = Math.round(c/Q.length*100);
+  var msg = pct>=90 ? '결합 선택자 완벽 마스터! 🎉' :
+            pct>=70 ? '잘 하고 있어요! 헷갈린 문제 다시 봐요.' :
+            pct>=50 ? '가계도 그림 보면서 다시 도전해봐요!' :
+            '공백/>/+/~ 네 가지부터 다시 정리해봐요!';
+
+  var box = el('div','score-box');
+  var sn = el('div','score-num'); txt(sn, pct+'점'); box.appendChild(sn);
+  var sl = el('div','score-label'); txt(sl, msg); box.appendChild(sl);
+
+  var grid = el('div','score-grid');
+  [[c,'#16a34a','정답'],[w,'#dc2626','오답'],[sk,'#94a3b8','미응답']].forEach(function(item){
+    var card = el('div','score-card');
+    var v = el('div','sc-val'); v.style.color=item[1]; txt(v,item[0]); card.appendChild(v);
+    var lb = el('div','sc-label'); txt(lb,item[2]); card.appendChild(lb);
+    grid.appendChild(card);
+  });
+  box.appendChild(grid);
+
+  var rb = el('button','nav-btn primary'); txt(rb,'처음부터 다시 풀기');
+  rb.addEventListener('click', function(){ cur=0; answered=new Array(Q.length).fill(null); sel=new Array(Q.length).fill(null); render(); });
+  box.appendChild(rb); root.appendChild(box);
+}
+
+render();
+</script>
+</body>
+</html>
