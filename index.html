@@ -108,6 +108,14 @@ main {
   background: var(--primary-light);
   color: var(--primary-dark);
 }
+.tag.quiz {
+  background: #fef3c7;
+  color: #92400e;
+}
+.tag.lecture {
+  background: #d1fae5;
+  color: #065f46;
+}
 
 /* 준비중 카드 */
 .card.soon {
@@ -141,7 +149,7 @@ footer {
 <header>
   <h1>Frontend Lecture</h1>
   <p>HTML/CSS 프론트엔드 강의자료 & 퀴즈 모음</p>
-  <div class="header-badge">imjinhee · GitHub Pages</div>
+  <div class="header-badge">JJinMangGo · GitHub Pages</div>
 </header>
 
 <main>
@@ -217,10 +225,93 @@ footer {
     </a>
   </div>
 
+  <!-- 퀴즈 모음 -->
+  <div class="section-label">HTML 퀴즈</div>
+  <div class="card-grid">
+    <a class="card" href="quiz/html_quiz1.html">
+      <div class="card-icon">🧩</div>
+      <div class="card-title">HTML 기초 퀴즈 1</div>
+      <div class="card-desc">HTML 문서 구조, 시맨틱 태그, 폼, 링크, 이미지 등 기초 개념을 확인해요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+        <span class="tag">20문제</span>
+      </div>
+    </a>
+    <a class="card" href="quiz/html_quiz2.html">
+      <div class="card-icon">🧩</div>
+      <div class="card-title">HTML 기초 퀴즈 2</div>
+      <div class="card-desc">HTML 심화 개념을 문제로 확인해보세요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-label">CSS 퀴즈</div>
+  <div class="card-grid">
+    <a class="card" href="quiz/css-text-color-quiz.html">
+      <div class="card-icon">🎨</div>
+      <div class="card-title">CSS 텍스트 & 컬러</div>
+      <div class="card-desc">text-align, text-transform, text-decoration, text-shadow, CSS Colors 등을 확인해요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+        <span class="tag">10문제</span>
+      </div>
+    </a>
+    <a class="card" href="quiz/css-font-quiz.html">
+      <div class="card-icon">✍️</div>
+      <div class="card-title">CSS 폰트</div>
+      <div class="card-desc">font-size, font-weight, font-family, line-height 등 폰트 관련 속성을 확인해요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+      </div>
+    </a>
+    <a class="card" href="quiz/css-unit-quiz.html">
+      <div class="card-icon">📏</div>
+      <div class="card-title">CSS 단위</div>
+      <div class="card-desc">px, em, rem, %, vw, vh 등 CSS 단위 개념을 확인해요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+      </div>
+    </a>
+    <a class="card" href="quiz/css-boxmodel-quiz.html">
+      <div class="card-icon">📦</div>
+      <div class="card-title">CSS 박스모델</div>
+      <div class="card-desc">margin, padding, border, box-sizing 등 박스모델 개념을 확인해요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+      </div>
+    </a>
+    <a class="card" href="quiz/css_background-quiz.html">
+      <div class="card-icon">🖼️</div>
+      <div class="card-title">CSS 배경</div>
+      <div class="card-desc">background-color, background-image, background-size 등 배경 속성을 확인해요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+      </div>
+    </a>
+    <a class="card" href="quiz/css_combinator_quiz.html">
+      <div class="card-icon">🔗</div>
+      <div class="card-title">CSS 결합 선택자</div>
+      <div class="card-desc">자손, 자식, 인접, 일반 형제 선택자 등 결합 선택자 개념을 확인해요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+      </div>
+    </a>
+    <a class="card" href="quiz/css_priority_quiz.html">
+      <div class="card-icon">⚖️</div>
+      <div class="card-title">CSS 우선순위</div>
+      <div class="card-desc">specificity, important, 캐스케이딩 등 CSS 우선순위 규칙을 확인해요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+      </div>
+    </a>
+  </div>
+
 </main>
 
 <footer>
-  © 2025 imjinhee · Frontend Lecture
+  © 2025 JJinMangGo · Frontend Lecture
 </footer>
 
 </body>
