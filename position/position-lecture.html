@@ -40,15 +40,24 @@ body {
   padding: 24px 0;
   overflow-y: auto;
   z-index: 100;
+  transition: transform 0.3s ease;
 }
-.sidebar-title {
-  font-size: 13px; font-weight: 700;
-  color: var(--primary-dark);
+.sidebar.collapsed { transform: translateX(-220px); }
+.sidebar-header {
+  display: flex; align-items: center; justify-content: space-between;
   padding: 0 20px 16px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 12px;
-  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border); margin-bottom: 12px;
 }
+.sidebar-title { font-size: 13px; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.05em; }
+.sidebar-toggle { display: none; background: none; border: none; cursor: pointer; font-size: 18px; color: var(--sub); padding: 2px; line-height: 1; }
+.nav-home {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 20px 12px; font-size: 12px; font-weight: 600;
+  color: var(--primary); text-decoration: none;
+  border-bottom: 1px solid var(--border); margin-bottom: 8px; transition: all 0.15s;
+}
+.nav-home:hover { background: var(--primary-light); }
+.nav-home-icon { font-size: 14px; }
 .nav-item {
   display: block; padding: 8px 20px;
   font-size: 13px; color: var(--sub);
@@ -58,9 +67,27 @@ body {
 .nav-item:hover { color: var(--primary); background: var(--primary-light); }
 .nav-item.active { color: var(--primary); border-left-color: var(--primary); background: var(--primary-light); font-weight: 600; }
 .nav-num { font-family: monospace; font-size: 11px; color: var(--muted); margin-right: 6px; }
+.menu-btn {
+  display: none; position: fixed; top: 12px; left: 12px; z-index: 200;
+  background: var(--primary); color: #fff; border: none; border-radius: 8px;
+  width: 40px; height: 40px; font-size: 18px; cursor: pointer;
+  align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: all 0.15s;
+}
+.menu-btn:hover { opacity: 0.85; }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 99; backdrop-filter: blur(2px); }
+.sidebar-overlay.show { display: block; }
 
 /* 메인 */
-.main { margin-left: 220px; padding: 40px 40px 100px; max-width: 960px; }
+.main { margin-left: 220px; padding: 40px 40px 100px; max-width: 960px; transition: margin 0.3s; }
+
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-220px); }
+  .sidebar.open { transform: translateX(0); }
+  .menu-btn { display: flex; }
+  .sidebar-toggle { display: block; }
+  .main { margin-left: 0; padding: 60px 16px 80px; }
+}
 
 /* 히어로 */
 .hero {
@@ -233,8 +260,19 @@ body {
 </head>
 <body>
 
-<nav class="sidebar">
-  <div class="sidebar-title">CSS POSITION 수업</div>
+<!-- 햄버거 버튼 -->
+<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn">☰</button>
+<!-- 오버레이 -->
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">CSS POSITION 수업</div>
+    <button class="sidebar-toggle" onclick="closeSidebar()">✕</button>
+  </div>
+  <a class="nav-home" href="index.html">
+    메인으로
+  </a>
   <a class="nav-item active" href="#s1"><span class="nav-num">01</span>position 개요</a>
   <a class="nav-item" href="#s2"><span class="nav-num">02</span>relative</a>
   <a class="nav-item" href="#s3"><span class="nav-num">03</span>absolute</a>
@@ -361,7 +399,7 @@ body {
   <section class="section" id="s3">
     <div class="section-num">CHAPTER 03</div>
     <div class="section-title">absolute</div>
-    <div class="section-desc">가장 가까운 <strong>position이 relative인 조상 요소</strong>를 기준으로 위치를 잡아요. 문서 흐름에서 이탈해서 다른 요소들이 그 자리를 채워요. <strong>부모 relative + 자식 absolute</strong>를 세트로 사용해요.</div>
+    <div class="section-desc">가장 가까운 <strong>position이 relative인 부모포함 가장 가까운 조상 요소</strong>를 기준으로 위치를 잡아요. 문서 흐름에서 이탈해서 다른 요소들이 그 자리를 채워요. <strong>부모 relative + 자식 absolute</strong>를 세트로 사용해요.</div>
 
     <div class="card">
       <div class="card-title"><span class="dot dot-blue"></span>코드</div>
@@ -458,19 +496,27 @@ body {
       <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 - 스크롤해도 고정</div>
       <div class="preview">
         <div class="preview-label">LIVE PREVIEW - 아래 박스를 스크롤해보세요</div>
-        <div class="scroll-demo">
-          <div style="position:sticky;top:0;background:#1e40af;color:#fff;padding:8px 14px;font-size:12px;font-weight:600;z-index:10">
-            🔒 fixed처럼 고정된 헤더 (데모용 sticky)
+        <div style="position:relative">
+          <div class="scroll-demo" id="fixed-demo">
+            <div style="position:sticky;top:0;background:#1e40af;color:#fff;padding:8px 14px;font-size:12px;font-weight:600;z-index:10">
+              🔒 fixed 헤더 - 스크롤해도 상단 고정!
+            </div>
+            <div class="scroll-content">
+              <div class="scroll-item">콘텐츠 1 - 스크롤해보세요 ↓</div>
+              <div class="scroll-item">콘텐츠 2</div>
+              <div class="scroll-item">콘텐츠 3</div>
+              <div class="scroll-item">콘텐츠 4</div>
+              <div class="scroll-item">콘텐츠 5</div>
+              <div class="scroll-item">콘텐츠 6</div>
+            </div>
           </div>
-          <div class="scroll-content">
-            <div class="scroll-item">콘텐츠 1 - 스크롤해보세요 ↓</div>
-            <div class="scroll-item">콘텐츠 2</div>
-            <div class="scroll-item">콘텐츠 3</div>
-            <div class="scroll-item">콘텐츠 4</div>
-            <div class="scroll-item">콘텐츠 5</div>
-            <div class="scroll-item">콘텐츠 6</div>
-          </div>
-          <div style="position:absolute;right:10px;bottom:10px;background:#1e40af;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">↑</div>
+          <!-- 위로버튼: 바깥 relative 기준으로 absolute 고정 -->
+          <div id="fixed-top-btn"
+            style="position:absolute;right:10px;bottom:10px;background:#1e40af;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;cursor:pointer;z-index:20"
+            onclick="document.getElementById('fixed-demo').scrollTop=0">↑</div>
+        </div>
+        <div style="font-size:12px;color:var(--sub);margin-top:8px">
+          ↑ 버튼은 박스 오른쪽 하단에 항상 고정 - 실제 fixed처럼 스크롤해도 안 움직여요
         </div>
       </div>
     </div>
@@ -712,6 +758,24 @@ body {
 </style>
 
 <script>
+// 사이드바 토글
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const btn = document.getElementById('menu-btn');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+  btn.textContent = sidebar.classList.contains('open') ? '✕' : '☰';
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const btn = document.getElementById('menu-btn');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('show');
+  btn.textContent = '☰';
+}
+
 // 사이드바 활성화
 const sections = document.querySelectorAll('.section');
 const navItems = document.querySelectorAll('.nav-item');
@@ -720,6 +784,9 @@ window.addEventListener('scroll', () => {
   sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) cur = s.id; });
   navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + cur));
 });
+navItems.forEach(n => n.addEventListener('click', () => {
+  if (window.innerWidth <= 768) closeSidebar();
+}));
 
 // 01: 개요 토글
 function setOverview(v, btn) {
@@ -749,7 +816,7 @@ function setRelative(prop, v) {
 function setAbs(prop, v) {
   document.getElementById('abs-badge').style[prop] = v + 'px';
   document.getElementById('abs-' + prop + '-v').textContent = v + 'px';
-  document.getElementById('v-a' + prop.charAt(0)).textContent = v + 'px';
+  document.getElementById('v-a' + prop).textContent = v + 'px';
 }
 
 // 06: z-index
