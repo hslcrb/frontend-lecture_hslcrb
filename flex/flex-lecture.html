@@ -597,13 +597,18 @@ body {
       </div>
       <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰</div>
       <div class="preview">
-        <div class="preview-label">LIVE PREVIEW - 컨테이너를 좁혀서 wrap 효과를 확인해요</div>
-        <div id="p8-box" style="display:flex;flex-wrap:nowrap;gap:8px;background:#dbeafe;border:2px solid #93c5fd;border-radius:8px;padding:8px;height:180px;align-content:flex-start;transition:all 0.3s;width:100%">
-          <div class="fi" style="min-width:100px">아이템 1</div>
-          <div class="fi" style="min-width:100px">아이템 2</div>
-          <div class="fi" style="min-width:100px">아이템 3</div>
-          <div class="fi" style="min-width:100px">아이템 4</div>
-          <div class="fi" style="min-width:100px">아이템 5</div>
+        <div class="preview-label">LIVE PREVIEW - 컨테이너 너비를 줄이면 wrap 효과가 보여요</div>
+        <div id="p8-wrap" style="overflow:hidden;transition:width 0.3s;width:100%;border:1.5px dashed var(--border);border-radius:8px;padding:8px;background:#fff;margin-bottom:8px">
+          <div id="p8-box" style="display:flex;flex-wrap:nowrap;gap:8px;background:#dbeafe;border:2px solid #93c5fd;border-radius:8px;padding:8px;height:180px;align-content:flex-start;transition:all 0.3s">
+            <div class="fi" style="min-width:100px">아이템 1</div>
+            <div class="fi" style="min-width:100px">아이템 2</div>
+            <div class="fi" style="min-width:100px">아이템 3</div>
+            <div class="fi" style="min-width:100px">아이템 4</div>
+            <div class="fi" style="min-width:100px">아이템 5</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--sub)" id="p8-desc">
+          컨테이너 <strong id="p8-wrap-w">100%</strong> - 아이템 5개 × 100px = 500px 필요
         </div>
       </div>
       <div class="controls">
@@ -613,6 +618,11 @@ body {
             <button class="tab-btn active" onclick="setWrap('nowrap',this)">nowrap (기본)</button>
             <button class="tab-btn" onclick="setWrap('wrap',this)">wrap</button>
           </div>
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label">컨테이너 너비</span>
+          <input type="range" min="20" max="100" value="100" step="5" oninput="setWrapWidth(this.value)">
+          <span class="ctrl-val" id="v-wrap8">100%</span>
         </div>
         <div class="ctrl-group">
           <span class="ctrl-label">align-content</span>
@@ -772,6 +782,20 @@ function setWrap(v, btn) {
     acSel.disabled = true;
     acSel.value = 'flex-start';
     document.getElementById('p8-box').style.alignContent = 'flex-start';
+  }
+}
+
+// 08: 컨테이너 너비
+function setWrapWidth(v) {
+  document.getElementById('p8-wrap').style.width = v + '%';
+  document.getElementById('v-wrap8').textContent = v + '%';
+  const wrapW = document.getElementById('p8-wrap').offsetWidth;
+  const desc = document.getElementById('p8-desc');
+  const wrap = document.getElementById('p8-box').style.flexWrap;
+  if (wrapW < 500) {
+    desc.innerHTML = `컨테이너 <strong id="p8-wrap-w">${v}%</strong> (약 ${wrapW}px) - 아이템 합계 500px 초과 → <span style="color:${wrap==='wrap'?'#10b981':'#ef4444'};font-weight:600">${wrap==='wrap'?'줄바꿈 발생!':'강제로 줄어듦 (nowrap)'}</span>`;
+  } else {
+    desc.innerHTML = `컨테이너 <strong id="p8-wrap-w">${v}%</strong> (약 ${wrapW}px) - 공간 충분 → 한 줄로 배치`;
   }
 }
 
