@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CSS Grid 완전정복</title>
+<title>Frontend Lecture</title>
 <style>
-/* ===== 리셋 & 기본 ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg: #f8f9fc;
@@ -13,931 +12,216 @@
   --primary: #4361ee;
   --primary-light: #eef2ff;
   --primary-dark: #3730a3;
-  --accent: #f72585;
   --text: #1e293b;
   --sub: #64748b;
   --muted: #94a3b8;
   --border: #e2e8f0;
-  --code-bg: #1e1e2e;
-  --radius: 12px;
-  --green: #10b981;
-  --amber: #f59e0b;
+  --radius: 14px;
 }
 body {
   font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.6;
+  min-height: 100vh;
 }
 
-/* ===== 사이드바 네비 ===== */
-.sidebar {
-  position: fixed;
-  left: 0; top: 0; bottom: 0;
-  width: 220px;
-  background: var(--card);
-  border-right: 1px solid var(--border);
-  padding: 24px 0;
-  overflow-y: auto;
-  z-index: 100;
-}
-.sidebar-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--primary-dark);
-  padding: 0 20px 16px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 12px;
-  letter-spacing: 0.05em;
-}
-.nav-item {
-  display: block;
-  padding: 8px 20px;
-  font-size: 13px;
-  color: var(--sub);
-  text-decoration: none;
-  transition: all 0.15s;
-  border-left: 3px solid transparent;
-}
-.nav-item:hover { color: var(--primary); background: var(--primary-light); }
-.nav-item.active { color: var(--primary); border-left-color: var(--primary); background: var(--primary-light); font-weight: 600; }
-.nav-num { font-family: monospace; font-size: 11px; color: var(--muted); margin-right: 6px; }
-
-/* ===== 메인 콘텐츠 ===== */
-.main { margin-left: 220px; padding: 40px 40px 100px; max-width: 960px; }
-
-/* ===== 히어로 ===== */
-.hero {
-  text-align: center;
-  padding: 60px 20px 48px;
+/* 헤더 */
+header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: var(--radius);
   color: #fff;
-  margin-bottom: 48px;
+  text-align: center;
+  padding: 60px 20px 50px;
 }
-.hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; letter-spacing: -1px; }
-.hero p { font-size: 16px; opacity: 0.85; }
-.hero-badges { display: flex; gap: 8px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
-.hero-badge {
+header h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
+header p  { font-size: 15px; opacity: 0.85; }
+.header-badge {
+  display: inline-block;
   background: rgba(255,255,255,0.2);
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(255,255,255,0.35);
   color: #fff;
   font-size: 12px;
-  padding: 4px 12px;
+  padding: 4px 14px;
   border-radius: 20px;
+  margin-top: 16px;
   font-weight: 500;
 }
 
-/* ===== 섹션 ===== */
-.section { margin-bottom: 64px; scroll-margin-top: 24px; }
-.section-header { margin-bottom: 24px; }
-.section-num {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: 0.1em;
-  margin-bottom: 6px;
+/* 메인 */
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
 }
-.section-title { font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -0.5px; }
-.section-desc { font-size: 14px; color: var(--sub); line-height: 1.7; }
 
-/* ===== 카드 ===== */
+/* 섹션 타이틀 */
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+/* 카드 그리드 */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
 .card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-.card-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--sub);
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  padding: 24px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
 }
-.card-title .dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--primary);
+  opacity: 0;
+  transition: opacity 0.2s;
 }
-.dot-blue { background: var(--primary); }
-.dot-green { background: var(--green); }
-.dot-amber { background: var(--amber); }
+.card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.card:hover::before { opacity: 1; }
 
-/* ===== 코드 블록 ===== */
-.code-block {
-  background: var(--code-bg);
-  padding: 20px;
-  font-family: 'Fira Code', 'Courier New', monospace;
-  font-size: 13px;
-  color: #cdd6f4;
-  line-height: 2;
-  overflow-x: auto;
-}
-.code-block .cm   { color: #6c7086; }
-.code-block .sel  { color: #cba6f7; }
-.code-block .prop { color: #89b4fa; }
-.code-block .val  { color: #a6e3a1; }
-.code-block .str  { color: #f38ba8; }
-.code-block .num  { color: #fab387; }
-
-/* ===== 라이브 프리뷰 ===== */
-.preview {
-  padding: 20px;
-  background: #f1f5f9;
-  min-height: 80px;
-}
-.preview-label {
+.card-icon { font-size: 28px; }
+.card-title { font-size: 16px; font-weight: 700; }
+.card-desc  { font-size: 13px; color: var(--sub); line-height: 1.6; }
+.card-tags  { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.tag {
   font-size: 11px;
-  color: var(--muted);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  margin-bottom: 12px;
-}
-
-/* 프리뷰용 그리드 아이템 */
-.pi {
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-weight: 500;
   background: var(--primary-light);
-  border: 1px solid #c7d2fe;
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 600; color: var(--primary-dark);
-  min-height: 48px;
-  transition: all 0.3s;
-}
-.pi.green { background: #d1fae5; border-color: #6ee7b7; color: #065f46; }
-.pi.amber { background: #fef3c7; border-color: #fcd34d; color: #92400e; }
-.pi.ghost { background: transparent; border: 2px dashed var(--border); color: var(--muted); font-size: 11px; }
-
-/* ===== 컨트롤 ===== */
-.controls { padding: 16px 20px; border-top: 1px solid var(--border); background: var(--card); display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
-.ctrl-group { display: flex; align-items: center; gap: 10px; width: 50%; }
-.ctrl-label { font-size: 12px; color: var(--sub); font-weight: 500; min-width: 80px; }
-.ctrl-group input[type=range] { width: 120px; accent-color: var(--primary); }
-.ctrl-val { font-size: 12px; font-family: monospace; font-weight: 600; color: var(--primary); min-width: 36px; }
-.ctrl-group select {
-  font-size: 12px; padding: 4px 8px; border-radius: 6px;
-  border: 1px solid var(--border); background: var(--card);
-  color: var(--text); font-family: inherit;
-}
-.tab-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-.tab-btn {
-  font-size: 12px; padding: 5px 14px; border-radius: 20px;
-  border: 1px solid var(--border); background: var(--card);
-  color: var(--sub); cursor: pointer; transition: all 0.15s; font-weight: 500;
-}
-.tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-/* ===== 팁 박스 ===== */
-.tip {
-  border-left: 3px solid var(--primary);
-  background: var(--primary-light);
-  padding: 12px 16px;
-  border-radius: 0 8px 8px 0;
-  font-size: 13px;
   color: var(--primary-dark);
-  margin-top: 16px;
-  line-height: 1.7;
-}
-.tip.green { border-color: var(--green); background: #d1fae5; color: #065f46; }
-.tip.amber { border-color: var(--amber); background: #fef3c7; color: #92400e; }
-
-/* ===== 비교 그리드 ===== */
-.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-.compare-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-.compare-title { font-size: 12px; font-weight: 600; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--bg); }
-
-/* ===== 실습 예제 ===== */
-.demo-hince {
-  display: grid;
-  grid-template-columns: 1fr 0.5fr 1fr 0.5fr 1fr;
-  gap: 4px;
-}
-.demo-hince .hi {
-  background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
-  border-radius: 4px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 600; color: #3730a3;
-  min-height: 80px;
 }
 
-.demo-nh {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  grid-template-areas:
-    ". . . a"
-    ". . b c"
-    ". d e f"
-    "g h i .";
+/* 준비중 카드 */
+.card.soon {
+  opacity: 0.5;
+  pointer-events: none;
 }
-.demo-nh .ni {
-  background: #d1fae5;
-  border: 1px solid #6ee7b7;
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 600; color: #065f46;
-  min-height: 50px;
+.card.soon::after {
+  content: '준비중';
+  position: absolute;
+  top: 14px; right: 14px;
+  font-size: 11px;
+  background: var(--border);
+  color: var(--muted);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
 }
 
-/* 파트너 로고 */
-.demo-partner-row1 { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin-bottom: 8px; }
-.demo-partner-row2 { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; padding: 0 calc(100% / 10); }
-.demo-partner .lc {
-  background: #f7f5f1;
-  border: 1px solid #e5e1da;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 600; color: #555;
-  height: 56px;
+/* 푸터 */
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 24px;
+  border-top: 1px solid var(--border);
 }
-
-/* divider */
-.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-
-/* 배지 */
-.badge {
-  display: inline-block; font-size: 11px; padding: 2px 8px;
-  border-radius: 20px; font-weight: 600; margin-left: 6px;
-}
-.badge-blue { background: var(--primary-light); color: var(--primary-dark); }
-.badge-green { background: #d1fae5; color: #065f46; }
-.badge-amber { background: #fef3c7; color: #92400e; }
 </style>
 </head>
 <body>
 
-<!-- 사이드바 -->
-<nav class="sidebar">
-  <div class="sidebar-title">CSS GRID 수업</div>
-  <a class="nav-item active" href="#s1"><span class="nav-num">01</span>display: grid</a>
-  <a class="nav-item" href="#s2"><span class="nav-num">02</span>repeat() + fr</a>
-  <a class="nav-item" href="#s3"><span class="nav-num">03</span>minmax()</a>
-  <a class="nav-item" href="#s4"><span class="nav-num">04</span>auto-fill vs auto-fit</a>
-  <a class="nav-item" href="#s5"><span class="nav-num">05</span>grid-column / row</a>
-  <a class="nav-item" href="#s6"><span class="nav-num">06</span>grid-template-areas</a>
-  <a class="nav-item" href="#s7"><span class="nav-num">07</span>grid-auto-flow</a>
-  <a class="nav-item" href="#s8"><span class="nav-num">08</span>gap / grid-auto-rows</a>
-  <a class="nav-item" href="#s9"><span class="nav-num">09</span>실습 예제</a>
-</nav>
+<header>
+  <h1>Frontend Lecture</h1>
+  <p>HTML/CSS 프론트엔드 강의자료 & 퀴즈 모음</p>
+  <div class="header-badge">imjinhee · GitHub Pages</div>
+</header>
 
-<main class="main">
+<main>
 
-  <!-- 히어로 -->
-  <div class="hero">
-    <h1>CSS Grid 완전정복</h1>
-    <p>2차원 레이아웃의 모든 것 - 개념부터 실습까지</p>
-    <div class="hero-badges">
-      <span class="hero-badge">display: grid</span>
-      <span class="hero-badge">repeat() / fr</span>
-      <span class="hero-badge">minmax()</span>
-      <span class="hero-badge">auto-fill / auto-fit</span>
-      <span class="hero-badge">grid-area</span>
-      <span class="hero-badge">grid-auto-flow</span>
-    </div>
+  <!-- CSS Grid -->
+  <div class="section-label">CSS GRID</div>
+  <div class="card-grid">
+    <a class="card" href="grid/grid-lecture.html">
+      <div class="card-icon">📐</div>
+      <div class="card-title">CSS Grid 강의자료</div>
+      <div class="card-desc">display: grid부터 grid-template-areas, auto-fill/fit, 실습 예제까지 인터랙티브 슬라이더로 배워요.</div>
+      <div class="card-tags">
+        <span class="tag">강의자료</span>
+        <span class="tag">인터랙티브</span>
+        <span class="tag">9 챕터</span>
+      </div>
+    </a>
+    <a class="card" href="grid/css-grid-quiz.html">
+      <div class="card-icon">📝</div>
+      <div class="card-title">CSS Grid 퀴즈</div>
+      <div class="card-desc">오늘 배운 Grid 개념을 15문제로 확인해보세요. 힌트, 해설, 점수까지 제공해요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+        <span class="tag">15문제</span>
+        <span class="tag">해설 포함</span>
+      </div>
+    </a>
   </div>
 
-  <!-- ===== 01: display: grid ===== -->
-  <section class="section" id="s1">
-    <div class="section-header">
-      <div class="section-num">CHAPTER 01</div>
-      <div class="section-title">display: grid</div>
-      <div class="section-desc">부모 요소에 <code>display: grid</code>를 선언하면 자식 요소들이 그리드 아이템이 됩니다. Flexbox가 1차원(행 또는 열)이라면, Grid는 행과 열을 동시에 제어하는 2차원 레이아웃이에요.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>코드</div>
-      <div class="code-block">
-<span class="sel">.container</span> {<br>
-&nbsp;&nbsp;<span class="prop">display</span>: <span class="val">grid</span>; <span class="cm">/* 그리드 활성화 */</span><br>
-&nbsp;&nbsp;<span class="prop">grid-template-columns</span>: <span class="val">repeat(3, 1fr)</span>;<br>
-}
+  <!-- CSS Flex -->
+  <div class="section-label">CSS FLEX</div>
+  <div class="card-grid">
+    <a class="card" href="flex/flex-lecture.html">
+      <div class="card-icon">🎯</div>
+      <div class="card-title">CSS Flex 강의자료</div>
+      <div class="card-desc">1차원 레이아웃의 모든 것. flex-direction, justify-content, align-items 등을 인터랙티브하게 배워요.</div>
+      <div class="card-tags">
+        <span class="tag">강의자료</span>
+        <span class="tag">인터랙티브</span>
       </div>
-      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰</div>
-      <div class="preview">
-        <div class="preview-label">LIVE PREVIEW</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-          <div class="pi">아이템 1</div>
-          <div class="pi">아이템 2</div>
-          <div class="pi">아이템 3</div>
-          <div class="pi">아이템 4</div>
-          <div class="pi">아이템 5</div>
-          <div class="pi">아이템 6</div>
-        </div>
+    </a>
+    <a class="card" href="flex/css-flex-quiz.html">
+      <div class="card-icon">📝</div>
+      <div class="card-title">CSS Flex 퀴즈</div>
+      <div class="card-desc">Flex 핵심 개념을 문제로 확인해보세요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+        <span class="tag">해설 포함</span>
       </div>
-    </div>
-    <div class="tip">💡 <strong>Flexbox vs Grid</strong> - Flexbox는 가로 또는 세로 한 방향, Grid는 가로 + 세로 동시 제어. 레이아웃 전체 구조는 Grid, 내부 정렬은 Flex가 일반적이에요.</div>
-  </section>
+    </a>
+  </div>
 
-  <hr class="divider">
-
-  <!-- ===== 02: repeat() + fr ===== -->
-  <section class="section" id="s2">
-    <div class="section-header">
-      <div class="section-num">CHAPTER 02</div>
-      <div class="section-title">repeat() + fr 단위</div>
-      <div class="section-desc"><code>repeat(횟수, 크기)</code>로 같은 컬럼을 반복하고, <code>fr</code>은 남은 공간의 비율을 나타냅니다.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>코드</div>
-      <div class="code-block">
-<span class="cm">/* repeat(반복횟수, 크기) */</span><br>
-<span class="prop">grid-template-columns</span>: <span class="val">repeat(<span id="r2-n">3</span>, 1fr)</span>;<br>
-<span class="cm">/* = 1fr 1fr 1fr (3번 반복) */</span><br><br>
-<span class="cm">/* fr = 남은 공간의 비율 */</span><br>
-<span class="prop">grid-template-columns</span>: <span class="val">2fr 1fr 1fr</span>; <span class="cm">/* 2:1:1 비율 */</span>
+  <!-- CSS Position -->
+  <div class="section-label">CSS POSITION</div>
+  <div class="card-grid">
+    <a class="card" href="position/position-lecture.html">
+      <div class="card-icon">📌</div>
+      <div class="card-title">CSS Position 강의자료</div>
+      <div class="card-desc">static, relative, absolute, fixed, sticky의 차이를 시각적으로 이해해요.</div>
+      <div class="card-tags">
+        <span class="tag">강의자료</span>
+        <span class="tag">인터랙티브</span>
       </div>
-      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 - 컬럼 수 조절</div>
-      <div class="preview">
-        <div class="preview-label">LIVE PREVIEW</div>
-        <div id="p2-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-          <div class="pi">1</div><div class="pi">2</div><div class="pi">3</div>
-          <div class="pi">4</div><div class="pi">5</div><div class="pi">6</div>
-        </div>
+    </a>
+    <a class="card" href="position/css-position-quiz.html">
+      <div class="card-icon">📝</div>
+      <div class="card-title">CSS Position 퀴즈</div>
+      <div class="card-desc">Position 핵심 개념을 문제로 확인해보세요.</div>
+      <div class="card-tags">
+        <span class="tag">퀴즈</span>
+        <span class="tag">해설 포함</span>
       </div>
-      <div class="controls">
-        <div class="ctrl-group">
-          <span class="ctrl-label">컬럼 수</span>
-          <input type="range" min="1" max="6" value="3" oninput="setRepeat(this.value)">
-          <span class="ctrl-val" id="v-repeat">3</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-amber"></span>fr 비율 비교</div>
-      <div class="preview">
-        <div class="preview-label">1fr 1fr 1fr (균등)</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
-          <div class="pi">1fr</div><div class="pi">1fr</div><div class="pi">1fr</div>
-        </div>
-        <div class="preview-label">2fr 1fr 1fr (2:1:1)</div>
-        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px">
-          <div class="pi">2fr</div><div class="pi amber">1fr</div><div class="pi amber">1fr</div>
-        </div>
-      </div>
-    </div>
-    <div class="tip">💡 <code>repeat(3, 1fr)</code>은 <code>1fr 1fr 1fr</code>과 완전히 동일해요. <code>repeat(2, 2fr 1fr)</code>처럼 패턴 반복도 가능해요!</div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ===== 03: minmax() ===== -->
-  <section class="section" id="s3">
-    <div class="section-header">
-      <div class="section-num">CHAPTER 03</div>
-      <div class="section-title">minmax()</div>
-      <div class="section-desc"><code>minmax(최솟값, 최댓값)</code>으로 컬럼 너비에 범위를 지정합니다. 최솟값보다 작아지지 않고, 최댓값보다 커지지 않아요.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>코드</div>
-      <div class="code-block">
-<span class="prop">grid-template-columns</span>: <span class="val">repeat(3, minmax(<span id="mm-min-v">80</span>px, 1fr))</span>;<br>
-<span class="cm">/* 최소 80px, 최대 1fr(남은 공간) */</span><br><br>
-<span class="cm">/* 자주 쓰는 패턴 */</span><br>
-<span class="prop">grid-template-columns</span>: <span class="val">repeat(3, minmax(150px, 1fr))</span>; <span class="cm">/* 반응형 카드 */</span><br>
-<span class="prop">grid-template-columns</span>: <span class="val">repeat(3, minmax(0, 1fr))</span>;   <span class="cm">/* = 1fr (안전) */</span>
-      </div>
-      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 - 컨테이너 너비 + 최솟값 동시 조절</div>
-      <div class="preview">
-        <div class="preview-label">LIVE PREVIEW - 컨테이너를 줄이면 최솟값이 언제 발동하는지 보여요</div>
-        <div id="p3-wrap" style="width:100%;overflow-x:auto;transition:width 0.3s;border:1.5px dashed var(--border);border-radius:8px;padding:8px;background:#fff;margin-bottom:6px">
-          <div id="p3-grid" style="display:grid;grid-template-columns:repeat(3,minmax(80px,1fr));gap:8px">
-            <div class="pi" id="p3-label">min: 80px</div>
-            <div class="pi">긴 텍스트</div>
-            <div class="pi">짧음</div>
-          </div>
-        </div>
-        <div style="font-size:12px;color:var(--sub);line-height:1.7" id="p3-desc">
-          컨테이너 <strong id="p3-wrap-w">100%</strong> - 칸당 여유 충분 → 1fr 균등 분배
-        </div>
-      </div>
-      <div class="controls">
-        <div class="ctrl-group">
-          <span class="ctrl-label">최솟값 (min)</span>
-          <input type="range" min="40" max="300" value="80" step="10" oninput="setMinmax(this.value)">
-          <span class="ctrl-val" id="v-mm">80px</span>
-        </div>
-        <div class="ctrl-group">
-          <span class="ctrl-label">컨테이너 너비</span>
-          <input type="range" min="20" max="100" value="100" step="5" oninput="setWrapWidth(this.value)">
-          <span class="ctrl-val" id="v-wrap">100%</span>
-        </div>
-      </div>
-    </div>
-    <div class="tip">💡 min에는 px, max에는 fr을 조합하는 게 가장 많이 쓰이는 패턴이에요. <code>min-content</code>, <code>max-content</code>도 사용 가능해요.</div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ===== 04: auto-fill vs auto-fit ===== -->
-  <section class="section" id="s4">
-    <div class="section-header">
-      <div class="section-num">CHAPTER 04</div>
-      <div class="section-title">auto-fill vs auto-fit</div>
-      <div class="section-desc">컨테이너 너비에 따라 컬럼 수를 자동으로 결정해요. 차이는 아이템이 트랙보다 적을 때 빈 트랙 처리 방식에 있어요.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>코드</div>
-      <div class="code-block">
-<span class="cm">/* auto-fill: 빈 트랙 유지 */</span><br>
-<span class="prop">grid-template-columns</span>: <span class="val">repeat(auto-fill, minmax(120px, 1fr))</span>;<br><br>
-<span class="cm">/* auto-fit: 빈 트랙 0px로 접음 → 아이템이 늘어남 */</span><br>
-<span class="prop">grid-template-columns</span>: <span class="val">repeat(auto-fit, minmax(120px, 1fr))</span>;
-      </div>
-      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 - 아이템 수 조절해서 비교</div>
-      <div class="preview">
-        <div class="compare">
-          <div class="compare-card">
-            <div class="compare-title">auto-fill <span class="badge badge-amber">빈 트랙 유지</span></div>
-            <div style="padding:12px">
-              <div id="p4-fill" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:6px">
-                <div class="pi" style="min-height:36px;font-size:11px">A</div>
-                <div class="pi" style="min-height:36px;font-size:11px">B</div>
-                <div class="pi" style="min-height:36px;font-size:11px">C</div>
-              </div>
-            </div>
-          </div>
-          <div class="compare-card">
-            <div class="compare-title">auto-fit <span class="badge badge-green">빈 트랙 접힘</span></div>
-            <div style="padding:12px">
-              <div id="p4-fit" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(60px,1fr));gap:6px">
-                <div class="pi green" style="min-height:36px;font-size:11px">A</div>
-                <div class="pi green" style="min-height:36px;font-size:11px">B</div>
-                <div class="pi green" style="min-height:36px;font-size:11px">C</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="controls">
-        <div class="ctrl-group">
-          <span class="ctrl-label">아이템 수</span>
-          <button class="tab-btn" onclick="changeAFItems(-1)">−</button>
-          <span class="ctrl-val" id="v-af">3</span>
-          <button class="tab-btn" onclick="changeAFItems(1)">+</button>
-        </div>
-      </div>
-    </div>
-    <div class="tip">💡 실무에서는 <strong>auto-fit</strong>이 더 많이 쓰여요. 아이템이 적어도 전체 너비를 꽉 채우니까요. 공식: <code>repeat(auto-fit, minmax(200px, 1fr))</code></div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ===== 05: grid-column / row ===== -->
-  <section class="section" id="s5">
-    <div class="section-header">
-      <div class="section-num">CHAPTER 05</div>
-      <div class="section-title">grid-column / grid-row</div>
-      <div class="section-desc">그리드 라인 번호로 아이템이 차지할 영역을 지정해요. 라인 번호는 칸 번호가 아니라 <strong>선의 번호</strong>예요.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>코드</div>
-      <div class="code-block">
-<span class="sel">.item</span> {<br>
-&nbsp;&nbsp;<span class="prop">grid-column</span>: <span class="val"><span id="cs-v">1</span> / <span id="ce-v">3</span></span>; <span class="cm">/* 열: 1번 라인 ~ 3번 라인 = 2칸 */</span><br>
-&nbsp;&nbsp;<span class="prop">grid-row</span>: <span class="val"><span id="rs-v">1</span> / <span id="re-v">3</span></span>;    <span class="cm">/* 행: 1번 라인 ~ 3번 라인 = 2칸 */</span><br>
-}<br><br>
-<span class="cm">/* span 문법 - 같은 결과 */</span><br>
-<span class="prop">grid-column</span>: <span class="val">1 / span 2</span>; <span class="cm">/* 1번 라인에서 2칸 */</span><br>
-<span class="prop">grid-column</span>: <span class="val">1 / -1</span>;     <span class="cm">/* 전체 너비 */</span>
-      </div>
-      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 - 라인 번호 조절</div>
-      <div class="preview">
-        <div class="preview-label">LIVE PREVIEW - 파란 아이템의 영역을 바꿔보세요</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;position:relative">
-          <div class="pi" id="p5-item" style="grid-column:1/3;grid-row:1/3;background:#c7d2fe;border-color:#6366f1;color:#3730a3">
-            ★ item
-          </div>
-          <div class="pi">B</div>
-          <div class="pi">C</div>
-          <div class="pi">D</div>
-          <div class="pi">E</div>
-        </div>
-      </div>
-      <div class="controls">
-        <div class="ctrl-group">
-          <span class="ctrl-label" style="color:#6366f1">column-start</span>
-          <input type="range" min="1" max="3" value="1" oninput="setSpan('cs',this.value)">
-          <span class="ctrl-val" id="v-cs">1</span>
-        </div>
-        <div class="ctrl-group">
-          <span class="ctrl-label" style="color:#6366f1">column-end</span>
-          <input type="range" min="2" max="4" value="3" oninput="setSpan('ce',this.value)">
-          <span class="ctrl-val" id="v-ce">3</span>
-        </div>
-        <div class="ctrl-group">
-          <span class="ctrl-label" style="color:#10b981">row-start</span>
-          <input type="range" min="1" max="3" value="1" oninput="setSpan('rs',this.value)">
-          <span class="ctrl-val" id="v-rs">1</span>
-        </div>
-        <div class="ctrl-group">
-          <span class="ctrl-label" style="color:#10b981">row-end</span>
-          <input type="range" min="2" max="4" value="3" oninput="setSpan('re',this.value)">
-          <span class="ctrl-val" id="v-re">3</span>
-        </div>
-      </div>
-    </div>
-    <div class="tip amber">⚠️ <strong>라인 번호 ≠ 칸 번호!</strong> 3×3 그리드면 라인이 4개(1~4)예요. <code>grid-column: 1/3</code>은 2칸, <code>1/4</code>는 3칸(전체)이에요.</div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ===== 06: grid-template-areas ===== -->
-  <section class="section" id="s6">
-    <div class="section-header">
-      <div class="section-num">CHAPTER 06</div>
-      <div class="section-title">grid-template-areas</div>
-      <div class="section-desc">레이아웃을 문자로 그림처럼 표현해요. 부모가 이름 지도를 그리면 자식이 <code>grid-area</code>로 자기 자리를 찾아가요.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>코드</div>
-      <div class="code-block">
-<span class="sel">.container</span> {<br>
-&nbsp;&nbsp;<span class="prop">grid-template-columns</span>: <span class="val">repeat(4, 1fr)</span>;<br>
-&nbsp;&nbsp;<span class="prop">grid-template-areas</span>:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">". . . a"</span>  <span class="cm">← 점(.)은 빈 칸</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">". . b c"</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">". d e f"</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"g h i ."</span>;<br>
-}<br>
-<span class="sel">.item1</span> { <span class="prop">grid-area</span>: <span class="val">a</span>; }<br>
-<span class="sel">.item2</span> { <span class="prop">grid-area</span>: <span class="val">b</span>; } <span class="cm">/* ... */</span><br><br>
-<span class="cm">/* 반응형 - 미디어쿼리에서 areas만 다시 쓰면 됨 */</span><br>
-<span class="val">@media</span> (max-width: <span class="num">768px</span>) {<br>
-&nbsp;&nbsp;<span class="sel">.container</span> {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="prop">grid-template-columns</span>: <span class="val">repeat(2, 1fr)</span>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="prop">grid-template-areas</span>: <span class="str">"a b" "c d" "e f" "g h" "i ."</span>;<br>
-&nbsp;&nbsp;}<br>
-}
-      </div>
-      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰</div>
-      <div class="preview">
-        <div class="preview-label">LIVE PREVIEW</div>
-        <div id="p6-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;grid-template-areas:'. . . a' '. . b c' '. d e f' 'g h i .'">
-          <div class="pi" style="grid-area:a">a</div>
-          <div class="pi" style="grid-area:b">b</div>
-          <div class="pi" style="grid-area:c">c</div>
-          <div class="pi" style="grid-area:d">d</div>
-          <div class="pi" style="grid-area:e">e</div>
-          <div class="pi" style="grid-area:f">f</div>
-          <div class="pi" style="grid-area:g">g</div>
-          <div class="pi" style="grid-area:h">h</div>
-          <div class="pi" style="grid-area:i">i</div>
-        </div>
-      </div>
-      <div class="controls">
-        <div class="ctrl-group">
-          <span class="ctrl-label">반응형</span>
-          <div class="tab-btns">
-            <button class="tab-btn active" onclick="setAreas(0,this)">데스크탑</button>
-            <button class="tab-btn" onclick="setAreas(1,this)">태블릿</button>
-            <button class="tab-btn" onclick="setAreas(2,this)">모바일</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="tip">💡 <strong>핵심:</strong> 자식의 <code>grid-area</code>는 그대로, 부모의 <code>grid-template-areas</code>만 바꾸면 레이아웃이 완전히 달라져요. absolute → static처럼 덮어쓰기예요!</div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ===== 07: grid-auto-flow ===== -->
-  <section class="section" id="s7">
-    <div class="section-header">
-      <div class="section-num">CHAPTER 07</div>
-      <div class="section-title">grid-auto-flow</div>
-      <div class="section-desc">아이템이 자동 배치될 때 흐르는 방향을 정해요. 기본값은 <code>row</code>(가로)예요.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>코드</div>
-      <div class="code-block">
-<span class="prop">grid-auto-flow</span>: <span class="val">row</span>;    <span class="cm">/* 기본값 - 가로로 흐름 */</span><br>
-<span class="prop">grid-auto-flow</span>: <span class="val">column</span>; <span class="cm">/* 세로로 흐름 (grid-template-rows도 필요) */</span><br>
-<span class="prop">grid-auto-flow</span>: <span class="val">row dense</span>; <span class="cm">/* 빈 칸을 뒤 아이템으로 채움 */</span>
-      </div>
-      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰</div>
-      <div class="preview">
-        <div class="compare">
-          <div class="compare-card">
-            <div class="compare-title">row (기본) → <span style="font-family:monospace">1→2→3 / 4→5→6</span></div>
-            <div style="padding:10px">
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
-                <div class="pi" style="min-height:36px;font-size:11px">1</div>
-                <div class="pi" style="min-height:36px;font-size:11px">2</div>
-                <div class="pi" style="min-height:36px;font-size:11px">3</div>
-                <div class="pi" style="min-height:36px;font-size:11px">4</div>
-                <div class="pi" style="min-height:36px;font-size:11px">5</div>
-                <div class="pi" style="min-height:36px;font-size:11px">6</div>
-              </div>
-            </div>
-          </div>
-          <div class="compare-card">
-            <div class="compare-title">column → <span style="font-family:monospace">1↓2 / 3↓4 / 5↓6</span></div>
-            <div style="padding:10px">
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,auto);grid-auto-flow:column;gap:6px">
-                <div class="pi green" style="min-height:36px;font-size:11px">1</div>
-                <div class="pi green" style="min-height:36px;font-size:11px">2</div>
-                <div class="pi green" style="min-height:36px;font-size:11px">3</div>
-                <div class="pi green" style="min-height:36px;font-size:11px">4</div>
-                <div class="pi green" style="min-height:36px;font-size:11px">5</div>
-                <div class="pi green" style="min-height:36px;font-size:11px">6</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="preview-label" style="margin-top:16px">dense - 빈 칸 채우기 (크기가 다를 때)</div>
-        <div class="compare">
-          <div class="compare-card">
-            <div class="compare-title">row (빈 칸 유지)</div>
-            <div style="padding:10px">
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-auto-flow:row;gap:6px">
-                <div class="pi" style="grid-column:span 2;min-height:36px;font-size:11px">1 (2칸)</div>
-                <div class="pi" style="grid-column:span 2;min-height:36px;font-size:11px">2 (2칸)</div>
-                <div class="pi" style="min-height:36px;font-size:11px">3 (1칸)</div>
-                <div class="pi" style="min-height:36px;font-size:11px">4 (1칸)</div>
-                <div class="pi" style="min-height:36px;font-size:11px">5 (1칸)</div>
-              </div>
-            </div>
-            <div style="padding:6px 10px 10px;font-size:11px;color:#ef4444">⚠️ 1번 뒤, 2번 뒤에 빈 칸 - 3,4,5가 다음 행으로 밀림</div>
-          </div>
-          <div class="compare-card">
-            <div class="compare-title">row dense <span class="badge badge-green">빈 칸 채움</span></div>
-            <div style="padding:10px">
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-auto-flow:row dense;gap:6px">
-                <div class="pi green" style="grid-column:span 2;min-height:36px;font-size:11px">1 (2칸)</div>
-                <div class="pi green" style="grid-column:span 2;min-height:36px;font-size:11px">2 (2칸)</div>
-                <div class="pi green" style="min-height:36px;font-size:11px">3 (1칸)</div>
-                <div class="pi green" style="min-height:36px;font-size:11px">4 (1칸)</div>
-                <div class="pi green" style="min-height:36px;font-size:11px">5 (1칸)</div>
-              </div>
-            </div>
-            <div style="padding:6px 10px 10px;font-size:11px;color:#10b981">✅ 3번이 1번 뒤 빈 칸으로, 4번이 2번 뒤 빈 칸으로 당겨짐</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="tip amber">⚠️ <code>grid-auto-flow: column</code>은 <code>grid-template-rows</code>도 함께 정의해야 의도대로 동작해요. 행이 1개만 있으면 한 줄로 나열돼요!</div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ===== 08: gap / grid-auto-rows ===== -->
-  <section class="section" id="s8">
-    <div class="section-header">
-      <div class="section-num">CHAPTER 08</div>
-      <div class="section-title">gap / grid-auto-rows</div>
-      <div class="section-desc">아이템 간 간격과 자동 생성되는 행의 크기를 설정해요.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>코드</div>
-      <div class="code-block">
-<span class="cm">/* gap: 행간격 열간격 */</span><br>
-<span class="prop">gap</span>: <span class="val">20px</span>;          <span class="cm">/* 행·열 동시 */</span><br>
-<span class="prop">gap</span>: <span class="val">20px 10px</span>;   <span class="cm">/* 행 20px, 열 10px */</span><br>
-<span class="prop">row-gap</span>: <span class="val">20px</span>;     <span class="cm">/* 행만 */</span><br>
-<span class="prop">column-gap</span>: <span class="val">10px</span>;  <span class="cm">/* 열만 */</span><br><br>
-<span class="cm">/* grid-auto-rows: 명시하지 않은 행의 기본 크기 */</span><br>
-<span class="prop">grid-auto-rows</span>: <span class="val">minmax(180px, auto)</span>;<br>
-<span class="cm">/* 최소 180px, 내용 많으면 늘어남 */</span>
-      </div>
-      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 - gap 조절</div>
-      <div class="preview">
-        <div class="preview-label">LIVE PREVIEW</div>
-        <div id="p8-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
-          <div class="pi">1</div><div class="pi">2</div><div class="pi">3</div>
-          <div class="pi">4</div><div class="pi">5</div><div class="pi">6</div>
-        </div>
-      </div>
-      <div class="controls">
-        <div class="ctrl-group">
-          <span class="ctrl-label">row-gap</span>
-          <input type="range" min="0" max="40" value="16" step="4" oninput="setGap('row',this.value)">
-          <span class="ctrl-val" id="v-rowgap">16px</span>
-        </div>
-        <div class="ctrl-group">
-          <span class="ctrl-label">column-gap</span>
-          <input type="range" min="0" max="40" value="16" step="4" oninput="setGap('col',this.value)">
-          <span class="ctrl-val" id="v-colgap">16px</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ===== 09: 실습 예제 ===== -->
-  <section class="section" id="s9">
-    <div class="section-header">
-      <div class="section-num">CHAPTER 09</div>
-      <div class="section-title">실습 예제</div>
-      <div class="section-desc">오늘 배운 Grid 개념을 실제 사이트 레이아웃에 적용해보아요.</div>
-    </div>
-
-    <!-- NH 농협 -->
-    <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>NH농협 그룹사 소개 - grid-template-areas + 반응형</div>
-      <div class="code-block">
-<span class="sel">.container</span> {<br>
-&nbsp;&nbsp;<span class="prop">display</span>: <span class="val">grid</span>;<br>
-&nbsp;&nbsp;<span class="prop">grid-template-columns</span>: <span class="val">repeat(4, 1fr)</span>;<br>
-&nbsp;&nbsp;<span class="prop">grid-auto-rows</span>: <span class="val">minmax(180px, auto)</span>;<br>
-&nbsp;&nbsp;<span class="prop">grid-template-areas</span>:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">". . . a"</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">". . b c"</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">". d e f"</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"g h i ."</span>;<br>
-}
-      </div>
-      <div class="preview">
-        <div class="preview-label">LIVE PREVIEW</div>
-        <div class="demo-nh">
-          <div class="ni" style="grid-area:a">NH농협리츠운용</div>
-          <div class="ni" style="grid-area:b">NH농협생명</div>
-          <div class="ni" style="grid-area:c">NH투자증권</div>
-          <div class="ni" style="grid-area:d">NH농협손해보험</div>
-          <div class="ni" style="grid-area:e">NH농협은행</div>
-          <div class="ni" style="grid-area:f">NH-Amundi</div>
-          <div class="ni" style="grid-area:g">NH밴처투자</div>
-          <div class="ni" style="grid-area:h">NH저축은행</div>
-          <div class="ni" style="grid-area:i">NH농협캐피탈</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 파트너 로고 -->
-    <div class="card">
-      <div class="card-title"><span class="dot dot-green"></span>파트너 로고 - 행 분리 + calc()</div>
-      <div class="code-block">
-<span class="cm">/* 행을 두 개로 분리 */</span><br>
-<span class="sel">.row1</span> { <span class="prop">grid-template-columns</span>: <span class="val">repeat(5, 1fr)</span>; }<br>
-<span class="sel">.row2</span> {<br>
-&nbsp;&nbsp;<span class="prop">grid-template-columns</span>: <span class="val">repeat(4, 1fr)</span>;<br>
-&nbsp;&nbsp;<span class="prop">padding</span>: <span class="val">0 calc(100% / 10)</span>; <span class="cm">/* 반칸씩 들여써서 가운데 정렬 */</span><br>
-}
-      </div>
-      <div class="preview">
-        <div class="preview-label">LIVE PREVIEW</div>
-        <div class="demo-partner">
-          <div class="demo-partner-row1">
-            <div class="lc">S-OIL</div>
-            <div class="lc">KOREAN AIR</div>
-            <div class="lc">NH투자증권</div>
-            <div class="lc">하나은행</div>
-            <div class="lc">ILDONG</div>
-          </div>
-          <div class="demo-partner-row2">
-            <div class="lc">DAOU</div>
-            <div class="lc">단국대학교</div>
-            <div class="lc">Sunmight</div>
-            <div class="lc">혜원의료재단</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- hince -->
-    <div class="card">
-      <div class="card-title"><span class="dot dot-amber"></span>@hince_official - 불규칙 갤러리 3가지 방법</div>
-      <div class="code-block">
-<span class="cm">/* 방법 1: grid-column/row 직접 지정 */</span><br>
-<span class="sel">.container</span> { <span class="prop">grid-template-columns</span>: <span class="val">1fr 0.5fr 1fr 0.5fr 1fr</span>; }<br>
-<span class="sel">.item1, .item4, .item7</span> { <span class="prop">grid-row</span>: <span class="val">1 / 3</span>; }<br>
-<span class="sel">.item4</span> { <span class="prop">grid-column</span>: <span class="val">3 / 4</span>; }<br>
-<span class="sel">.item7</span> { <span class="prop">grid-column</span>: <span class="val">5 / 6</span>; }<br><br>
-<span class="cm">/* 방법 2: grid-template-areas */</span><br>
-<span class="prop">grid-template-areas</span>:<br>
-&nbsp;&nbsp;<span class="str">"a b c d e"</span><br>
-&nbsp;&nbsp;<span class="str">"a f c g e"</span>;<br><br>
-<span class="cm">/* 방법 3: span */</span><br>
-<span class="sel">.item1, .item4, .item7</span> { <span class="prop">grid-row</span>: <span class="val">span 2</span>; }<br>
-<span class="sel">.item4</span> { <span class="prop">grid-column</span>: <span class="val">3</span>; }
-      </div>
-      <div class="preview">
-        <div class="preview-label">LIVE PREVIEW</div>
-        <div class="demo-hince" id="p9-hince">
-          <div class="hi" style="grid-row:1/3;background:#0f172a;color:#e0f2fe">01<br>tall</div>
-          <div class="hi" style="background:#bfdbfe;color:#1e3a5f">02</div>
-          <div class="hi" style="background:#dbeafe;color:#1e3a5f">03</div>
-          <div class="hi" style="grid-row:1/3;grid-column:3/4;background:#1e40af;color:#eff6ff">04<br>tall</div>
-          <div class="hi" style="background:#bfdbfe;color:#1e3a5f">05</div>
-          <div class="hi" style="background:#dbeafe;color:#1e3a5f">06</div>
-          <div class="hi" style="grid-row:1/3;grid-column:5/6;background:#0ea5e9;color:#fff">07<br>tall</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </a>
+  </div>
 
 </main>
 
-<script>
-// 사이드바 활성화
-const sections = document.querySelectorAll('.section');
-const navItems = document.querySelectorAll('.nav-item');
-window.addEventListener('scroll', () => {
-  let cur = '';
-  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) cur = s.id; });
-  navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + cur));
-});
+<footer>
+  © 2025 imjinhee · Frontend Lecture
+</footer>
 
-// 02: repeat
-function setRepeat(v) {
-  document.getElementById('p2-grid').style.gridTemplateColumns = `repeat(${v},1fr)`;
-  document.getElementById('r2-n').textContent = v;
-  document.getElementById('v-repeat').textContent = v;
-}
-
-// 03: minmax
-let mmMin = 80, wrapPct = 100;
-function setMinmax(v) {
-  mmMin = parseInt(v);
-  document.getElementById('p3-grid').style.gridTemplateColumns = `repeat(3,minmax(${v}px,1fr))`;
-  document.getElementById('mm-min-v').textContent = v;
-  document.getElementById('v-mm').textContent = v + 'px';
-  document.getElementById('p3-label').textContent = 'min: ' + v + 'px';
-  updateMinmaxDesc();
-}
-function setWrapWidth(v) {
-  wrapPct = parseInt(v);
-  document.getElementById('p3-wrap').style.width = v + '%';
-  document.getElementById('v-wrap').textContent = v + '%';
-  document.getElementById('p3-wrap-w').textContent = v + '%';
-  updateMinmaxDesc();
-}
-function updateMinmaxDesc() {
-  const wrap = document.getElementById('p3-wrap');
-  const wrapPx = wrap.offsetWidth;
-  const perCol = Math.floor(wrapPx / 3);
-  const desc = document.getElementById('p3-desc');
-  if (mmMin > perCol) {
-    desc.innerHTML = `컨테이너 <strong id="p3-wrap-w">${wrapPct}%</strong> (약 ${wrapPx}px) - 칸당 ${perCol}px &lt; min ${mmMin}px → <span style="color:#ef4444;font-weight:600">최솟값 발동! 가로 스크롤 발생</span>`;
-  } else {
-    desc.innerHTML = `컨테이너 <strong id="p3-wrap-w">${wrapPct}%</strong> (약 ${wrapPx}px) - 칸당 ${perCol}px ≥ min ${mmMin}px → <span style="color:#10b981;font-weight:600">1fr 균등 분배</span>`;
-  }
-}
-
-// 04: auto-fill vs auto-fit
-let afItems = 3;
-const afLabels = ['A','B','C','D','E','F','G','H'];
-function changeAFItems(d) {
-  afItems = Math.max(1, Math.min(8, afItems + d));
-  document.getElementById('v-af').textContent = afItems;
-  ['p4-fill','p4-fit'].forEach((id, gi) => {
-    const el = document.getElementById(id);
-    el.innerHTML = '';
-    for (let i = 0; i < afItems; i++) {
-      const div = document.createElement('div');
-      div.className = 'pi' + (gi === 1 ? ' green' : '');
-      div.style.cssText = 'min-height:36px;font-size:11px';
-      div.textContent = afLabels[i];
-      el.appendChild(div);
-    }
-  });
-}
-
-// 05: grid-column/row
-const spanVals = { cs:1, ce:3, rs:1, re:3 };
-function setSpan(key, v) {
-  spanVals[key] = parseInt(v);
-  document.getElementById('v-' + key).textContent = v;
-  document.getElementById(key + '-v').textContent = v;
-  const item = document.getElementById('p5-item');
-  item.style.gridColumn = `${spanVals.cs}/${spanVals.ce}`;
-  item.style.gridRow = `${spanVals.rs}/${spanVals.re}`;
-}
-
-// 06: areas
-const areaPresets = [
-  { cols: 'repeat(4,1fr)', areas: "'. . . a' '. . b c' '. d e f' 'g h i .'" },
-  { cols: 'repeat(2,1fr)', areas: "'a b' 'c d' 'e f' 'g h' 'i .'" },
-  { cols: '1fr',           areas: "'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'i'" },
-];
-function setAreas(i, btn) {
-  document.querySelectorAll('#s6 .tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const g = document.getElementById('p6-grid');
-  g.style.gridTemplateColumns = areaPresets[i].cols;
-  g.style.gridTemplateAreas = areaPresets[i].areas;
-}
-
-// 08: gap
-function setGap(type, v) {
-  const g = document.getElementById('p8-grid');
-  if (type === 'row') { g.style.rowGap = v + 'px'; document.getElementById('v-rowgap').textContent = v + 'px'; }
-  else { g.style.columnGap = v + 'px'; document.getElementById('v-colgap').textContent = v + 'px'; }
-}
-</script>
 </body>
 </html>
