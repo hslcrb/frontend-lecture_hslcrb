@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Flex 완전정복</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f8f9fc;
+  --card: #ffffff;
+  --primary: #f72585;
+  --primary-light: #fff0f6;
+  --primary-dark: #9d0049;
+  --text: #1e293b;
+  --sub: #64748b;
+  --muted: #94a3b8;
+  --border: #e2e8f0;
+  --code-bg: #1e1e2e;
+  --radius: 12px;
+  --green: #10b981;
+  --amber: #f59e0b;
+  --blue: #4361ee;
+}
+body {
+  font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* 사이드바 */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 220px;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  overflow-y: auto;
+  z-index: 100;
+}
+.sidebar-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--primary-dark);
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+.nav-item {
+  display: block; padding: 8px 20px;
+  font-size: 13px; color: var(--sub);
+  text-decoration: none; transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+.nav-item:hover { color: var(--primary); background: var(--primary-light); }
+.nav-item.active { color: var(--primary); border-left-color: var(--primary); background: var(--primary-light); font-weight: 600; }
+.nav-num { font-family: monospace; font-size: 11px; color: var(--muted); margin-right: 6px; }
+
+/* 메인 */
+.main { margin-left: 220px; padding: 40px 40px 100px; max-width: 960px; }
+
+/* 히어로 */
+.hero {
+  text-align: center;
+  padding: 60px 20px 48px;
+  background: linear-gradient(135deg, #f72585 0%, #7209b7 100%);
+  border-radius: var(--radius);
+  color: #fff;
+  margin-bottom: 48px;
+}
+.hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; letter-spacing: -1px; }
+.hero p  { font-size: 16px; opacity: 0.85; }
+.hero-badges { display: flex; gap: 8px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+.hero-badge {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff; font-size: 12px;
+  padding: 4px 12px; border-radius: 20px; font-weight: 500;
+}
+
+/* 섹션 */
+.section { margin-bottom: 64px; scroll-margin-top: 24px; }
+.section-num { font-size: 12px; font-weight: 700; color: var(--primary); letter-spacing: 0.1em; margin-bottom: 6px; }
+.section-title { font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -0.5px; }
+.section-desc { font-size: 14px; color: var(--sub); line-height: 1.7; }
+
+/* 카드 */
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; margin-bottom: 20px;
+}
+.card-title {
+  font-size: 13px; font-weight: 600; color: var(--sub);
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  background: var(--bg); display: flex; align-items: center; gap: 8px;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot-pink  { background: var(--primary); }
+.dot-green { background: var(--green); }
+.dot-amber { background: var(--amber); }
+
+/* 코드 */
+.code-block {
+  background: var(--code-bg); padding: 20px;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 13px; color: #cdd6f4; line-height: 2; overflow-x: auto;
+}
+.code-block .cm   { color: #6c7086; }
+.code-block .sel  { color: #cba6f7; }
+.code-block .prop { color: #89b4fa; }
+.code-block .val  { color: #a6e3a1; }
+.code-block .str  { color: #f38ba8; }
+
+/* 프리뷰 */
+.preview { padding: 20px; background: #f1f5f9; min-height: 80px; }
+.preview-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.08em; margin-bottom: 12px; }
+
+/* flex 데모 박스 */
+.flex-demo {
+  background: #dbeafe;
+  border: 2px solid #93c5fd;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  transition: all 0.3s;
+  min-height: 120px;
+}
+.fi {
+  background: var(--primary-light);
+  border: 1.5px solid #f9a8d4;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--primary-dark);
+  padding: 8px 12px; transition: all 0.3s;
+  white-space: nowrap;
+}
+.fi.tall { padding: 24px 12px; }
+.fi.taller { padding: 40px 12px; }
+.fi.wide { min-width: 100px; }
+
+/* 컨트롤 */
+.controls {
+  padding: 16px 20px; border-top: 1px solid var(--border);
+  background: var(--card); display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+}
+.ctrl-group { display: flex; align-items: center; gap: 10px; }
+.ctrl-label { font-size: 12px; color: var(--sub); font-weight: 500; min-width: 90px; }
+.ctrl-group select {
+  font-size: 12px; padding: 5px 8px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--card);
+  color: var(--text); font-family: inherit;
+}
+.ctrl-group input[type=range] { width: 100px; accent-color: var(--primary); }
+.ctrl-val { font-size: 12px; font-family: monospace; font-weight: 600; color: var(--primary); min-width: 36px; }
+.tab-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.tab-btn {
+  font-size: 12px; padding: 5px 12px; border-radius: 20px;
+  border: 1px solid var(--border); background: var(--card);
+  color: var(--sub); cursor: pointer; transition: all 0.15s; font-weight: 500;
+}
+.tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* 팁 */
+.tip {
+  border-left: 3px solid var(--primary); background: var(--primary-light);
+  padding: 12px 16px; border-radius: 0 8px 8px 0;
+  font-size: 13px; color: var(--primary-dark); margin-top: 16px; line-height: 1.7;
+}
+.tip.green { border-color: var(--green); background: #d1fae5; color: #065f46; }
+.tip.amber { border-color: var(--amber); background: #fef3c7; color: #92400e; }
+.tip.blue  { border-color: var(--blue); background: #eef2ff; color: #3730a3; }
+
+/* 비교 */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.compare-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.compare-title { font-size: 12px; font-weight: 600; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--bg); }
+
+/* 피그마 비교 배지 */
+.figma-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #1e1e1e; color: #fff;
+  font-size: 11px; padding: 3px 10px;
+  border-radius: 20px; font-weight: 500; margin-left: 8px;
+}
+
+.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+.badge {
+  display: inline-block; font-size: 11px; padding: 2px 8px;
+  border-radius: 20px; font-weight: 600; margin-left: 6px;
+}
+.badge-pink  { background: var(--primary-light); color: var(--primary-dark); }
+.badge-green { background: #d1fae5; color: #065f46; }
+.badge-blue  { background: #eef2ff; color: #3730a3; }
+
+/* grow/shrink/basis 시각화 */
+.grow-demo {
+  background: #dbeafe; border: 2px solid #93c5fd;
+  border-radius: 8px; padding: 8px;
+  display: flex; gap: 8px; min-height: 60px; align-items: stretch;
+}
+.grow-item {
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: #fff; transition: all 0.3s; padding: 8px 4px;
+  text-align: center; line-height: 1.4;
+}
+
+/* 실습 */
+.demo-golf {
+  display: flex; column-gap: 16px;
+}
+.demo-golf .gi {
+  flex: 1; background: #f0fdf4; border: 1px solid #86efac;
+  border-radius: 8px; padding: 12px; font-size: 12px; font-weight: 600; color: #065f46;
+}
+.demo-pintel {
+  display: flex; gap: 16px; align-items: stretch;
+}
+.demo-pintel .pi-txt {
+  flex: 0 0 200px; background: #1e1e2e; color: #cdd6f4; border-radius: 8px; padding: 20px; font-size: 13px;
+}
+.demo-pintel .pi-list {
+  flex: 1; display: flex; flex-direction: column; gap: 10px;
+}
+.demo-pintel .pi-item {
+  flex: 1; background: #f8f9fc; border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px; font-size: 12px; font-weight: 600; color: var(--sub);
+}
+</style>
+</head>
+<body>
+
+<!-- 사이드바 -->
+<nav class="sidebar">
+  <div class="sidebar-title">CSS FLEX 수업</div>
+  <a class="nav-item active" href="#s1"><span class="nav-num">01</span>display: flex</a>
+  <a class="nav-item" href="#s2"><span class="nav-num">02</span>flex-direction</a>
+  <a class="nav-item" href="#s3"><span class="nav-num">03</span>justify-content</a>
+  <a class="nav-item" href="#s4"><span class="nav-num">04</span>align-items</a>
+  <a class="nav-item" href="#s5"><span class="nav-num">05</span>gap</a>
+  <a class="nav-item" href="#s6"><span class="nav-num">06</span>flex-grow/shrink/basis</a>
+  <a class="nav-item" href="#s7"><span class="nav-num">07</span>align-self / order</a>
+  <a class="nav-item" href="#s8"><span class="nav-num">08</span>flex-wrap / align-content</a>
+  <a class="nav-item" href="#s9"><span class="nav-num">09</span>실습 예제</a>
+</nav>
+
+<main class="main">
+
+  <!-- 히어로 -->
+  <div class="hero">
+    <h1>CSS Flex 완전정복</h1>
+    <p>1차원 정렬의 모든 것 - 피그마 오토레이아웃과 1:1 비교</p>
+    <div class="hero-badges">
+      <span class="hero-badge">display: flex</span>
+      <span class="hero-badge">flex-direction</span>
+      <span class="hero-badge">justify-content</span>
+      <span class="hero-badge">align-items</span>
+      <span class="hero-badge">flex-grow/shrink/basis</span>
+      <span class="hero-badge">flex-wrap</span>
+    </div>
+  </div>
+
+  <!-- ===== 01 ===== -->
+  <section class="section" id="s1">
+    <div class="section-num">CHAPTER 01</div>
+    <div class="section-title">display: flex</div>
+    <div class="section-desc">부모 요소에 <code>display: flex</code>를 선언하면 자식 요소들이 자동으로 가로로 나열돼요. <strong>피그마 오토레이아웃</strong>과 거의 동일한 개념이에요.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-pink"></span>코드</div>
+      <div class="code-block">
+<span class="sel">.container</span> {<br>
+&nbsp;&nbsp;<span class="prop">display</span>: <span class="val">flex</span>; <span class="cm">/* flex 활성화 - 자식들이 가로로 나열됨 */</span><br>
+}<br><br>
+<span class="cm">/* flex 적용 전: 블록 요소라 세로로 쌓임 */</span><br>
+<span class="cm">/* flex 적용 후: 자식들이 자동으로 가로로 나열 */</span>
+      </div>
+      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 - flex 토글</div>
+      <div class="preview">
+        <div class="preview-label">LIVE PREVIEW</div>
+        <div id="p1-box" style="background:#dbeafe;border:2px solid #93c5fd;border-radius:8px;padding:8px;transition:all 0.3s">
+          <div class="fi">아이템 1</div>
+          <div class="fi" style="margin-top:4px" id="p1-m">아이템 2</div>
+          <div class="fi" style="margin-top:4px" id="p1-m2">아이템 3</div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="ctrl-group">
+          <span class="ctrl-label">display</span>
+          <div class="tab-btns">
+            <button class="tab-btn" onclick="toggleFlex(false,this)">block (기본)</button>
+            <button class="tab-btn active" onclick="toggleFlex(true,this)">flex</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tip">💡 <strong>Flex vs Grid</strong> - Flex는 1차원(가로 또는 세로 한 방향), Grid는 2차원(가로+세로 동시). 정렬·배치엔 Flex, 레이아웃 전체 구조엔 Grid가 일반적이에요.</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 02 ===== -->
+  <section class="section" id="s2">
+    <div class="section-num">CHAPTER 02</div>
+    <div class="section-title">flex-direction</div>
+    <div class="section-desc">아이템이 나열되는 <strong>방향(축)</strong>을 정해요. 피그마 오토레이아웃의 방향 설정과 완전히 일치해요.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-pink"></span>코드</div>
+      <div class="code-block">
+<span class="prop">flex-direction</span>: <span class="val">row</span>;            <span class="cm">/* 기본값 - 가로 (왼→오) */</span><br>
+<span class="prop">flex-direction</span>: <span class="val">column</span>;         <span class="cm">/* 세로 (위→아래) */</span><br>
+<span class="prop">flex-direction</span>: <span class="val">row-reverse</span>;    <span class="cm">/* 가로 역순 (오→왼) */</span><br>
+<span class="prop">flex-direction</span>: <span class="val">column-reverse</span>; <span class="cm">/* 세로 역순 (아래→위) */</span>
+      </div>
+      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰</div>
+      <div class="preview">
+        <div class="preview-label">LIVE PREVIEW</div>
+        <div class="flex-demo" id="p2-box" style="gap:8px">
+          <div class="fi">1</div>
+          <div class="fi tall">2</div>
+          <div class="fi">3</div>
+          <div class="fi">4</div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="ctrl-group">
+          <span class="ctrl-label">flex-direction</span>
+          <select onchange="setDir(this.value)">
+            <option value="row">row (기본)</option>
+            <option value="column">column</option>
+            <option value="row-reverse">row-reverse</option>
+            <option value="column-reverse">column-reverse</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="tip blue">🎨 <strong>피그마 오토레이아웃 방향</strong>과 1:1 매핑이에요.<br>
+      row = 가로방향, column = 세로방향, reverse = 방향 뒤집기</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 03 ===== -->
+  <section class="section" id="s3">
+    <div class="section-num">CHAPTER 03</div>
+    <div class="section-title">justify-content</div>
+    <div class="section-desc"><strong>메인축</strong> 방향으로 아이템을 어떻게 배치할지 결정해요. row면 가로, column이면 세로 방향이에요.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-pink"></span>코드</div>
+      <div class="code-block">
+<span class="prop">justify-content</span>: <span class="val">flex-start</span>;   <span class="cm">/* 기본값 - 시작점 밀착 */</span><br>
+<span class="prop">justify-content</span>: <span class="val">flex-end</span>;     <span class="cm">/* 끝점 밀착 */</span><br>
+<span class="prop">justify-content</span>: <span class="val">center</span>;      <span class="cm">/* 가운데 정렬 */</span><br>
+<span class="prop">justify-content</span>: <span class="val">space-between</span>;<span class="cm">/* 양끝 붙이고 사이 균등 - 피그마 auto */</span><br>
+<span class="prop">justify-content</span>: <span class="val">space-around</span>; <span class="cm">/* 양쪽 여백 = 사이 여백의 절반 */</span><br>
+<span class="prop">justify-content</span>: <span class="val">space-evenly</span>; <span class="cm">/* 모든 여백 동일 */</span>
+      </div>
+      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰</div>
+      <div class="preview">
+        <div class="preview-label">LIVE PREVIEW</div>
+        <div class="flex-demo" id="p3-box" style="gap:0">
+          <div class="fi">1</div>
+          <div class="fi">2</div>
+          <div class="fi">3</div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="ctrl-group">
+          <span class="ctrl-label">justify-content</span>
+          <select onchange="setJC(this.value)">
+            <option value="flex-start">flex-start (기본)</option>
+            <option value="flex-end">flex-end</option>
+            <option value="center">center</option>
+            <option value="space-between">space-between</option>
+            <option value="space-around">space-around</option>
+            <option value="space-evenly">space-evenly</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="tip blue">🎨 <code>space-between</code>이 피그마 오토레이아웃의 <strong>Auto 정렬</strong>과 같아요!</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 04 ===== -->
+  <section class="section" id="s4">
+    <div class="section-num">CHAPTER 04</div>
+    <div class="section-title">align-items</div>
+    <div class="section-desc">메인축과 <strong>수직 방향</strong>으로 아이템을 정렬해요. row면 세로, column이면 가로 방향이에요.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-pink"></span>코드</div>
+      <div class="code-block">
+<span class="prop">align-items</span>: <span class="val">stretch</span>;    <span class="cm">/* 기본값 - 부모 높이만큼 늘어남 */</span><br>
+<span class="prop">align-items</span>: <span class="val">flex-start</span>; <span class="cm">/* 교차축 시작점 정렬 */</span><br>
+<span class="prop">align-items</span>: <span class="val">flex-end</span>;   <span class="cm">/* 교차축 끝점 정렬 */</span><br>
+<span class="prop">align-items</span>: <span class="val">center</span>;     <span class="cm">/* 교차축 가운데 정렬 */</span>
+      </div>
+      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 - 높이가 다른 아이템 정렬</div>
+      <div class="preview">
+        <div class="preview-label">LIVE PREVIEW - 아이템 높이가 다를 때 어떻게 정렬되는지 보여요</div>
+        <div class="flex-demo" id="p4-box" style="gap:8px;height:160px;align-items:stretch">
+          <div class="fi" style="align-self:auto;height:auto">아이템1<br>짧음</div>
+          <div class="fi" style="align-self:auto;height:auto;padding:32px 12px">아이템2<br>높음</div>
+          <div class="fi" style="align-self:auto;height:auto">아이템3<br>짧음</div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="ctrl-group">
+          <span class="ctrl-label">align-items</span>
+          <select onchange="setAI(this.value)">
+            <option value="stretch">stretch (기본)</option>
+            <option value="flex-start">flex-start</option>
+            <option value="flex-end">flex-end</option>
+            <option value="center">center</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="tip amber">⚠️ <strong>justify-content vs align-items</strong><br>
+      justify = 메인축 방향 (row면 가로, column이면 세로)<br>
+      align = 교차축 방향 (row면 세로, column이면 가로)</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 05 ===== -->
+  <section class="section" id="s5">
+    <div class="section-num">CHAPTER 05</div>
+    <div class="section-title">gap</div>
+    <div class="section-desc">아이템 사이의 간격을 설정해요. 피그마 오토레이아웃의 gap과 완전히 동일해요.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-pink"></span>코드</div>
+      <div class="code-block">
+<span class="prop">gap</span>: <span class="val">20px</span>;           <span class="cm">/* 가로세로 동일 */</span><br>
+<span class="prop">gap</span>: <span class="val">20px 10px</span>;    <span class="cm">/* 행간격 열간격 */</span><br>
+<span class="prop">column-gap</span>: <span class="val">20px</span>;  <span class="cm">/* 가로 간격만 */</span><br>
+<span class="prop">row-gap</span>: <span class="val">10px</span>;     <span class="cm">/* 세로 간격만 */</span>
+      </div>
+      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰</div>
+      <div class="preview">
+        <div class="preview-label">LIVE PREVIEW</div>
+        <div class="flex-demo" id="p5-box" style="gap:16px">
+          <div class="fi">아이템 1</div>
+          <div class="fi">아이템 2</div>
+          <div class="fi">아이템 3</div>
+          <div class="fi">아이템 4</div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="ctrl-group">
+          <span class="ctrl-label">gap</span>
+          <input type="range" min="0" max="48" value="16" step="4" oninput="setGap(this.value)">
+          <span class="ctrl-val" id="v-gap">16px</span>
+        </div>
+      </div>
+    </div>
+    <div class="tip blue">🎨 피그마 오토레이아웃의 <strong>gap 수치</strong>와 1:1 매핑이에요! margin 대신 gap을 쓰는 게 훨씬 깔끔해요.</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 06 ===== -->
+  <section class="section" id="s6">
+    <div class="section-num">CHAPTER 06</div>
+    <div class="section-title">flex-grow / flex-shrink / flex-basis</div>
+    <div class="section-desc">자식 아이템에 적용하는 속성이에요. 공간이 남거나 모자랄 때 아이템이 얼마나 늘어나고 줄어드는지 결정해요.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-pink"></span>코드</div>
+      <div class="code-block">
+<span class="cm">/* flex-grow: 남은 공간을 얼마나 가져갈지 비율 (기본값 0) */</span><br>
+<span class="sel">.item</span> { <span class="prop">flex-grow</span>: <span class="val">1</span>; } <span class="cm">/* 남은 공간 모두 차지 - 피그마 Fill */</span><br>
+<span class="sel">.item</span> { <span class="prop">flex-grow</span>: <span class="val">2</span>; } <span class="cm">/* 다른 아이템보다 2배 더 */</span><br><br>
+<span class="cm">/* flex-shrink: 공간 부족할 때 얼마나 줄어들지 (기본값 1) */</span><br>
+<span class="sel">.item</span> { <span class="prop">flex-shrink</span>: <span class="val">0</span>; } <span class="cm">/* 줄어들지 않음 - 크기 고정 */</span><br><br>
+<span class="cm">/* flex-basis: 정렬 전 기본 크기 (기본값 auto) */</span><br>
+<span class="sel">.item</span> { <span class="prop">flex-basis</span>: <span class="val">200px</span>; } <span class="cm">/* 기본 너비 200px */</span><br><br>
+<span class="cm">/* 단축 속성 */</span><br>
+<span class="sel">.item</span> { <span class="prop">flex</span>: <span class="val">1</span>; }        <span class="cm">/* flex: 1 1 0 */</span><br>
+<span class="sel">.item</span> { <span class="prop">flex</span>: <span class="val">0 1 auto</span>; } <span class="cm">/* 기본값 */</span>
+      </div>
+      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 - flex-grow 비율 조절</div>
+      <div class="preview">
+        <div class="preview-label">LIVE PREVIEW - 각 아이템의 grow 비율 조절</div>
+        <div class="grow-demo" id="p6-box">
+          <div class="grow-item" id="g1" style="background:#f9a8d4;flex-grow:1">A<br>grow: <span id="g1v">1</span></div>
+          <div class="grow-item" id="g2" style="background:#86efac;flex-grow:1">B<br>grow: <span id="g2v">1</span></div>
+          <div class="grow-item" id="g3" style="background:#93c5fd;flex-grow:1">C<br>grow: <span id="g3v">1</span></div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="ctrl-group">
+          <span class="ctrl-label" style="color:#f9a8d4">A grow</span>
+          <input type="range" min="0" max="4" value="1" step="1" oninput="setGrow('g1',this.value)">
+          <span class="ctrl-val" id="g1-v">1</span>
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label" style="color:#86efac">B grow</span>
+          <input type="range" min="0" max="4" value="1" step="1" oninput="setGrow('g2',this.value)">
+          <span class="ctrl-val" id="g2-v">1</span>
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label" style="color:#93c5fd">C grow</span>
+          <input type="range" min="0" max="4" value="1" step="1" oninput="setGrow('g3',this.value)">
+          <span class="ctrl-val" id="g3-v">1</span>
+        </div>
+      </div>
+    </div>
+    <div class="tip blue">🎨 <code>flex-grow: 1</code>이 피그마의 <strong>Fill 모드</strong>와 같아요!<br>
+    <code>flex-basis: auto</code>는 피그마의 <strong>Hug 모드</strong>와 같아요.</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 07 ===== -->
+  <section class="section" id="s7">
+    <div class="section-num">CHAPTER 07</div>
+    <div class="section-title">align-self / order</div>
+    <div class="section-desc">특정 아이템 하나만 개별적으로 정렬하거나 순서를 바꾸고 싶을 때 써요.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-pink"></span>코드</div>
+      <div class="code-block">
+<span class="cm">/* align-self: 해당 아이템만 교차축 정렬 변경 */</span><br>
+<span class="sel">.item-special</span> { <span class="prop">align-self</span>: <span class="val">center</span>; }<br>
+<span class="cm">/* 부모의 align-items를 무시하고 개별 적용 */</span><br><br>
+<span class="cm">/* order: HTML 순서 안 바꾸고 시각적 순서 변경 */</span><br>
+<span class="sel">.item</span>   { <span class="prop">order</span>: <span class="val">0</span>; }  <span class="cm">/* 기본값 */</span><br>
+<span class="sel">.first</span>  { <span class="prop">order</span>: <span class="val">-1</span>; } <span class="cm">/* 숫자 작을수록 앞으로 */</span><br>
+<span class="sel">.last</span>   { <span class="prop">order</span>: <span class="val">1</span>; }  <span class="cm">/* 숫자 클수록 뒤로 */</span>
+      </div>
+      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰</div>
+      <div class="preview">
+        <div class="compare">
+          <div class="compare-card">
+            <div class="compare-title">align-self - 아이템 B만 개별 정렬</div>
+            <div style="padding:10px">
+              <div class="flex-demo" style="gap:8px;height:120px;align-items:flex-start" id="p7-as">
+                <div class="fi">A</div>
+                <div class="fi" id="as-item" style="align-self:flex-start;background:#fef3c7;border-color:#fcd34d;color:#92400e">B<br><span style="font-size:10px" id="as-label">flex-start</span></div>
+                <div class="fi">C</div>
+              </div>
+            </div>
+            <div style="padding:8px 10px;border-top:1px solid var(--border)">
+              <select onchange="setAlignSelf(this.value)" style="font-size:12px;width:100%;padding:4px;border-radius:6px;border:1px solid var(--border)">
+                <option value="flex-start">flex-start</option>
+                <option value="center">center</option>
+                <option value="flex-end">flex-end</option>
+                <option value="stretch">stretch</option>
+              </select>
+            </div>
+          </div>
+          <div class="compare-card">
+            <div class="compare-title">order - HTML 순서는 1,2,3인데</div>
+            <div style="padding:10px">
+              <div class="flex-demo" style="gap:8px" id="p7-order">
+                <div class="fi" style="order:2">HTML 1번째</div>
+                <div class="fi" style="order:3;background:#fef3c7;border-color:#fcd34d;color:#92400e">HTML 2번째</div>
+                <div class="fi" style="order:1">HTML 3번째</div>
+              </div>
+            </div>
+            <div style="padding:8px 10px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)">
+              order: 2 / 3 / 1 → 시각적으로 3→1→2 순서
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tip amber">⚠️ <code>order</code>는 시각적 순서만 바꾸고 HTML 순서는 그대로예요. 스크린리더는 HTML 순서대로 읽어서 <strong>접근성 이슈</strong>가 생길 수 있어요!</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 08 ===== -->
+  <section class="section" id="s8">
+    <div class="section-num">CHAPTER 08</div>
+    <div class="section-title">flex-wrap / align-content</div>
+    <div class="section-desc">아이템이 한 줄을 넘칠 때 줄바꿈 여부와 여러 줄의 정렬 방식을 설정해요.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-pink"></span>코드</div>
+      <div class="code-block">
+<span class="cm">/* flex-wrap: 줄바꿈 여부 */</span><br>
+<span class="prop">flex-wrap</span>: <span class="val">nowrap</span>; <span class="cm">/* 기본값 - 줄바꿈 없이 강제로 줄임 */</span><br>
+<span class="prop">flex-wrap</span>: <span class="val">wrap</span>;   <span class="cm">/* 넘치면 다음 줄로 - 피그마 wrap */</span><br><br>
+<span class="cm">/* align-content: wrap 됐을 때 여러 줄 정렬 */</span><br>
+<span class="cm">/* 전제조건: flex-wrap: wrap + 두 줄 이상일 때만 작동 */</span><br>
+<span class="prop">align-content</span>: <span class="val">flex-start</span>;   <span class="cm">/* 위쪽으로 몰기 */</span><br>
+<span class="prop">align-content</span>: <span class="val">center</span>;       <span class="cm">/* 가운데 */</span><br>
+<span class="prop">align-content</span>: <span class="val">space-between</span>; <span class="cm">/* 줄 사이 균등 분배 */</span>
+      </div>
+      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰</div>
+      <div class="preview">
+        <div class="preview-label">LIVE PREVIEW - 컨테이너를 좁혀서 wrap 효과를 확인해요</div>
+        <div id="p8-box" style="display:flex;flex-wrap:nowrap;gap:8px;background:#dbeafe;border:2px solid #93c5fd;border-radius:8px;padding:8px;height:180px;align-content:flex-start;transition:all 0.3s;width:100%">
+          <div class="fi" style="min-width:100px">아이템 1</div>
+          <div class="fi" style="min-width:100px">아이템 2</div>
+          <div class="fi" style="min-width:100px">아이템 3</div>
+          <div class="fi" style="min-width:100px">아이템 4</div>
+          <div class="fi" style="min-width:100px">아이템 5</div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="ctrl-group">
+          <span class="ctrl-label">flex-wrap</span>
+          <div class="tab-btns">
+            <button class="tab-btn active" onclick="setWrap('nowrap',this)">nowrap (기본)</button>
+            <button class="tab-btn" onclick="setWrap('wrap',this)">wrap</button>
+          </div>
+        </div>
+        <div class="ctrl-group">
+          <span class="ctrl-label">align-content</span>
+          <select onchange="setAC(this.value)" id="ac-sel" disabled>
+            <option value="flex-start">flex-start</option>
+            <option value="center">center</option>
+            <option value="flex-end">flex-end</option>
+            <option value="space-between">space-between</option>
+            <option value="space-around">space-around</option>
+            <option value="stretch">stretch</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="tip blue">🎨 <code>flex-wrap: wrap</code>이 피그마 오토레이아웃의 <strong>Wrap 모드</strong>와 같아요!<br>
+    align-content는 wrap이 됐을 때만 작동해요 - 한 줄이면 반응 없어요.</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 09 ===== -->
+  <section class="section" id="s9">
+    <div class="section-num">CHAPTER 09</div>
+    <div class="section-title">실습 예제</div>
+    <div class="section-desc">오늘 배운 Flex 개념을 실제 사이트 레이아웃에 적용해보아요.</div>
+
+    <!-- SBS 골프 -->
+    <div class="card">
+      <div class="card-title"><span class="dot dot-pink"></span>SBS 골프닷컴 - flex-grow + flex-basis</div>
+      <div class="code-block">
+<span class="sel">ul</span> { <span class="prop">display</span>: <span class="val">flex</span>; <span class="prop">column-gap</span>: <span class="val">20px</span>; }<br>
+<span class="sel">ul > li</span> {<br>
+&nbsp;&nbsp;<span class="prop">flex-grow</span>: <span class="val">1</span>;    <span class="cm">/* 남은 공간 균등 분배 */</span><br>
+&nbsp;&nbsp;<span class="prop">flex-basis</span>: <span class="val">100%</span>; <span class="cm">/* 기본 너비 동일하게 */</span><br>
+&nbsp;&nbsp;<span class="prop">overflow</span>: <span class="val">hidden</span>; <span class="cm">/* 넘치는 텍스트 숨김 */</span><br>
+}
+      </div>
+      <div class="preview">
+        <div class="preview-label">LIVE PREVIEW</div>
+        <div class="demo-golf">
+          <div class="gi">스카티카메론<br>Phantom 5</div>
+          <div class="gi">스카티카메론<br>Phantom 7.5</div>
+          <div class="gi">스카티카메론<br>Phantom 9.2R</div>
+          <div class="gi">스카티카메론<br>Phantom 11R OC</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 핀텔 -->
+    <div class="card">
+      <div class="card-title"><span class="dot dot-green"></span>핀텔 - flex + flex-direction: column</div>
+      <div class="code-block">
+<span class="sel">section</span> { <span class="prop">display</span>: <span class="val">flex</span>; <span class="prop">gap</span>: <span class="val">40px</span>; }<br>
+<span class="sel">.txt-box</span> { <span class="prop">flex</span>: <span class="val">0 0 200px</span>; } <span class="cm">/* 고정 너비, 줄어들지 않음 */</span><br>
+<span class="sel">.list-box</span> {<br>
+&nbsp;&nbsp;<span class="prop">flex</span>: <span class="val">1</span>;                    <span class="cm">/* 남은 공간 채우기 */</span><br>
+&nbsp;&nbsp;<span class="prop">display</span>: <span class="val">flex</span>;             <span class="cm">/* 자식도 flex */</span><br>
+&nbsp;&nbsp;<span class="prop">flex-direction</span>: <span class="val">column</span>;   <span class="cm">/* 세로 배치 */</span><br>
+&nbsp;&nbsp;<span class="prop">gap</span>: <span class="val">12px</span>;<br>
+}
+      </div>
+      <div class="preview">
+        <div class="preview-label">LIVE PREVIEW</div>
+        <div class="demo-pintel">
+          <div class="pi-txt">
+            <div style="font-size:18px;font-weight:700;margin-bottom:8px">PREVAX</div>
+            <div style="font-size:12px;opacity:0.7">핀텔의 공식 기업 자료를 한곳에 담았습니다.</div>
+          </div>
+          <div class="pi-list">
+            <div class="pi-item">공시정보</div>
+            <div class="pi-item">재무정보</div>
+            <div class="pi-item">공지사항</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+// 사이드바 활성화
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) cur = s.id; });
+  navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + cur));
+});
+
+// 01: flex 토글
+function toggleFlex(on, btn) {
+  document.querySelectorAll('#s1 .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const box = document.getElementById('p1-box');
+  const m1  = document.getElementById('p1-m');
+  const m2  = document.getElementById('p1-m2');
+  if (on) {
+    box.style.display = 'flex';
+    box.style.gap = '8px';
+    m1.style.marginTop = '0';
+    m2.style.marginTop = '0';
+  } else {
+    box.style.display = 'block';
+    box.style.gap = '0';
+    m1.style.marginTop = '4px';
+    m2.style.marginTop = '4px';
+  }
+}
+// 초기 flex 상태
+toggleFlex(true, document.querySelector('#s1 .tab-btn.active'));
+
+// 02: flex-direction
+function setDir(v) {
+  document.getElementById('p2-box').style.flexDirection = v;
+}
+
+// 03: justify-content
+function setJC(v) {
+  document.getElementById('p3-box').style.justifyContent = v;
+}
+
+// 04: align-items
+function setAI(v) {
+  document.getElementById('p4-box').style.alignItems = v;
+}
+
+// 05: gap
+function setGap(v) {
+  document.getElementById('p5-box').style.gap = v + 'px';
+  document.getElementById('v-gap').textContent = v + 'px';
+}
+
+// 06: flex-grow
+function setGrow(id, v) {
+  document.getElementById(id).style.flexGrow = v;
+  document.getElementById(id + 'v').textContent = v;
+  document.getElementById(id + '-v').textContent = v;
+}
+
+// 07: align-self
+function setAlignSelf(v) {
+  document.getElementById('as-item').style.alignSelf = v;
+  document.getElementById('as-label').textContent = v;
+}
+
+// 08: flex-wrap
+function setWrap(v, btn) {
+  document.querySelectorAll('#s8 .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('p8-box').style.flexWrap = v;
+  const acSel = document.getElementById('ac-sel');
+  if (v === 'wrap') {
+    acSel.disabled = false;
+  } else {
+    acSel.disabled = true;
+    acSel.value = 'flex-start';
+    document.getElementById('p8-box').style.alignContent = 'flex-start';
+  }
+}
+
+// 08: align-content
+function setAC(v) {
+  document.getElementById('p8-box').style.alignContent = v;
+}
+</script>
+
+</body>
+</html>
