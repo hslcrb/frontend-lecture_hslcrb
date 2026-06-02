@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Box Model 퀴즈</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f0f4f8; /* 명세서 반영: 밝은 배경 */
+      color: #1e293b;
+      min-height: 100vh;
+      padding: 40px 20px 80px;
+    }
+
+    header {
+      max-width: 680px;
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+
+    header .badge {
+      display: inline-block;
+      background: #4361ee;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 99px;
+      margin-bottom: 14px;
+    }
+
+    header h1 {
+      font-size: clamp(20px, 4vw, 28px);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #0f172a;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    /* 진행률 */
+    .progress-wrap {
+      max-width: 680px;
+      margin: 0 auto 20px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #4361ee; /* 명세서 반영: 파란색 막대 */
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    /* 카드 */
+    .card {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px 32px 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+    }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .q-num {
+      color: #94a3b8; /* 명세서 반영: 회색 톤 텍스트 */
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .q-cat {
+      font-size: 12px;
+      color: #3730a3; /* 명세서 반영: 짙은 남색 */
+      background: #eef2ff; /* 명세서 반영: 연한 파란색 배경 */
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-weight: 600;
+    }
+
+    .q-text {
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      word-break: keep-all;
+      color: #0f172a;
+    }
+
+    .q-text code {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      padding: 2px 6px;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      color: #4361ee;
+    }
+
+    /* 힌트 박스 */
+    .hint-box {
+      border-left: 3px solid #4361ee; /* 명세서 반영: 좌측 보더 라인 */
+      background: #f8fafc;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      font-size: 13.5px;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .hint-box strong { color: #4361ee; margin-right: 6px; }
+
+    /* 선택지 */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .opt-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      font-family: 'Noto Sans KR', sans-serif;
+      color: #334155;
+      text-align: left;
+      transition: all 0.2s;
+      width: 100%;
+      word-break: keep-all;
+      line-height: 1.5;
+    }
+
+    .opt-btn:hover:not(:disabled) { 
+      background: #eef2ff; /* 명세서 반영 */
+      border-color: #4361ee; 
+      color: #1e293b;
+    }
+    
+    /* 명세서 반영: 정답/오답 스타일 */
+    .opt-btn.correct  { background: #f0fdf4; border-color: #16a34a; color: #15803d; font-weight: 500; }
+    .opt-btn.wrong    { background: #fef2f2; border-color: #dc2626; color: #b91c1c; font-weight: 500; }
+    .opt-btn:disabled { cursor: default; }
+
+    .opt-key {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      font-size: 12px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      color: #64748b;
+      transition: all 0.2s;
+    }
+
+    .opt-btn:hover:not(:disabled) .opt-key { background: #4361ee; color: #fff; }
+    .opt-btn.correct .opt-key { background: #16a34a; color: #fff; border: none; }
+    .opt-btn.wrong   .opt-key { background: #dc2626; color: #fff; border: none; }
+
+    /* 해설 */
+    .explanation {
+      display: none;
+      padding: 16px 20px;
+      background: #f8fafc;
+      border-top: 3px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #334155;
+      margin-bottom: 24px;
+    }
+
+    .explanation.show { display: block; animation: fadeIn 0.4s ease; }
+    .explanation strong { display: block; margin-bottom: 6px; font-size: 15px; }
+    .explanation strong.c { color: #16a34a; }
+    .explanation strong.w { color: #dc2626; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* 네비게이션 */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .nav-btn {
+      padding: 12px 24px;
+      border-radius: 10px;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover:not(:disabled) { border-color: #4361ee; color: #4361ee; }
+    .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .nav-btn.primary {
+      background: #4361ee;
+      border-color: #4361ee;
+      color: #fff;
+    }
+    .nav-btn.primary:hover:not(:disabled) { background: #3730a3; border-color: #3730a3; }
+
+    /* 결과창 */
+    .score-box {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      display: none;
+    }
+
+    .score-box h2 { font-size: 24px; font-weight: 700; margin-bottom: 12px; color: #0f172a; }
+
+    .score-pct {
+      font-size: 64px;
+      font-weight: 800;
+      color: #4361ee;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .score-msg { color: #64748b; font-size: 16px; margin-bottom: 32px; }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .score-grid div {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px 10px;
+    }
+
+    .score-grid .num { font-size: 32px; font-weight: 700; line-height: 1; }
+    .score-grid .lbl { font-size: 13px; color: #64748b; margin-top: 8px; font-weight: 500; }
+    .score-grid .num.c { color: #16a34a; }
+    .score-grid .num.w { color: #dc2626; }
+    .score-grid .num.s { color: #94a3b8; }
+
+    .retry-btn {
+      padding: 14px 40px;
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      border-radius: 99px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .retry-btn:hover { background: #334155; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">CSS Core Concepts</div>
+  <h1>박스 모델 & 디스플레이 퀴즈</h1>
+  <p>block · inline · inline-block · margin · padding</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-info">
+    <span>문제 <span id="prog-label">1 / 15</span></span>
+    <span id="prog-pct">0% 완료</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<div class="card" id="qa"></div>
+<div class="score-box" id="score-box"></div>
+
+<script>
+const Q = [
+  {
+    cat: '블록 요소',
+    q: '블록(block) 요소의 특징으로 사실과 다른 것은 무엇입니까?',
+    hint: '블록 요소가 가로 공간을 어떻게 차지하는지 생각해보세요.',
+    opts: [
+      'width와 height를 지정할 수 있다.',
+      '상하좌우 4면에 margin과 padding이 모두 정상적으로 작동한다.',
+      '콘텐츠(글자)만큼만 가로 너비를 차지한다.',
+      '시맨틱(Semantic) 요소들은 기본적으로 블록 요소이다.'
+    ],
+    ans: 2,
+    ex: '콘텐츠 크기만큼만 너비를 차지하는 것은 <strong>인라인 요소</strong>의 특징입니다. 블록 요소는 부모 컨테이너의 너비를 꽉 채웁니다.'
+  },
+  {
+    cat: '인라인 요소',
+    q: '인라인(inline) 요소에 대한 설명으로 올바른 것은 무엇입니까?',
+    hint: '글자(텍스트)의 흐름과 공간을 어떻게 다루는지 떠올려보세요.',
+    opts: [
+      'width와 height 속성을 사용하여 크기를 자유롭게 변경할 수 있다.',
+      '상하(top, bottom) 마진(margin) 값이 적용되어 주변 요소를 밀어낸다.',
+      '줄바꿈이 일어나지 않으며, 요소 안의 콘텐츠만큼만 공간을 차지한다.',
+      '모든 종류의 블록 요소를 제약 없이 자식으로 포함할 수 있다.'
+    ],
+    ans: 2,
+    ex: '인라인 요소는 문장 안의 단어처럼 흐르며, 내부에 포함된 글자 크기만큼만 영역을 가집니다. 임의로 너비나 높이를 부여할 수 없습니다.'
+  },
+  {
+    cat: 'Box Model',
+    q: '인라인 요소에 상하(top, bottom) 패딩(padding)을 적용하면 화면에서 어떤 결과가 나타납니까?',
+    hint: '시각적인 변화와 실제 공간 차지 여부의 차이를 구분해야 합니다.',
+    opts: [
+      '설정된 패딩 수치만큼 주변 요소를 상하로 밀어내어 공간이 넓어진다.',
+      '눈으로는 배경색이 늘어난 것처럼 보이나, 실제로는 다른 요소를 밀어내지 못해 겹치는 현상이 생긴다.',
+      '상하 패딩 값이 완전히 무시되어 화면에 아무런 시각적 변화도 일어나지 않는다.',
+      '요소가 주변 공간을 인지하여 자동으로 블록(block) 요소로 변환된다.'
+    ],
+    ans: 1,
+    ex: '인라인 요소의 상하 패딩은 시각적인 부피는 커지지만 문서 레이아웃 흐름에 영향을 주지 않으므로 위아래 콘텐츠와 겹쳐 보이게 됩니다.'
+  },
+  {
+    cat: '디스플레이',
+    q: 'CSS에서 요소를 <code>display: inline-block;</code>으로 설정했을 때 나타나는 특징은 무엇입니까?',
+    hint: '인라인과 블록의 장점을 어떻게 섞었는지 고려해보세요.',
+    opts: [
+      '요소의 앞뒤로 항상 줄바꿈이 발생하여 세로로 배치된다.',
+      '줄바꿈 없이 나란히 배치되면서도 width, height, margin, padding을 모두 제어할 수 있다.',
+      '인라인 요소와 동일하게 가로와 세로 크기를 지정하는 속성이 무시된다.',
+      '화면 전체 너비를 꽉 채우며 부모 요소와 동일한 크기가 된다.'
+    ],
+    ans: 1,
+    ex: '<code>inline-block</code>은 인라인처럼 가로 배치를 유지하면서, 블록처럼 크기와 여백을 자유롭게 조절하는 두 가지 특성을 모두 가집니다.'
+  },
+  {
+    cat: '정렬(Align)',
+    q: '<code>inline-block</code>으로 설정된 요소를 부모 컨테이너의 가로 중앙에 정렬하려고 합니다. 올바른 방법은 무엇입니까?',
+    hint: 'inline-block 요소가 문서의 텍스트 흐름 속에서 어떻게 취급되는지 생각해보세요.',
+    opts: [
+      '해당 요소 자체에 margin: 0 auto;를 적용한다.',
+      '부모 요소에 text-align: center;를 적용한다.',
+      '해당 요소 자체에 text-align: center;를 적용한다.',
+      '부모 요소에 margin: 0 auto;를 적용한다.'
+    ],
+    ans: 1,
+    ex: '블록 요소는 <code>margin: 0 auto;</code>로 정렬하지만, <code>inline-block</code> 요소는 텍스트(인라인)처럼 취급되므로 부모 요소에 <code>text-align: center;</code>를 주어 가운데 정렬합니다.'
+  },
+  {
+    cat: 'Margin 병합',
+    q: '상하로 인접한 두 블록 요소 사이에서 발생하는 마진 겹침(Margin Collapsing) 현상에 대한 설명으로 올바른 것은 무엇입니까?',
+    hint: '여백이 만났을 때 최종적으로 남는 공간의 크기를 결정하는 규칙입니다.',
+    opts: [
+      '두 요소의 마진 값이 서로 더해져 두 배의 여백이 생성된다.',
+      '마진이 충돌할 경우 위쪽 요소의 마진 값만 항상 적용된다.',
+      '위아래로 만나는 두 마진 값 중 숫자가 더 큰 값을 따라 최종 여백이 결정된다.',
+      '두 마진 값이 만날 경우 두 값의 평균만큼 여백이 생긴다.'
+    ],
+    ans: 2,
+    ex: '박스 모델에서 인접한 수직 마진은 합산되지 않고 겹쳐지며, 20px과 30px의 마진이 만나면 더 큰 공간인 30px만큼의 여백만 남게 됩니다.'
+  },
+  {
+    cat: '배경(Background)',
+    q: '요소에 배경색을 적용했을 때 색상이 칠해지는 영역에 대한 설명으로 올바른 것은 무엇입니까?',
+    hint: '요소의 내부 여백과 외부 여백 중 어디까지가 요소 자신의 영역인지 구별해보세요.',
+    opts: [
+      'margin 영역까지 해당 요소의 배경색이 적용된다.',
+      'padding 영역에는 요소의 배경색이 적용되지 않고 투명하게 남는다.',
+      '부모 요소에 margin을 주면 그 여백 영역에 부모의 배경색이 칠해진다.',
+      'margin 여백에는 배경색이나 이미지를 넣을 수 없다.'
+    ],
+    ans: 3,
+    ex: 'margin은 요소들을 물리적으로 띄워놓는 바깥 투명 여백 역할을 하므로 배경색이나 이미지가 적용되지 않습니다.'
+  },
+  {
+    cat: '레이아웃 실무',
+    q: '섹션 요소 안쪽에 있는 제목 요소의 위치를 안쪽으로 밀어 넣어 여백을 만들고 싶을 때, 가장 권장되는 방식은 무엇입니까?',
+    hint: '부모 컨테이너의 내부 공간을 넓히는 속성을 활용하는 방법입니다.',
+    opts: [
+      '섹션 부모 요소에 padding 값을 주어 내부 여백을 형성한다.',
+      '자식 요소에 음수(-) 마진 값을 주어 강제로 위치를 옮긴다.',
+      '섹션 부모 요소에 margin 값을 주어 안쪽 공간을 만든다.',
+      '자식 요소를 인라인 요소로 강제 변경한다.'
+    ],
+    ans: 0,
+    ex: '부모 요소에 내부 여백(padding)을 설정하면 레이아웃 흐름이나 배경을 해치지 않고 자식을 안전하게 안쪽으로 이동시킬 수 있습니다.'
+  },
+  {
+    cat: 'HTML 중첩 규칙',
+    q: 'HTML 요소들의 중첩 규칙(감싸기)에 대한 설명으로 올바른 것은 무엇입니까?',
+    hint: '블록 요소와 인라인 요소의 포함 관계 규칙에 예외가 있는 태그를 기억해 보세요.',
+    opts: [
+      '인라인 요소인 태그들은 블록 요소를 제약 없이 자유롭게 감쌀 수 있다.',
+      '인라인 요소는 블록 요소를 감쌀 수 없지만, 예외적으로 &lt;a&gt; 태그는 &lt;div&gt; 등의 블록 요소를 감쌀 수 있다.',
+      '블록 요소끼리는 서로 감싸거나 중첩해서 사용할 수 없다.',
+      '시맨틱(Semantic) 요소들은 특별하여 어떤 블록 요소 안에 넣어도 인라인 요소로 변한다.'
+    ],
+    ans: 1,
+    ex: '기본적으로 인라인은 블록을 감쌀 수 없지만, HTML5부터는 링크 영역을 넓게 잡기 위해 예외적으로 <code>&lt;a&gt;</code> 태그가 블록 요소를 감싸는 것이 허용되었습니다.'
+  },
+  {
+    cat: '단축 속성',
+    q: 'CSS 속성 <code>margin: 30px 20px 40px;</code> 와 같이 값이 3개 주어졌을 때, 각각의 여백은 어느 방향에 적용됩니까?',
+    hint: '단축 속성(Shorthand)에서 3개의 값이 주어질 때 시계 방향의 원리를 응용해보세요.',
+    opts: [
+      '왼쪽 30px, 위아래 20px, 오른쪽 40px',
+      '위 30px, 좌우 20px, 아래 40px',
+      '위아래 30px, 좌우 20px, 모든 방향 40px 중첩',
+      '위 30px, 오른쪽 20px, 아래 40px (왼쪽은 0)'
+    ],
+    ans: 1,
+    ex: '값이 3개일 경우 첫 번째 값은 top(위), 두 번째 값은 left/right(좌우), 세 번째 값은 bottom(아래)을 지정하는 단축 표기법입니다.'
+  },
+  {
+    cat: '단축 속성',
+    q: '<code>margin: 30px 50px;</code> 로 값을 2개 지정했을 때 적용되는 위치로 올바른 것은 무엇입니까?',
+    hint: '값이 두 개일 때 대칭되는 방향끼리 묶이는 규칙을 확인하세요.',
+    opts: [
+      '상하 30px, 좌우 50px',
+      '좌우 30px, 상하 50px',
+      '위 30px, 아래 50px (좌우는 0)',
+      '왼쪽 30px, 오른쪽 50px (상하는 0)'
+    ],
+    ans: 0,
+    ex: '값이 2개일 때는 첫 번째 값이 세로 방향(top, bottom), 두 번째 값이 가로 방향(left, right)에 동시 적용됩니다.'
+  },
+  {
+    cat: '인라인 요소',
+    q: '인라인 요소의 바깥 여백을 조정할 때 화면 레이아웃에 정상적으로 영향을 미치는 속성은 무엇입니까?',
+    hint: '인라인 요소가 텍스트처럼 취급될 때 어느 방향으로 밀고 당길 수 있는지 생각하세요.',
+    opts: [
+      'margin-top과 margin-bottom',
+      'margin-left와 margin-right',
+      'width 속성',
+      'height 속성'
+    ],
+    ans: 1,
+    ex: '인라인 요소에서 상하(top/bottom) 마진은 무시되지만, 글자 흐름 방향과 같은 좌우(left/right)로는 마진을 주어 다른 글자나 요소를 밀어낼 수 있습니다.'
+  },
+  {
+    cat: 'Margin 특성',
+    q: '외부 여백인 마진(Margin)에 대한 설명으로 틀린 것은 무엇입니까?',
+    hint: '박스를 반대 방향으로 당기거나 겹치게 할 때 사용하는 기법에 대해 생각해보세요.',
+    opts: [
+      '위아래 마진이 만날 경우 겹쳐서 더 큰 여백 값을 따르게 된다.',
+      '요소의 테두리(border) 바깥쪽의 공간을 조절한다.',
+      '마이너스(-) 값을 지정하는 것은 문법적으로 불가능하다.',
+      'inline-block 요소도 margin을 상하좌우 모두 사용할 수 있다.'
+    ],
+    ans: 2,
+    ex: '사용을 권장하지는 않으나, 마이너스(-) 마진 값을 넣어 요소를 억지로 끌어오거나 요소끼리 겹치게 만드는 것은 문법적으로 가능합니다.'
+  },
+  {
+    cat: '반응형 제어',
+    q: '브라우저 화면 크기를 줄이더라도 요소의 너비가 설정한 수치보다 더 이상 작아지지 않게 방어하는 CSS 속성은 무엇입니까?',
+    hint: '최소한으로 보장해야 하는 길이를 지정하는 속성입니다.',
+    opts: [
+      'max-width',
+      'min-width',
+      'width',
+      'padding-left'
+    ],
+    ans: 1,
+    ex: '<code>min-width</code>를 지정하면 부모나 브라우저 창이 아무리 좁아져도 요소가 해당 값 미만으로 줄어들지 않고 유지됩니다.'
+  },
+  {
+    cat: '핵심 속성',
+    q: 'HTML 태그가 기본적으로 가지고 있는 블록이나 인라인과 같은 렌더링 박스 모델의 성격을 직접 변경할 수 있는 CSS 속성은 무엇입니까?',
+    hint: '요소가 화면에 표시되는 방식을 결정짓는 핵심 속성입니다.',
+    opts: [
+      'display',
+      'box-sizing',
+      'position',
+      'text-align'
+    ],
+    ans: 0,
+    ex: '<code>display</code> 속성의 값을 block, inline, inline-block 등으로 지정하여 요소의 기본적인 배치 성격을 바꿀 수 있습니다.'
+  }
+];
+
+let cur = 0;
+let answered = new Array(Q.length).fill(null);
+let sel = new Array(Q.length).fill(null);
+
+function render() {
+  const card = document.getElementById('qa');
+  const item = Q[cur];
+  const done = answered[cur] !== null;
+  const total = Q.length;
+
+  // 1. 진행률 업데이트
+  const answeredCount = answered.filter(a => a !== null).length;
+  document.getElementById('prog-label').textContent = `${cur + 1} / ${total}`;
+  document.getElementById('prog-pct').textContent = `${Math.round(answeredCount / total * 100)}% 완료`;
+  document.getElementById('prog-fill').style.width = (answeredCount / total * 100) + '%';
+
+  // 2. 힌트 박스 생성
+  const hintHtml = item.hint
+    ? `<div class="hint-box"><strong>💡 Hint</strong> ${item.hint}</div>`
+    : '';
+
+  // 3. 선택지 리스트 생성
+  const optsHtml = item.opts.map((opt, i) => {
+    let cls = 'opt-btn';
+    if (done) {
+      if (i === item.ans) cls += ' correct';
+      else if (i === sel[cur] && answered[cur] === 'wrong') cls += ' wrong';
+    }
+    const label = ['A', 'B', 'C', 'D'][i];
+    return `
+      <button class="${cls}" onclick="choose(${i})" ${done ? 'disabled' : ''}>
+        <span class="opt-key">${label}</span>
+        <span>${opt}</span>
+      </button>`;
+  }).join('');
+
+  // 4. 해설 영역 생성
+  let exStatus = '';
+  if (done) {
+    if (answered[cur] === 'correct') {
+      exStatus = '<strong class="c">✅ 정답입니다!</strong>';
+    } else {
+      exStatus = '<strong class="w">❌ 오답입니다.</strong>';
+    }
+  }
+  const exHtml = `<div class="explanation ${done ? 'show' : ''}">
+    ${exStatus}
+    ${item.ex}
+  </div>`;
+
+  // 5. 네비게이션 버튼 (이전/다음/결과보기)
+  const isLast = cur === total - 1;
+  const navHtml = `<div class="nav">
+    <button class="nav-btn" onclick="go(-1)" ${cur === 0 ? 'disabled' : ''}>← 이전</button>
+    ${isLast
+      ? `<button class="nav-btn primary" onclick="showScore()">결과 보기 🏆</button>`
+      : `<button class="nav-btn primary" onclick="go(1)">다음 문제 →</button>`
+    }
+  </div>`;
+
+  // 6. DOM 렌더링
+  card.innerHTML = `
+    <div class="q-meta">
+      <div class="q-num">Question ${cur + 1}</div>
+      <span class="q-cat">${item.cat}</span>
+    </div>
+    <div class="q-text">${item.q}</div>
+    ${hintHtml}
+    <div class="options">${optsHtml}</div>
+    ${exHtml}
+    ${navHtml}
+  `;
+}
+
+// 보기 선택 로직
+function choose(i) {
+  if (answered[cur] !== null) return; // 이미 풀었으면 무시
+  
+  sel[cur] = i;
+  answered[cur] = (i === Q[cur].ans) ? 'correct' : 'wrong';
+  render(); // 화면 다시 그리기
+}
+
+// 이전/다음 문항 이동 로직
+function go(d) {
+  cur = Math.max(0, Math.min(Q.length - 1, cur + d));
+  render();
+}
+
+// 결과창 노출 로직
+function showScore() {
+  document.getElementById('qa').style.display = 'none';
+  document.querySelector('.progress-wrap').style.display = 'none';
+  document.querySelector('header').style.display = 'none';
+
+  const correct = answered.filter(a => a === 'correct').length;
+  const wrong = answered.filter(a => a === 'wrong').length;
+  const skip = answered.filter(a => a === null).length;
+  const pct = Math.round((correct / Q.length) * 100);
+
+  // 구간별 피드백 메시지
+  let msg = '';
+  if (pct >= 90) msg = '완벽합니다! 박스 모델의 원리를 꿰뚫고 계시네요! 🌟';
+  else if (pct >= 70) msg = '훌륭합니다! 핵심 개념을 잘 이해하고 있습니다. 👍';
+  else if (pct >= 50) msg = '수고하셨습니다! 헷갈린 부분을 다시 복습해보세요. 💡';
+  else msg = '조금 더 연습이 필요합니다! 천천히 다시 도전해보세요. 💪';
+
+  const sb = document.getElementById('score-box');
+  sb.style.display = 'block';
+  sb.innerHTML = `
+    <h2>🎉 퀴즈 완료!</h2>
+    <div class="score-pct">${pct}%</div>
+    <p class="score-msg">${msg}</p>
+    <div class="score-grid">
+      <div><div class="num c">${correct}</div><div class="lbl">정답</div></div>
+      <div><div class="num w">${wrong}</div><div class="lbl">오답</div></div>
+      <div><div class="num s">${skip}</div><div class="lbl">미응답</div></div>
+    </div>
+    <button class="retry-btn" onclick="resetQuiz()">처음부터 다시 풀기 ↻</button>
+  `;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 퀴즈 초기화 로직
+function resetQuiz() {
+  cur = 0;
+  answered = new Array(Q.length).fill(null);
+  sel = new Array(Q.length).fill(null);
+  
+  document.getElementById('qa').style.display = 'block';
+  document.querySelector('.progress-wrap').style.display = 'block';
+  document.querySelector('header').style.display = 'block';
+  document.getElementById('score-box').style.display = 'none';
+  
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 첫 진입 시 렌더링
+render();
+</script>
+</body>
+</html>
