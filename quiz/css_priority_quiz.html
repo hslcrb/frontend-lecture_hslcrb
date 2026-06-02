@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS 우선순위 퀴즈</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f4f0; color: #1a1a1a; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+  .card { background: #fff; border-radius: 16px; border: 1px solid #e0e0d8; padding: 2rem; width: 100%; max-width: 720px; }
+
+  /* 진행 바 */
+  .prog-bg { background: #ebebeb; border-radius: 99px; height: 6px; margin-bottom: 1.5rem; }
+  .prog-fill { height: 6px; border-radius: 99px; background: #C0620F; transition: width .3s; }
+
+  /* 메타 */
+  .q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: .6rem; }
+  .q-num { font-size: 13px; color: #888; }
+  .q-cat { font-size: 12px; padding: 2px 10px; border-radius: 99px; background: #FEF0E6; color: #7A3B0A; }
+
+  /* 질문 */
+  .q-text { font-size: 15px; font-weight: 600; margin-bottom: 1rem; line-height: 1.6; }
+
+  /* 힌트 박스 */
+  .hint-box { background: #fafaf7; border: 1px solid #e0e0d8; border-radius: 10px; padding: 14px 16px; margin-bottom: 1rem; font-size: 13px; line-height: 1.7; }
+  .hint-box .hint-title { font-weight: 600; font-size: 12px; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* 코드 블록 */
+  pre.code-block { background: #1e1e2e; color: #cdd6f4; border-radius: 10px; padding: 14px 16px; font-family: 'Courier New', monospace; font-size: 13px; margin-bottom: 1rem; white-space: pre; overflow-x: auto; line-height: 1.7; }
+  .kw { color: #89b4fa; }   /* 키워드/선택자 */
+  .prop { color: #89dceb; } /* 속성 */
+  .val { color: #a6e3a1; }  /* 값 */
+  .cm { color: #6c7086; font-style: italic; } /* 주석 */
+  .hl { background: rgba(249,226,175,.15); border-left: 3px solid #f9e2af; padding-left: 4px; display: block; }
+
+  /* 선택지 */
+  .options { display: flex; flex-direction: column; gap: 9px; margin-bottom: 1.4rem; }
+  .opt-btn { text-align: left; background: #fff; border: 1px solid #ccc; border-radius: 10px; padding: 11px 16px; font-size: 14px; font-family: inherit; color: #1a1a1a; cursor: pointer; line-height: 1.5; transition: border-color .15s, background .15s; display: flex; align-items: center; gap: 10px; width: 100%; }
+  .opt-btn:hover:not(:disabled) { border-color: #C0620F; background: #FEF0E6; color: #7A3B0A; }
+  .opt-btn.correct { background: #EAF3DE; border-color: #3B6D11; color: #27500A; }
+  .opt-btn.wrong { background: #FCEBEB; border-color: #A32D2D; color: #501313; }
+  .opt-btn:disabled { cursor: default; }
+  .color-swatch { width: 20px; height: 20px; border-radius: 4px; border: 1px solid rgba(0,0,0,.15); flex-shrink: 0; display: inline-block; }
+
+  /* 해설 */
+  .explanation { background: #fafaf7; border-left: 3px solid #C0620F; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; color: #444; line-height: 1.7; margin-bottom: 1.4rem; }
+  .explanation strong { color: #C0620F; }
+  .score-badge { display: inline-block; font-family: 'Courier New', monospace; background: #1e1e2e; color: #a6e3a1; border-radius: 6px; padding: 1px 7px; font-size: 12px; margin: 0 2px; }
+
+  /* 네비 */
+  .nav-row { display: flex; justify-content: space-between; align-items: center; }
+  .nav-btn { padding: 8px 22px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #1a1a1a; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .nav-btn:hover:not(:disabled) { background: #f5f5f0; }
+  .nav-btn:disabled { opacity: 0.4; cursor: default; }
+  .nav-btn.primary { background: #C0620F; color: #fff; border-color: #C0620F; }
+  .nav-btn.primary:hover { background: #7A3B0A; }
+  .nav-count { font-size: 13px; color: #888; }
+
+  /* 결과 */
+  .score-box { text-align: center; padding: 2rem 1rem; }
+  .score-num { font-size: 52px; font-weight: 600; color: #C0620F; }
+  .score-label { font-size: 16px; color: #555; margin: .25rem 0 1.5rem; }
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .score-card { background: #f5f5f0; border-radius: 10px; padding: 14px; }
+  .sc-val { font-size: 22px; font-weight: 600; }
+  .sc-label { font-size: 12px; color: #888; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="qa"></div>
+</div>
+<script>
+
+/* ───── 문제 데이터 ───── */
+var Q = [
+
+  /* ── 1. 점수 체계 이해 ── */
+  {
+    cat: '점수 체계',
+    q: '다음 중 CSS 선택자 점수가 높은 순서로 올바르게 나열된 것은?',
+    code: null,
+    hint: '선택자 종류별 점수\n전체(*) = 0점  |  태그(h1) = 1점  |  클래스(.box) = 10점  |  id(#gnb) = 100점  |  인라인 style="" = 1000점',
+    opts: [
+      { text: 'id > class > tag > 전체(*)', color: null },
+      { text: 'class > id > tag > 전체(*)', color: null },
+      { text: 'tag > class > id > 전체(*)', color: null },
+      { text: 'id > tag > class > 전체(*)', color: null }
+    ],
+    ans: 0,
+    ex: 'CSS 선택자 우선순위 점수는 id(100점) > class(10점) > tag(1점) > 전체*(0점) 순입니다. 점수가 높을수록 우선 적용됩니다.'
+  },
+
+  /* ── 2. 같은 선택자 중복 ── */
+  {
+    cat: '동일 선택자 중복',
+    q: '아래 CSS에서 .sub-depth01 의 최종 background-color 는?',
+    code:
+'.sub-depth01 {\n' +
+'  background-color: red;    /* 첫 번째 */\n' +
+'}\n' +
+'.sub-depth01 {\n' +
+'  background-color: orange; /* 두 번째 */\n' +
+'}',
+    hint: '같은 선택자(점수가 동일)가 두 번 등장하면\n→ 나중에 작성된 규칙이 이긴다 (Cascade = 폭포처럼 아래로 흐름)',
+    opts: [
+      { text: 'red (첫 번째가 우선)', color: 'red' },
+      { text: 'orange (나중에 쓴 것이 우선)', color: 'orange' },
+      { text: '두 색이 섞인다', color: null },
+      { text: '오류가 나서 아무 색도 없다', color: null }
+    ],
+    ans: 1,
+    ex: '선택자 점수가 같으면 CSS에서 나중에 선언된 규칙이 적용됩니다. 이것이 Cascade(폭포) 원리입니다. 따라서 두 번째에 쓴 orange가 최종 적용됩니다.'
+  },
+
+  /* ── 3. tag vs class ── */
+  {
+    cat: '선택자 점수 충돌',
+    q: '아래 CSS에서 span.sub-depth01 의 최종 background-color 는?',
+    code:
+'span {\n' +
+'  background-color: darkgoldenrod; /* tag 선택자: 1점 */\n' +
+'}\n' +
+'.sub-depth01 {\n' +
+'  background-color: orange;        /* class 선택자: 10점 */\n' +
+'}',
+    hint: 'tag 선택자(1점) vs class 선택자(10점)\n→ 점수가 높은 쪽이 항상 이긴다 (선언 순서 무관)',
+    opts: [
+      { text: 'darkgoldenrod (span이 먼저 선언됨)', color: 'darkgoldenrod' },
+      { text: 'orange (class 점수 10점 > tag 점수 1점)', color: 'orange' },
+      { text: '두 색이 번갈아 나온다', color: null },
+      { text: '어떤 게 적용될지 알 수 없다', color: null }
+    ],
+    ans: 1,
+    ex: 'class 선택자(.sub-depth01)는 10점, tag 선택자(span)는 1점입니다. 선언 순서와 상관없이 점수가 높은 class 선택자가 이기므로 orange가 적용됩니다.'
+  },
+
+  /* ── 4. id vs class ── */
+  {
+    cat: '선택자 점수 충돌',
+    q: '아래 CSS에서 ul#gnb.gnb 의 border-color 최종 값은?',
+    code:
+'ul {\n' +
+'  border: 1px solid black; /* tag: 1점 */\n' +
+'}\n' +
+'.gnb {\n' +
+'  border-color: #fff;      /* class: 10점 */\n' +
+'}\n' +
+'/* HTML: <ul id="gnb" class="gnb"> */',
+    hint: 'border 속성은 border-color, border-width, border-style 을 한꺼번에 지정합니다.\nborder-color만 따로 바꾸면 나머지(width, style)는 유지됩니다.',
+    opts: [
+      { text: 'black (ul이 먼저 선언됨)', color: 'black' },
+      { text: '#fff 흰색 (class .gnb 가 10점으로 더 높음)', color: '#fff' },
+      { text: 'border 자체가 사라진다', color: null },
+      { text: '두 색이 동시에 적용된다', color: null }
+    ],
+    ans: 1,
+    ex: '.gnb는 10점, ul은 1점입니다. 점수가 높은 .gnb의 border-color: #fff가 적용됩니다. 단, border-width(1px)와 border-style(solid)은 ul에서 그대로 상속되므로 흰색 테두리 선이 보입니다.'
+  },
+
+  /* ── 5. 인라인 vs 내부 CSS ── */
+  {
+    cat: '적용 위치 우선순위',
+    q: '같은 요소에 내부CSS와 인라인 스타일이 동시에 적용될 때 어느 것이 우선인가?',
+    code:
+'/* 내부 CSS (style 태그 안) */\n' +
+'p { color: blue; }\n' +
+'\n' +
+'<!-- HTML -->\n' +
+'<p style="color: red;">이 텍스트 색은?</p>',
+    hint: '위치별 우선순위\n인라인 style="" (1000점) > 내부 CSS <style> (선택자 점수) > 외부 CSS <link>',
+    opts: [
+      { text: 'blue (내부 CSS가 먼저 로드되므로)', color: 'blue' },
+      { text: 'red (인라인 스타일이 1000점으로 가장 강함)', color: 'red' },
+      { text: '보라색 (두 색이 섞임)', color: 'purple' },
+      { text: '기본 검정 (둘 다 무시됨)', color: '#222' }
+    ],
+    ans: 1,
+    ex: '인라인 스타일(style="")은 1000점으로 내부 CSS나 외부 CSS의 어떤 선택자보다 높습니다. 따라서 style="color: red"가 우선 적용되어 텍스트는 빨간색이 됩니다.'
+  },
+
+  /* ── 6. 상속 ── */
+  {
+    cat: '상속',
+    q: '아래 코드에서 li 안의 텍스트 색깔은 무엇인가?',
+    code:
+'ul {\n' +
+'  color: navy;\n' +
+'}\n' +
+'\n' +
+'<ul>\n' +
+'  <li>메뉴1</li>   ← 이 텍스트 색은?\n' +
+'</ul>',
+    hint: 'color, font-size, font-family 등 글자 관련 속성은 자식 요소에게 자동으로 상속됩니다.\nmargin, padding, border, background 등은 상속되지 않습니다.',
+    opts: [
+      { text: '기본 검정 (li에 직접 지정 안 했으니까)', color: '#222' },
+      { text: 'navy (부모 ul의 color가 상속됨)', color: 'navy' },
+      { text: '투명 (상속이 안 돼서 색이 없음)', color: null },
+      { text: '오류가 난다', color: null }
+    ],
+    ans: 1,
+    ex: 'color 속성은 자식 요소에게 상속됩니다. ul에 color: navy를 지정하면 자식인 li도 navy 색상을 물려받습니다. 상속되는 대표 속성: color, font-*, line-height 등'
+  },
+
+  /* ── 7. 상속 안 되는 속성 ── */
+  {
+    cat: '상속',
+    q: '아래 코드에서 li의 background-color는?',
+    code:
+'ul {\n' +
+'  background-color: blue;\n' +
+'}\n' +
+'\n' +
+'<ul>\n' +
+'  <li>메뉴1</li>   ← 배경색은?\n' +
+'</ul>',
+    hint: 'background-color, margin, padding, border 등은 상속되지 않습니다.\n부모에게 지정해도 자식 요소에는 적용되지 않아요.',
+    opts: [
+      { text: 'blue (부모 ul 배경이 상속됨)', color: 'blue' },
+      { text: '투명(기본값) - background-color는 상속 안 됨', color: null },
+      { text: '흰색 (브라우저 기본)', color: 'white' },
+      { text: '검정', color: '#222' }
+    ],
+    ans: 1,
+    ex: 'background-color는 상속되지 않는 속성입니다. ul의 배경이 파랗게 보이지만 li 자체의 background-color는 기본값인 투명(transparent)입니다. 실제 화면에서 파랗게 보이는 건 ul의 배경이 비쳐 보이는 것입니다.'
+  },
+
+  /* ── 8. 복합 선택자 점수 ── */
+  {
+    cat: '점수 계산',
+    q: '아래 두 선택자 중 더 높은 점수를 가진 것은?',
+    code:
+'/* A */  ul li span { color: red; }\n' +
+'/* B */  .sub-depth01 { color: orange; }',
+    hint: '선택자 점수 계산법\ntag 하나당 1점, class 하나당 10점, id 하나당 100점\nA: ul(1) + li(1) + span(1) = 3점\nB: .sub-depth01 = 10점',
+    opts: [
+      { text: 'A (ul li span) - 태그가 3개라서', color: 'red' },
+      { text: 'B (.sub-depth01) - class 10점 > tag 3점', color: 'orange' },
+      { text: '점수가 같다', color: null },
+      { text: '순서가 나중인 것이 이긴다', color: null }
+    ],
+    ans: 1,
+    ex: 'A의 점수: ul(1) + li(1) + span(1) = 3점 / B의 점수: .sub-depth01 = 10점\n태그를 아무리 많이 써도 class 하나(10점)를 이길 수 없습니다. B가 이깁니다.'
+  },
+
+  /* ── 9. 외부/내부/인라인 순서 ── */
+  {
+    cat: '적용 위치 우선순위',
+    q: '외부CSS, 내부CSS, 인라인 스타일 모두 같은 선택자에 같은 속성을 적용할 때 최종 적용 순서는?',
+    code: null,
+    hint: '파일 위치별 적용 강도\n외부 CSS (.css 파일) < 내부 CSS (<style>태그) < 인라인 (style="")\n단, 선택자 점수가 같을 때 기준!',
+    opts: [
+      { text: '외부CSS > 내부CSS > 인라인', color: null },
+      { text: '인라인 > 내부CSS > 외부CSS', color: null },
+      { text: '내부CSS > 인라인 > 외부CSS', color: null },
+      { text: '모두 동등하고 나중에 로드된 것이 우선', color: null }
+    ],
+    ans: 1,
+    ex: '같은 선택자, 같은 속성이 충돌하면 인라인(1000점) > 내부CSS > 외부CSS 순으로 적용됩니다. 실무에서 인라인 스타일을 남용하면 CSS 관리가 어려워져 가급적 지양합니다.'
+  },
+
+  /* ── 10. 실전 종합 ── */
+  {
+    cat: '종합 문제',
+    q: '아래 코드에서 span.sub-depth01 의 최종 background-color 는?',
+    code:
+'/* 외부 CSS */\n' +
+'span { background-color: darkgoldenrod; } /* 1점 */\n' +
+'\n' +
+'/* 내부 CSS (<style> 태그) */\n' +
+'.sub-depth01 { background-color: red;    } /* 10점, 1번째 */\n' +
+'.sub-depth01 { background-color: orange; } /* 10점, 2번째 */\n' +
+'\n' +
+'/* HTML */\n' +
+'<span class="sub-depth01">하위메뉴1</span>',
+    hint: '판단 순서\n① 점수가 다르면 → 점수 높은 것이 무조건 이김\n② 점수가 같으면 → 나중에 선언된 것이 이김\n③ 위치가 다르면 → 인라인 > 내부 > 외부',
+    opts: [
+      { text: 'darkgoldenrod (외부 CSS span 태그)', color: 'darkgoldenrod' },
+      { text: 'red (내부 CSS 첫 번째 .sub-depth01)', color: 'red' },
+      { text: 'orange (내부 CSS 두 번째 .sub-depth01 - 점수 같고 나중에 선언)', color: 'orange' },
+      { text: '알 수 없다', color: null }
+    ],
+    ans: 2,
+    ex: '① span(1점) vs .sub-depth01(10점) → class가 이김 → darkgoldenrod 탈락\n② .sub-depth01 두 개는 점수 동일(10점) → 나중에 선언된 orange가 이김\n최종 답: orange'
+  }
+];
+
+/* ───── 상태 ───── */
+var cur = 0;
+var answered = new Array(Q.length).fill(null);
+var sel = new Array(Q.length).fill(null);
+
+/* ───── DOM 헬퍼 ───── */
+function el(tag, cls) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  return e;
+}
+function txt(node, t) { node.textContent = t; }
+
+/* ───── 렌더 ───── */
+function render() {
+  var root = document.getElementById('qa');
+  while (root.firstChild) root.removeChild(root.firstChild);
+  if (cur >= Q.length) { renderScore(root); return; }
+
+  var q = Q[cur];
+  var done = answered[cur] !== null;
+  var pct = Math.round(cur / Q.length * 100);
+
+  /* 진행 바 */
+  var pb = el('div', 'prog-bg');
+  var pf = el('div', 'prog-fill');
+  pf.style.width = pct + '%';
+  pb.appendChild(pf);
+  root.appendChild(pb);
+
+  /* 메타 */
+  var meta = el('div', 'q-meta');
+  var qn = el('span', 'q-num');
+  txt(qn, (cur + 1) + ' / ' + Q.length);
+  var qc = el('span', 'q-cat');
+  txt(qc, q.cat);
+  meta.appendChild(qn);
+  meta.appendChild(qc);
+  root.appendChild(meta);
+
+  /* 질문 */
+  var qt = el('div', 'q-text');
+  txt(qt, q.q);
+  root.appendChild(qt);
+
+  /* 힌트 박스 */
+  if (q.hint) {
+    var hb = el('div', 'hint-box');
+    var ht = el('div', 'hint-title');
+    txt(ht, '💡 핵심 개념');
+    hb.appendChild(ht);
+    var hc = el('pre');
+    hc.style.cssText = 'font-family:inherit;font-size:13px;white-space:pre-wrap;';
+    txt(hc, q.hint);
+    hb.appendChild(hc);
+    root.appendChild(hb);
+  }
+
+  /* 코드 블록 */
+  if (q.code) {
+    var pre = el('pre', 'code-block');
+    txt(pre, q.code);
+    root.appendChild(pre);
+  }
+
+  /* 선택지 */
+  var opts = el('div', 'options');
+  q.opts.forEach(function(o, i) {
+    var btn = el('button', 'opt-btn');
+    if (done) {
+      if (i === q.ans) btn.classList.add('correct');
+      else if (i === sel[cur] && i !== q.ans) btn.classList.add('wrong');
+      btn.disabled = true;
+    }
+    if (o.color) {
+      var sw = el('span', 'color-swatch');
+      sw.style.background = o.color;
+      btn.appendChild(sw);
+    }
+    var label = el('span');
+    txt(label, o.text);
+    btn.appendChild(label);
+    btn.addEventListener('click', (function(idx){ return function(){ choose(idx); }; })(i));
+    opts.appendChild(btn);
+  });
+  root.appendChild(opts);
+
+  /* 해설 */
+  if (done) {
+    var exp = el('div', 'explanation');
+    var b = el('strong');
+    txt(b, '해설 ');
+    exp.appendChild(b);
+    var pre2 = document.createElement('pre');
+    pre2.style.cssText = 'font-family:inherit;font-size:13px;white-space:pre-wrap;margin-top:4px;color:#444;';
+    txt(pre2, q.ex);
+    exp.appendChild(pre2);
+    root.appendChild(exp);
+  }
+
+  /* 네비 */
+  var nav = el('div', 'nav-row');
+
+  var prev = el('button', 'nav-btn');
+  txt(prev, '← 이전');
+  if (cur === 0) prev.disabled = true;
+  prev.addEventListener('click', function(){ go(-1); });
+
+  var cnt = el('span', 'nav-count');
+  txt(cnt, answered.filter(function(a){ return a !== null; }).length + '문제 완료');
+
+  var next = el('button', 'nav-btn primary');
+  if (cur < Q.length - 1) {
+    txt(next, '다음 →');
+    next.addEventListener('click', function(){ go(1); });
+  } else {
+    txt(next, '결과 보기');
+    next.addEventListener('click', function(){ cur = Q.length; render(); });
+  }
+
+  nav.appendChild(prev);
+  nav.appendChild(cnt);
+  nav.appendChild(next);
+  root.appendChild(nav);
+}
+
+function choose(i) {
+  if (answered[cur] !== null) return;
+  sel[cur] = i;
+  answered[cur] = i === Q[cur].ans ? 'correct' : 'wrong';
+  render();
+}
+function go(d) {
+  cur = Math.max(0, Math.min(Q.length - 1, cur + d));
+  render();
+}
+
+function renderScore(root) {
+  var c = answered.filter(function(a){ return a === 'correct'; }).length;
+  var w = answered.filter(function(a){ return a === 'wrong'; }).length;
+  var sk = answered.filter(function(a){ return a === null; }).length;
+  var pct = Math.round(c / Q.length * 100);
+  var msg = pct >= 90 ? 'CSS 우선순위 완벽 이해!' :
+            pct >= 70 ? '잘 하고 있어요! 헷갈렸던 문제 한 번 더 보세요.' :
+            pct >= 50 ? '핵심 개념을 다시 정리하고 재도전해보세요!' :
+            '점수와 상속 개념부터 차근차근 다시 봐요!';
+
+  var box = el('div', 'score-box');
+  var sn = el('div', 'score-num'); txt(sn, pct + '점'); box.appendChild(sn);
+  var sl = el('div', 'score-label'); txt(sl, msg); box.appendChild(sl);
+
+  var grid = el('div', 'score-grid');
+  [[c,'#3B6D11','정답'],[w,'#A32D2D','오답'],[sk,'#888','미응답']].forEach(function(item){
+    var card = el('div','score-card');
+    var v = el('div','sc-val'); v.style.color = item[1]; txt(v, item[0]); card.appendChild(v);
+    var lb = el('div','sc-label'); txt(lb, item[2]); card.appendChild(lb);
+    grid.appendChild(card);
+  });
+  box.appendChild(grid);
+
+  var rb = el('button', 'nav-btn primary');
+  txt(rb, '처음부터 다시 풀기');
+  rb.addEventListener('click', function(){
+    cur = 0;
+    answered = new Array(Q.length).fill(null);
+    sel = new Array(Q.length).fill(null);
+    render();
+  });
+  box.appendChild(rb);
+  root.appendChild(box);
+}
+
+render();
+</script>
+</body>
+</html>
