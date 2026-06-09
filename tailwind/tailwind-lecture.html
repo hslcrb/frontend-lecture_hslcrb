@@ -184,14 +184,15 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
     메인으로
   </a>
   <a class="nav-item active" href="#s1"><span class="nav-num">01</span>Tailwind란?</a>
-  <a class="nav-item" href="#s2"><span class="nav-num">02</span>CDN 셋팅 (v3 vs v4)</a>
+  <a class="nav-item" href="#s2"><span class="nav-num">02</span>CDN 셋팅 (v4)</a>
   <a class="nav-item" href="#s3"><span class="nav-num">03</span>단위 시스템</a>
   <a class="nav-item" href="#s4"><span class="nav-num">04</span>Layout - flex</a>
   <a class="nav-item" href="#s5"><span class="nav-num">05</span>Layout - grid</a>
   <a class="nav-item" href="#s6"><span class="nav-num">06</span>position</a>
   <a class="nav-item" href="#s7"><span class="nav-num">07</span>텍스트 & 색상</a>
-  <a class="nav-item" href="#s8"><span class="nav-num">08</span>v4 주의사항</a>
-  <a class="nav-item" href="#s9"><span class="nav-num">09</span>실습 예제</a>
+  <a class="nav-item" href="#s8"><span class="nav-num">08</span>실습 예제</a>
+  <a class="nav-item" href="#s9"><span class="nav-num">부록 A</span>v3 vs v4 차이</a>
+  <a class="nav-item" href="#s10"><span class="nav-num">부록 B</span>주의사항 & 버그</a>
 </nav>
 
 <main class="main">
@@ -213,13 +214,13 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
   <section class="section" id="s1">
     <div class="section-num">CHAPTER 01</div>
     <div class="section-title">Tailwind란?</div>
-    <div class="section-desc">CSS를 별도 파일 없이 HTML 클래스로 바로 작성하는 유틸리티 퍼스트 프레임워크예요. 실무에서는 <strong>컴포넌트 단위</strong>로 스타일을 관리할 때 특히 강력해요.</div>
+    <div class="section-desc">CSS를 별도 파일 없이 HTML 클래스로 바로 작성하는 <strong>유틸리티 퍼스트 프레임워크</strong>예요. CSS 파일과 HTML 파일을 왔다갔다 안 해도 돼요.</div>
 
     <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>기존 CSS vs Tailwind</div>
+      <div class="card-title"><span class="dot dot-blue"></span>가장 간단한 예시 - 버튼 하나</div>
       <div class="compare">
         <div>
-          <div class="compare-label label-css">기존 CSS</div>
+          <div class="compare-label label-css">기존 CSS - 파일 2개</div>
           <div class="code-block">
 <span class="cm">/* style.css */</span><br>
 <span class="sel">.btn</span> {<br>
@@ -234,7 +235,7 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
           </div>
         </div>
         <div>
-          <div class="compare-label label-tw">Tailwind</div>
+          <div class="compare-label label-tw">Tailwind - 파일 1개</div>
           <div class="code-block">
 <span class="cm">/* CSS 파일 필요 없음 */</span><br><br><br>
 <span class="tag">&lt;button</span><br>
@@ -249,24 +250,50 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
         </div>
       </div>
       <div class="preview">
-        <div class="preview-label">LIVE PREVIEW</div>
-        <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <div class="preview-label">LIVE PREVIEW - 결과는 완전히 동일해요</div>
+        <div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap">
           <div>
             <p style="font-size:11px;color:var(--muted);margin-bottom:8px">기존 방식</p>
             <button style="background:#3b82f6;color:#fff;padding:8px 16px;border-radius:8px;font-weight:600;border:none;cursor:pointer">버튼</button>
           </div>
-          <div style="font-size:20px;color:var(--muted)">→</div>
+          <div style="font-size:20px;color:var(--muted)">=</div>
           <div>
             <p style="font-size:11px;color:var(--muted);margin-bottom:8px">Tailwind</p>
             <button style="background:#3b82f6;color:#fff;padding:8px 16px;border-radius:8px;font-weight:600;border:none;cursor:pointer">버튼</button>
           </div>
-          <div style="font-size:13px;color:var(--sub);max-width:240px">결과는 동일 - 차이는 <strong>스타일이 HTML에 함께 있다는 것</strong>. 파일 두 개 왔다갔다 안 해도 됨.</div>
+          <div style="font-size:13px;color:var(--sub);max-width:200px;line-height:1.7">결과는 동일 - 차이는 <strong>CSS 파일 없이 HTML에 바로 스타일을 쓴다</strong>는 것</div>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title"><span class="dot dot-amber"></span>컴포넌트 개념 - 레고 블록</div>
+      <div class="card-title"><span class="dot dot-amber"></span>왜 쓰나요?</div>
+      <div class="preview">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:14px">
+            <div style="font-size:13px;font-weight:700;color:#065f46;margin-bottom:8px">✅ 장점</div>
+            <div style="font-size:12px;color:#065f46;line-height:1.9">
+              • CSS 파일 왔다갔다 안 해도 됨<br>
+              • 클래스 이름 고민 필요 없음<br>
+              • 디자인 시스템과 연동 쉬움<br>
+              • 피그마 값 → 클래스로 바로 변환
+            </div>
+          </div>
+          <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px">
+            <div style="font-size:13px;font-weight:700;color:#9a3412;margin-bottom:8px">⚠️ 단점</div>
+            <div style="font-size:12px;color:#9a3412;line-height:1.9">
+              • HTML이 클래스로 길어짐<br>
+              • 처음엔 클래스 이름 외워야 함<br>
+              • CDN 버전은 실험적 (버그 있음)<br>
+              • 복잡한 CSS는 한계 있음
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-purple"></span>컴포넌트 개념 - Figma 컴포넌트와 같아요</div>
       <div class="preview">
         <div class="preview-label">COMPONENT = 재사용 가능한 UI 조각</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
@@ -303,66 +330,51 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
   <!-- ===== 02: CDN 셋팅 ===== -->
   <section class="section" id="s2">
     <div class="section-num">CHAPTER 02</div>
-    <div class="section-title">CDN 셋팅 - v3 vs v4</div>
-    <div class="section-desc">npm 설치 없이 <code style="background:var(--primary-light);padding:1px 6px;border-radius:4px;font-family:monospace">&lt;script&gt;</code> 태그 한 줄로 바로 시작할 수 있어요. v3과 v4의 문법 차이를 알아두세요.</div>
+    <div class="section-title">CDN 셋팅</div>
+    <div class="section-desc">npm 설치 없이 <code style="background:var(--primary-light);padding:1px 6px;border-radius:4px;font-family:monospace">&lt;script&gt;</code> 태그 한 줄로 바로 시작할 수 있어요. 수업에서는 <strong>v4</strong>를 사용해요.</div>
 
     <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>v3 vs v4 CDN 비교</div>
-      <div class="ver-grid" style="padding:16px;gap:12px">
-        <div class="ver-card ver-v3">
-          <div class="ver-header">v3 - cdn.tailwindcss.com</div>
-          <div class="ver-body">
-            <div class="code-block" style="font-size:12px;padding:14px">
+      <div class="card-title"><span class="dot dot-blue"></span>v4 CDN - 이렇게 시작해요</div>
+      <div class="code-block">
+<span class="cm">&lt;!-- &lt;head&gt; 안에 한 줄만 추가 --&gt;</span><br>
 <span class="tag">&lt;script</span><br>
-&nbsp;&nbsp;<span class="attr">src</span>=<span class="str">"https://cdn.tailwindcss.com"</span><br>
+&nbsp;&nbsp;<span class="attr">src</span>=<span class="str">"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"</span><br>
 <span class="tag">&gt;&lt;/script&gt;</span><br><br>
-<span class="cm">/* 커스텀 컬러 */</span><br>
-<span class="tag">&lt;script&gt;</span><br>
-&nbsp;&nbsp;tailwind.config = {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;theme: { extend: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;colors: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;brand: <span class="str">'#e63329'</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}}<br>
-&nbsp;&nbsp;}<br>
-<span class="tag">&lt;/script&gt;</span>
-            </div>
-          </div>
-        </div>
-        <div class="ver-card ver-v4">
-          <div class="ver-header">v4 - @tailwindcss/browser ✅ 수업 사용</div>
-          <div class="ver-body">
-            <div class="code-block" style="font-size:12px;padding:14px">
-<span class="tag">&lt;script</span><br>
-&nbsp;&nbsp;<span class="attr">src</span>=<span class="str">"https://cdn.jsdelivr.net/npm/<br>&nbsp;&nbsp;@tailwindcss/browser@4"</span><br>
-<span class="tag">&gt;&lt;/script&gt;</span><br><br>
-<span class="cm">/* 커스텀 컬러 */</span><br>
-<span class="tag">&lt;style</span> <span class="attr">type</span>=<span class="str">"text/tailwindcss"</span><span class="tag">&gt;</span><br>
-&nbsp;&nbsp;<span class="new">@theme</span> {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="prop">--color-brand</span>: <span class="str">#e63329</span>;<br>
-&nbsp;&nbsp;}<br>
-<span class="tag">&lt;/style&gt;</span>
-            </div>
-          </div>
-        </div>
+<span class="cm">&lt;!-- 그리고 바로 클래스 사용 가능 --&gt;</span><br>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"text-blue-500 font-bold p-4"</span><span class="tag">&gt;</span>Hello Tailwind!<span class="tag">&lt;/div&gt;</span>
       </div>
-      <div class="tip" style="margin:0 16px 16px">💡 v4의 <code>@theme</code>은 Figma 디자인 시스템 CSS 변수와 이름을 맞춰 쓸 수 있어서 일관성 유지가 편해요. <code>--color-brand</code> 선언하면 <code>text-brand</code>, <code>bg-brand</code> 클래스로 바로 사용 가능!</div>
     </div>
 
     <div class="card">
-      <div class="card-title"><span class="dot dot-amber"></span>v4 CSS 변수 활용 - makeon 예제에서</div>
+      <div class="card-title"><span class="dot dot-green"></span>커스텀 컬러 추가 - @theme</div>
+      <div class="code-block">
+<span class="cm">&lt;!-- script 아래에 style 태그 추가 --&gt;</span><br>
+<span class="tag">&lt;style</span> <span class="attr">type</span>=<span class="str">"text/tailwindcss"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="new">@theme</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="prop">--color-brand</span>: <span class="str">#e63329</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="prop">--color-brand-dark</span>: <span class="str">#b91c1c</span>;<br>
+&nbsp;&nbsp;}<br>
+<span class="tag">&lt;/style&gt;</span><br><br>
+<span class="cm">&lt;!-- 선언하면 바로 클래스로 사용 가능 --&gt;</span><br>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"<span class="new">bg-brand text-white</span>"</span><span class="tag">&gt;</span>브랜드 버튼<span class="tag">&lt;/button&gt;</span>
+      </div>
+      <div class="tip">💡 <code>@theme</code>은 Figma 디자인 시스템 CSS 변수와 이름을 맞춰 쓸 수 있어서 일관성 유지가 편해요.<br>
+      <code>--color-brand</code> 선언하면 <code>text-brand</code>, <code>bg-brand</code>, <code>border-brand</code> 클래스로 바로 사용 가능!</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-amber"></span>CSS 변수를 클래스로 - makeon 예제</div>
       <div class="code-block">
 <span class="cm">/* :root에 변수 선언 후 */</span><br>
 <span class="sel">:root</span> {<br>
 &nbsp;&nbsp;<span class="prop">--default-color</span>: <span class="str">#111111</span>;<br>
 &nbsp;&nbsp;<span class="prop">--sub-color</span>: <span class="str">#666666</span>;<br>
 }<br><br>
-<span class="cm">/* v4에서 CSS 변수를 클래스로 사용하는 법 */</span><br>
-<span class="tag">&lt;body</span> <span class="attr">class</span>=<span class="str">"text-(--default-color)"</span><span class="tag">&gt;</span>  <span class="cm">← v4 문법</span><br>
-<span class="cm">/* text-[var(--default-color)] ← v3 문법 */</span><br><br>
-<span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="str">"text-(--sub-color)"</span><span class="tag">&gt;</span>부제목<span class="tag">&lt;/p&gt;</span>
+<span class="cm">/* v4에서 CSS 변수를 클래스로 사용 */</span><br>
+<span class="tag">&lt;body</span> <span class="attr">class</span>=<span class="str">"<span class="new">text-(--default-color)</span>"</span><span class="tag">&gt;</span><br>
+<span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="str">"<span class="new">text-(--sub-color)</span>"</span><span class="tag">&gt;</span>부제목<span class="tag">&lt;/p&gt;</span>
       </div>
-      <div class="tip amber">⚠️ <strong>v3과 v4 동시에 CDN 두 개 넣으면 충돌!</strong> 하나만 사용하세요.</div>
+      <div class="tip amber">⚠️ v3에서는 <code>text-[var(--sub-color)]</code>로 써야 했는데 v4에서는 <code>text-(--sub-color)</code>로 더 짧아졌어요. v3/v4 문법 차이 전체는 <strong>부록 A</strong>를 참고하세요.</div>
     </div>
   </section>
 
@@ -659,11 +671,168 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
 
   <hr class="divider">
 
-  <!-- ===== 08: v4 주의사항 ===== -->
+  <!-- ===== 08: 실습 예제 ===== -->
   <section class="section" id="s8">
     <div class="section-num">CHAPTER 08</div>
-    <div class="section-title">v4 주의사항 & 버그</div>
-    <div class="section-desc">@tailwindcss/browser@4는 실험적 버전이에요. 알려진 이슈를 미리 파악해두세요.</div>
+    <div class="section-title">실습 예제</div>
+    <div class="section-desc">수업에서 만든 파일들의 핵심 Tailwind 패턴을 확인해요. <strong>완성 결과 → 코드 → 한 줄 해설</strong> 순서로 읽으세요.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-blue"></span>makeon - flex + grow + 중앙 정렬</div>
+      <div class="preview">
+        <div class="preview-label">완성 결과</div>
+        <div style="background:#fff;border-radius:8px;padding:16px;border:1px solid var(--border)">
+          <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:16px">
+            <span style="font-size:13px;font-weight:300;letter-spacing:-0.5px;color:#666">Premium Collection</span>
+            <span style="font-size:22px;font-weight:700;letter-spacing:-1px">MAKEON</span>
+          </div>
+          <div style="display:flex;gap:14px">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;background:#f8f9fc;border-radius:8px;padding:12px">
+              <div style="width:40px;height:40px;background:#e2e8f0;border-radius:50%"></div>
+              <span style="font-size:11px;font-weight:600">카드 A</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;background:#f8f9fc;border-radius:8px;padding:12px">
+              <div style="width:40px;height:40px;background:#e2e8f0;border-radius:50%"></div>
+              <span style="font-size:11px;font-weight:600">카드 B</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;background:#f8f9fc;border-radius:8px;padding:12px">
+              <div style="width:40px;height:40px;background:#e2e8f0;border-radius:50%"></div>
+              <span style="font-size:11px;font-weight:600">카드 C</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="code-block">
+<span class="cm">/* 제목: flex-col + items-center */</span><br>
+<span class="tag">&lt;h2</span> <span class="attr">class</span>=<span class="str">"<span class="new">flex flex-col items-center</span> mb-12"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"text-[22px] font-light tracking-tight"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"eng text-[50px] font-bold"</span><span class="tag">&gt;</span><br><br>
+<span class="cm">/* 카드 3개 균등 분배 */</span><br>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"flex gap-7"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="str">"<span class="new">grow basis-full</span> flex flex-col items-center gap-4"</span><span class="tag">&gt;</span>
+      </div>
+      <div style="font-size:12px;color:var(--sub);background:var(--bg);padding:10px 14px;border-top:1px solid var(--border)">
+        📌 <strong>grow basis-full</strong> - flex-grow:1 + flex-basis:100%로 3개 카드가 남은 공간을 균등하게 나눠 가져요
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-green"></span>deahan - grid 4열 + border 조합</div>
+      <div class="preview">
+        <div class="preview-label">완성 결과</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);border:1px solid #979891;border-radius:12px;overflow:hidden">
+          <div style="border-right:1px solid #979891;border-bottom:1px solid #979891;padding:16px;font-size:11px;font-weight:600">Merit 소개</div>
+          <div style="border-right:1px solid #979891;border-bottom:1px solid #979891;padding:16px;font-size:11px;font-weight:600">Merit 01</div>
+          <div style="border-right:1px solid #979891;border-bottom:1px solid #979891;padding:16px;font-size:11px;font-weight:600">Merit 02</div>
+          <div style="border-bottom:1px solid #979891;padding:16px;font-size:11px;font-weight:600">영상</div>
+          <div style="border-right:1px solid #979891;padding:16px;font-size:11px;font-weight:600">영상2</div>
+          <div style="border-right:1px solid #979891;padding:16px;font-size:11px;font-weight:600">Merit 03</div>
+          <div style="border-right:1px solid #979891;padding:16px;font-size:11px;font-weight:600">Merit 04</div>
+          <div style="padding:16px;font-size:11px;font-weight:600">빈 칸</div>
+        </div>
+      </div>
+      <div class="code-block">
+<span class="cm">/* 4열 그리드 컨테이너 */</span><br>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"<span class="new">grid grid-cols-4</span><br>
+&nbsp;&nbsp;border border-[#979891] rounded-2xl"</span><span class="tag">&gt;</span><br><br>
+<span class="cm">/* 각 셀 - border-r, border-b로 구분선 */</span><br>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"<span class="new">border-r border-b</span> border-[#979891]<br>
+&nbsp;&nbsp;py-[50px] px-[30px]"</span><span class="tag">&gt;</span>
+      </div>
+      <div style="font-size:12px;color:var(--sub);background:var(--bg);padding:10px 14px;border-top:1px solid var(--border)">
+        📌 <strong>border-r border-b</strong> - 각 셀에 오른쪽·아래쪽 테두리만 줘서 외곽선은 컨테이너 border 하나로 처리해요
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-amber"></span>logo-grid - 행마다 다른 열 수</div>
+      <div class="preview">
+        <div class="preview-label">완성 결과</div>
+        <div style="margin-bottom:8px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
+          <div style="background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:10px;font-size:11px;font-weight:600;color:#713f12;text-align:center">S-OIL</div>
+          <div style="background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:10px;font-size:11px;font-weight:600;color:#713f12;text-align:center">KAL</div>
+          <div style="background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:10px;font-size:11px;font-weight:600;color:#713f12;text-align:center">NH</div>
+          <div style="background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:10px;font-size:11px;font-weight:600;color:#713f12;text-align:center">하나</div>
+          <div style="background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:10px;font-size:11px;font-weight:600;color:#713f12;text-align:center">ILDONG</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 10%">
+          <div style="background:#dbeafe;border:1px solid #93c5fd;border-radius:6px;padding:10px;font-size:11px;font-weight:600;color:#1e40af;text-align:center">DAOU</div>
+          <div style="background:#dbeafe;border:1px solid #93c5fd;border-radius:6px;padding:10px;font-size:11px;font-weight:600;color:#1e40af;text-align:center">단국대</div>
+          <div style="background:#dbeafe;border:1px solid #93c5fd;border-radius:6px;padding:10px;font-size:11px;font-weight:600;color:#1e40af;text-align:center">Sunmight</div>
+          <div style="background:#dbeafe;border:1px solid #93c5fd;border-radius:6px;padding:10px;font-size:11px;font-weight:600;color:#1e40af;text-align:center">혜원</div>
+        </div>
+      </div>
+      <div class="code-block">
+<span class="cm">/* 1행: 5열 */</span><br>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"grid <span class="new">grid-cols-5</span> gap-3 mb-3"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;div</span><span class="tag">&gt;</span>S-OIL<span class="tag">&lt;/div&gt;</span> <span class="cm">... 5개</span><br>
+<span class="tag">&lt;/div&gt;</span><br><br>
+<span class="cm">/* 2행: 4열 + 양쪽 여백 */</span><br>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"grid <span class="new">grid-cols-4</span> gap-3 <span class="new">px-[10%]</span>"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;div</span><span class="tag">&gt;</span>DAOU<span class="tag">&lt;/div&gt;</span> <span class="cm">... 4개</span><br>
+<span class="tag">&lt;/div&gt;</span>
+      </div>
+      <div style="font-size:12px;color:var(--sub);background:var(--bg);padding:10px 14px;border-top:1px solid var(--border)">
+        📌 <strong>px-[10%]</strong> - 양쪽 10% 여백으로 2행(4열)이 1행(5열)보다 안쪽으로 들어와 가운데 정렬처럼 보여요
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 부록 A: v3 vs v4 ===== -->
+  <section class="section" id="s9">
+    <div class="section-num">부록 A</div>
+    <div class="section-title">v3 vs v4 문법 차이</div>
+    <div class="section-desc">인터넷에서 Tailwind 코드를 찾다 보면 v3 문법이 섞여 있을 수 있어요. 차이점을 알아두면 헷갈리지 않아요.</div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-purple"></span>v3 vs v4 문법 비교</div>
+      <div class="compare">
+        <div>
+          <div class="compare-label label-css">v3 문법</div>
+          <div class="code-block">
+<span class="cm">/* CDN */</span><br>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"https://cdn.tailwindcss.com"</span><span class="tag">&gt;&lt;/script&gt;</span><br><br>
+<span class="cm">/* 커스텀 컬러 설정 */</span><br>
+<span class="tag">&lt;script&gt;</span><br>
+&nbsp;&nbsp;tailwind.config = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;theme: { extend: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;colors: { brand: <span class="str">'#e63329'</span> }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}}<br>
+&nbsp;&nbsp;}<br>
+<span class="tag">&lt;/script&gt;</span><br><br>
+<span class="cm">/* CSS 변수 사용 */</span><br>
+<span class="cls">text-[var(--sub-color)]</span>
+          </div>
+        </div>
+        <div>
+          <div class="compare-label label-tw">v4 문법 ✅ 수업 사용</div>
+          <div class="code-block">
+<span class="cm">/* CDN */</span><br>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"</span><span class="tag">&gt;&lt;/script&gt;</span><br><br>
+<span class="cm">/* 커스텀 컬러 설정 */</span><br>
+<span class="tag">&lt;style</span> <span class="attr">type</span>=<span class="str">"text/tailwindcss"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="new">@theme</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="prop">--color-brand</span>: <span class="str">#e63329</span>;<br>
+&nbsp;&nbsp;}<br>
+<span class="tag">&lt;/style&gt;</span><br><br>
+<span class="cm">/* CSS 변수 사용 (더 짧음) */</span><br>
+<span class="cls">text-(--sub-color)</span>
+          </div>
+        </div>
+      </div>
+      <div class="tip">💡 구글에서 Tailwind 예제를 찾을 때 v3 문법이 나올 수 있어요. v4에서도 v3 문법이 대부분 동작하지만 <code>@theme</code>과 CSS 변수 단축 문법은 v4에서만 돼요.</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 부록 B: 주의사항 ===== -->
+  <section class="section" id="s10">
+    <div class="section-num">부록 B</div>
+    <div class="section-title">주의사항 & 알려진 버그</div>
+    <div class="section-desc">@tailwindcss/browser@4는 실험적 버전이에요. 막힐 때 여기서 확인하세요.</div>
 
     <div class="card">
       <div class="card-title"><span class="dot dot-amber"></span>padding 클래스 미적용 버그</div>
@@ -685,85 +854,8 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
 <span class="cm">/* ❌ 충돌 - 둘 다 넣으면 안 됨 */</span><br>
 <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"https://cdn.tailwindcss.com"</span><span class="tag">&gt;&lt;/script&gt;</span><br>
 <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"</span><span class="tag">&gt;&lt;/script&gt;</span><br><br>
-<span class="cm">/* ✅ 하나만 사용 */</span><br>
+<span class="cm">/* ✅ v4 하나만 사용 */</span><br>
 <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"</span><span class="tag">&gt;&lt;/script&gt;</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-purple"></span>v3 vs v4 문법 차이 정리</div>
-      <div class="compare">
-        <div>
-          <div class="compare-label label-css">v3 문법</div>
-          <div class="code-block">
-<span class="cm">/* CSS 변수 클래스 */</span><br>
-<span class="cls">text-[var(--sub-color)]</span><br><br>
-<span class="cm">/* 커스텀 설정 */</span><br>
-<span class="sel">tailwind.config</span> = {<br>
-&nbsp;&nbsp;theme: { extend: {} }<br>
-}
-          </div>
-        </div>
-        <div>
-          <div class="compare-label label-tw">v4 문법</div>
-          <div class="code-block">
-<span class="cm">/* CSS 변수 클래스 (더 짧음) */</span><br>
-<span class="cls">text-(--sub-color)</span><br><br>
-<span class="cm">/* 커스텀 설정 */</span><br>
-<span class="tag">&lt;style</span> <span class="attr">type</span>=<span class="str">"text/tailwindcss"</span><span class="tag">&gt;</span><br>
-&nbsp;&nbsp;<span class="new">@theme</span> { ... }<br>
-<span class="tag">&lt;/style&gt;</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- ===== 09: 실습 예제 ===== -->
-  <section class="section" id="s9">
-    <div class="section-num">CHAPTER 09</div>
-    <div class="section-title">실습 예제</div>
-    <div class="section-desc">수업에서 만든 파일들의 핵심 Tailwind 패턴을 확인해요.</div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-blue"></span>makeon - flex + grow + 중앙 정렬</div>
-      <div class="code-block">
-<span class="cm">/* 제목: flex-col + items-center */</span><br>
-<span class="tag">&lt;h2</span> <span class="attr">class</span>=<span class="str">"flex flex-col items-center mb-12"</span><span class="tag">&gt;</span><br>
-&nbsp;&nbsp;<span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"text-[22px] font-light tracking-tight"</span><span class="tag">&gt;</span><br>
-&nbsp;&nbsp;<span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"eng text-[50px] font-bold"</span><span class="tag">&gt;</span><br><br>
-<span class="cm">/* 카드 3개 균등 분배 */</span><br>
-<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"flex gap-7"</span><span class="tag">&gt;</span><br>
-&nbsp;&nbsp;<span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="str">"<span class="new">grow basis-full</span> flex flex-col items-center gap-4"</span><span class="tag">&gt;</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-green"></span>deahan - grid 4열 + border 조합</div>
-      <div class="code-block">
-<span class="cm">/* 4열 그리드 컨테이너 */</span><br>
-<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"grid grid-cols-4<br>
-&nbsp;&nbsp;border border-[#979891] rounded-2xl"</span><span class="tag">&gt;</span><br><br>
-<span class="cm">/* 각 셀 - border-r, border-b로 구분선 */</span><br>
-<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"<span class="new">border-r border-b</span> border-[#979891]<br>
-&nbsp;&nbsp;py-[50px] px-[30px]"</span><span class="tag">&gt;</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><span class="dot dot-amber"></span>logo-grid - 행마다 다른 열 수</div>
-      <div class="code-block">
-<span class="cm">/* 1행: 5열 */</span><br>
-<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"grid <span class="new">grid-cols-5</span> gap-3 mb-3"</span><span class="tag">&gt;</span><br>
-&nbsp;&nbsp;<span class="tag">&lt;div</span><span class="tag">&gt;</span>S-OIL<span class="tag">&lt;/div&gt;</span> <span class="cm">... 5개</span><br>
-<span class="tag">&lt;/div&gt;</span><br><br>
-<span class="cm">/* 2행: 4열 + 양쪽 여백 */</span><br>
-<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"grid <span class="new">grid-cols-4</span> gap-3 <span class="new">px-[10%]</span>"</span><span class="tag">&gt;</span><br>
-&nbsp;&nbsp;<span class="tag">&lt;div</span><span class="tag">&gt;</span>DAOU<span class="tag">&lt;/div&gt;</span> <span class="cm">... 4개</span><br>
-<span class="tag">&lt;/div&gt;</span><br><br>
-<span class="cm">/* px-[10%] = 양쪽 10% 여백으로 4열이 5열보다 좁아 보이게 */</span>
       </div>
     </div>
   </section>
