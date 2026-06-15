@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jjinmanggo.github.io/frontend-lecture/sitemap.xml
