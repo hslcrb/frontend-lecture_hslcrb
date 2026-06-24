@@ -96,11 +96,11 @@
     .section-desc { font-size: 14px; color: var(--sub); line-height: 1.7; }
 
     /* ===== 카드 ===== */
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; margin-top: 20px; }
     .card-title { font-size: 13px; font-weight: 600; color: var(--sub); padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; gap: 8px; }
     .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
 
-    .code-block { background: var(--code-bg); padding: 20px; font-family: 'Fira Code', monospace; font-size: 13px; color: #cdd6f4; line-height: 2; overflow-x: auto; }
+    .code-block { background: var(--code-bg); padding: 20px; font-family: 'Fira Code', monospace; font-size: 13px; color: #cdd6f4; line-height: 2; overflow-x: auto; border-radius: 8px; }
     .code-block .cm { color: #6c7086; }
     .code-block .kw { color: #89b4fa; }
     .code-block .str { color: #a6e3a1; }
@@ -123,7 +123,7 @@
     ul li, ol li { margin-bottom: 8px; color: var(--sub); line-height: 1.7; }
 
     /* ===== 비교 박스 ===== */
-    .compare-box { background: var(--primary-light); padding: 14px; border-radius: 8px; border-left: 3px solid var(--primary); color: var(--primary-dark); margin: 12px 0; font-size: 13px; line-height: 1.7; }
+    .compare-box { background: var(--primary-light); padding: 14px; border-radius: 0; border-left: 3px solid var(--primary); color: var(--primary-dark); margin: 20px 0 0 0; font-size: 13px; line-height: 1.7; }
     .code-inline { background: #f1f5f9; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
   </style>
 </head>
@@ -168,7 +168,7 @@
       <div class="card-title"><span class="dot"></span>정의</div>
       <div class="preview">
         <div class="preview-label">CONCEPT</div>
-        <div style="padding:14px;background:#d1fae5;border-radius:8px;color:#065f46;font-size:13px;line-height:1.7">
+        <div style="padding:14px;background:#d1fae5;border-radius:0;color:#065f46;font-size:13px;line-height:1.7;border-left:3px solid var(--primary)">
           <strong>Variable (변수)</strong><br>
           = 데이터를 임시로 저장하는 공간<br>
           = 값을 저장하는 상자<br><br>
@@ -282,8 +282,8 @@ console.log(age);   <span class="cm">// 21</span>
       <div class="card-title"><span class="dot"></span>let - 값이 변하는 변수</div>
       <div class="preview">
         <div class="preview-label">USE CASE</div>
-        <div style="padding:14px;background:#d1fae5;border-radius:8px;color:#065f46;font-size:13px;line-height:1.7">
-          <strong>사용 상황:</strong><br>
+        <div style="padding:14px;background:#d1fae5;border-radius:0;color:#065f46;font-size:13px;line-height:1.7;border-left:3px solid var(--primary)">
+          <strong>💚 사용 상황:</strong><br>
           카운터, 점수 증감, 상태 변경, 누적 계산
         </div>
       </div>
@@ -302,8 +302,8 @@ count = <span class="num">2</span>;   <span class="cm">// ✅ OK</span><br><br>
       <div class="card-title"><span class="dot"></span>const - 절대 안 바뀌는 상수</div>
       <div class="preview">
         <div class="preview-label">USE CASE</div>
-        <div style="padding:14px;background:#fed7aa;border-radius:8px;color:#9a3412;font-size:13px;line-height:1.7">
-          <strong>사용 상황:</strong><br>
+        <div style="padding:14px;background:var(--primary-light);border-radius:0;color:var(--primary-dark);font-size:13px;line-height:1.7;border-left:3px solid var(--primary)">
+          <strong>💚 사용 상황:</strong><br>
           API 키, 설정값, 상수, 고정 데이터
         </div>
       </div>
@@ -325,7 +325,9 @@ PI = <span class="num">3.14</span>;  <span class="cm">// ❌ TypeError!</span>
           절대 사용하면 안 됩니다!
         </div>
       </div>
-      <div class="card">
+    </div>
+
+    <div class="card">
       <div class="card-title"><span class="dot"></span>문제점 1️⃣: 중복 선언 가능</div>
       <div class="code-block">
 <span class="kw">var</span> x = <span class="num">10</span>;<br>
@@ -334,11 +336,11 @@ console.log(x);  <span class="cm">// 10</span><br><br>
 <span class="kw">var</span> x = <span class="num">20</span>;  <span class="cm">// ❌ 중복 허용!</span><br>
 console.log(x);  <span class="cm">// 20 (이전 값 사라짐)</span>
       </div>
-      <div style="padding:14px;background:#fee2e2;border-radius:0px;border-left:3px solid var(--red);color:#7f1d1d;margin:14px 0;font-size:13px">
+      <div style="padding:14px;background:#fee2e2;border-radius:0;border-left:3px solid var(--red);color:#7f1d1d;margin:0 0 20px 0;font-size:13px">
         <strong>⚠️ 문제:</strong> 같은 이름으로 실수로 선언해도 에러가 안 나요. 코드가 복잡해지면 찾기 어려운 버그가 됩니다.
       </div>
     </div>
- 
+
     <div class="card">
       <div class="card-title"><span class="dot"></span>문제점 2️⃣: 함수 스코프만 인정</div>
       <div class="code-block">
@@ -353,14 +355,14 @@ console.log(x);  <span class="cm">// 20 (이전 값 사라짐)</span>
 }<br>
 example();
       </div>
-      <div style="padding:14px;background:#fee2e2;border-radius:0px;border-left:3px solid var(--red);color:#7f1d1d;margin:14px 0;font-size:13px">
+      <div style="padding:14px;background:#fee2e2;border-radius:0;border-left:3px solid var(--red);color:#7f1d1d;margin:0 0 20px 0;font-size:13px">
         <strong>⚠️ 문제:</strong> if 블록 안에서 선언한 y가 if 블록 밖에서도 접근돼요. 예상과 다른 결과! (자세한 설명은 다음 강의 "스코프"에서)
       </div>
     </div>
- 
+
     <div class="card">
       <div class="card-title"><span class="dot"></span>비교: var vs let</div>
-      <div class="code-block">
+      <div class="code-block" style="border-radius: 8px 8px 0 0">
 <span class="cm">// ❌ var 문제</span><br>
 <span class="kw">var</span> score = <span class="num">100</span>;<br>
 <span class="kw">if</span> (<span class="kw">true</span>) {<br>
@@ -374,8 +376,9 @@ console.log(score);  <span class="cm">// 200 (의도와 다름)</span><br><br>
 }<br>
 console.log(score);  <span class="cm">// 100 (원래대로)</span>
       </div>
-      <div style="padding:14px;background:#d1fae5;border-radius:0px;border-left:3px solid var(--primary);color:#065f46;margin:14px 0;font-size:13px">
-        <strong>✅ let은 블록 단위로 범위가 나뉘어 안전합니다!</strong>
+      <div style="padding:14px;background:var(--primary-light);border-radius:0 0 8px 8px;border-left:3px solid var(--primary);color:var(--primary-dark);margin:0 0 20px 0;font-size:13px">
+        <strong>✅ let은 블록 단위로 범위가 나뉘어 안전합니다!</strong><br>
+        var는 if 블록 내의 변수가 블록 밖에서도 접근돼요. 의도와 다른 결과!
       </div>
     </div>
 
