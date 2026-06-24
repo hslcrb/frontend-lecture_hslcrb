@@ -166,7 +166,7 @@
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: var(--radius) var(--radius) 0 0;
       overflow: hidden;
       margin-bottom: 20px;
     }
@@ -335,7 +335,7 @@
 }<br>
 test();
       </div>
-      <div style="padding:14px;background:#fee2e2;border-radius:0px;border-left:3px solid var(--red);color:#7f1d1d;margin:14px 0;font-size:13px">
+      <div style="padding:14px;background:#fee2e2;border-radius:0px;border-left:3px solid var(--red);color:#7f1d1d;margin:14px 0 0;font-size:13px">
         <strong>❌ 문제:</strong> if 블록 안의 x가 함수 전체의 x에 영향을 줘요. 예측 불가능!
       </div>
     </div>
@@ -354,7 +354,7 @@ test();
 }<br>
 test();
       </div>
-      <div style="padding:14px;background:#d1fae5;border-radius:0px;border-left:3px solid var(--primary);color:#065f46;margin:14px 0;font-size:13px">
+      <div style="padding:14px;background:#d1fae5;border-radius:0px;border-left:3px solid var(--primary);color:#065f46;margin:14px 0 0;font-size:13px">
         <strong>✅ 안전:</strong> if 블록 내의 x는 if 블록 안에서만 존재. 바깥의 x는 영향 없음!
       </div>
     </div>
@@ -409,7 +409,7 @@ console.log(x);<br>
 <span style="color:var(--primary);">var x = 10;</span>
         </div>
       </div>
-      <div class="preview" style="padding:0;margin-top:-1px;border-top:none;">
+      <div class="preview" style="margin-top:-1px;border-top:none;">
         <div class="preview-label">JavaScript가 해석</div>
         <div style="padding:10px;background:#fee2e2;border:1px solid var(--border);border-radius:0 0 6px 6px;font-family:monospace;font-size:12px;color:var(--sub)">
 <span style="color:var(--red);">var x;</span>  <span style="color:#6c7086;">← 끌어올려짐!</span><br>
@@ -417,7 +417,7 @@ console.log(x);  <span style="color:#6c7086;">// undefined (에러 아님!)</spa
 x = 10;
         </div>
       </div>
-      <div style="padding:14px;background:#fee2e2;border-radius:0px;border-left:3px solid var(--red);color:#7f1d1d;margin:14px 0;font-size:13px">
+      <div style="padding:14px;background:#fee2e2;border-radius:0px;border-left:3px solid var(--red);color:#7f1d1d;margin:0;font-size:13px">
         <strong>❌ 문제:</strong> 에러가 안 나서 버그를 찾기 어려워요!
       </div>
     </div>
@@ -431,14 +431,14 @@ console.log(x);<br>
 <span style="color:var(--primary);">let x = 10;</span>
         </div>
       </div>
-      <div class="preview" style="padding:0;margin-top:-1px;border-top:none;">
+      <div class="preview" style="margin-top:-1px;border-top:none;">
         <div class="preview-label">JavaScript 실행</div>
         <div style="padding:10px;background:#d1fae5;border:1px solid var(--border);border-radius:0 0 6px 6px;font-family:monospace;font-size:12px;color:var(--sub)">
 ❌ ReferenceError: x is not defined<br>
 <span style="color:#6c7086;">(즉시 버그 발견!)</span>
         </div>
       </div>
-      <div style="padding:14px;background:#d1fae5;border-radius:0px;border-left:3px solid var(--primary);color:#065f46;margin:14px 0;font-size:13px">
+      <div style="padding:14px;background:#d1fae5;border-radius:0px;border-left:3px solid var(--primary);color:#065f46;margin:0;font-size:13px">
         <strong>✅ 안전:</strong> 에러가 바로 나타나서 쉽게 찾을 수 있어요!
       </div>
     </div>
@@ -456,7 +456,7 @@ console.log(x);<br>
 }<br>
 fnc();
       </div>
-      <div style="padding:14px;background:#fed7aa;border-radius:0px;border-left:3px solid var(--orange);color:#9a3412;margin:14px 0;font-size:13px">
+      <div style="padding:14px;background:#fed7aa;border-radius:0px;border-left:3px solid var(--orange);color:#9a3412;margin:14px 0 0;font-size:13px">
         <strong>⚠️ 복잡한 이유:</strong> 함수 내에 var scope가 있으면, JavaScript가 함수 전체에서 그 scope를 사용해요. 그래서 첫 번째 console.log에서 '전역'이 아니라 undefined가 나옵니다!
       </div>
     </div>
