@@ -325,13 +325,57 @@ PI = <span class="num">3.14</span>;  <span class="cm">// ❌ TypeError!</span>
           절대 사용하면 안 됩니다!
         </div>
       </div>
+      <div class="card">
+      <div class="card-title"><span class="dot"></span>문제점 1️⃣: 중복 선언 가능</div>
       <div class="code-block">
-<span class="cm">// 중복 선언 가능 (위험)</span><br>
 <span class="kw">var</span> x = <span class="num">10</span>;<br>
-<span class="kw">var</span> x = <span class="num">20</span>;  <span class="cm">// ❌ 중복 허용</span><br><br>
-<span class="cm">// 재할당 가능</span><br>
-<span class="kw">var</span> y = <span class="num">10</span>;<br>
-y = <span class="num">20</span>;  <span class="cm">// ✅ 가능</span>
+console.log(x);  <span class="cm">// 10</span><br><br>
+<span class="cm">// 실수로 다시 선언</span><br>
+<span class="kw">var</span> x = <span class="num">20</span>;  <span class="cm">// ❌ 중복 허용!</span><br>
+console.log(x);  <span class="cm">// 20 (이전 값 사라짐)</span>
+      </div>
+      <div style="padding:14px;background:#fee2e2;border-radius:0px;border-left:3px solid var(--red);color:#7f1d1d;margin:14px 0;font-size:13px">
+        <strong>⚠️ 문제:</strong> 같은 이름으로 실수로 선언해도 에러가 안 나요. 코드가 복잡해지면 찾기 어려운 버그가 됩니다.
+      </div>
+    </div>
+ 
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>문제점 2️⃣: 함수 스코프만 인정</div>
+      <div class="code-block">
+<span class="kw">function</span> example() {<br>
+&nbsp;&nbsp;<span class="kw">var</span> x = <span class="num">10</span>;<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;<span class="kw">if</span> (<span class="kw">true</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">var</span> y = <span class="num">20</span>;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;console.log(y);  <span class="cm">// 20 (if 블록 밖인데!)</span><br>
+}<br>
+example();
+      </div>
+      <div style="padding:14px;background:#fee2e2;border-radius:0px;border-left:3px solid var(--red);color:#7f1d1d;margin:14px 0;font-size:13px">
+        <strong>⚠️ 문제:</strong> if 블록 안에서 선언한 y가 if 블록 밖에서도 접근돼요. 예상과 다른 결과! (자세한 설명은 다음 강의 "스코프"에서)
+      </div>
+    </div>
+ 
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>비교: var vs let</div>
+      <div class="code-block">
+<span class="cm">// ❌ var 문제</span><br>
+<span class="kw">var</span> score = <span class="num">100</span>;<br>
+<span class="kw">if</span> (<span class="kw">true</span>) {<br>
+&nbsp;&nbsp;<span class="kw">var</span> score = <span class="num">200</span>;  <span class="cm">// 같은 변수</span><br>
+}<br>
+console.log(score);  <span class="cm">// 200 (의도와 다름)</span><br><br>
+<span class="cm">// ✅ let 안전</span><br>
+<span class="kw">let</span> score = <span class="num">100</span>;<br>
+<span class="kw">if</span> (<span class="kw">true</span>) {<br>
+&nbsp;&nbsp;<span class="kw">let</span> score = <span class="num">200</span>;  <span class="cm">// 다른 변수</span><br>
+}<br>
+console.log(score);  <span class="cm">// 100 (원래대로)</span>
+      </div>
+      <div style="padding:14px;background:#d1fae5;border-radius:0px;border-left:3px solid var(--primary);color:#065f46;margin:14px 0;font-size:13px">
+        <strong>✅ let은 블록 단위로 범위가 나뉘어 안전합니다!</strong>
       </div>
     </div>
 
