@@ -96,7 +96,7 @@
     .section-desc { font-size: 14px; color: var(--sub); line-height: 1.7; }
 
     /* ===== 카드 ===== */
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; margin-top: 20px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; overflow: hidden; margin-bottom: 20px; margin-top: 20px; }
     .card-title { font-size: 13px; font-weight: 600; color: var(--sub); padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; gap: 8px; }
     .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
 
@@ -336,7 +336,7 @@ console.log(x);  <span class="cm">// 10</span><br><br>
 <span class="kw">var</span> x = <span class="num">20</span>;  <span class="cm">// ❌ 중복 허용!</span><br>
 console.log(x);  <span class="cm">// 20 (이전 값 사라짐)</span>
       </div>
-      <div style="padding:14px;background:#fee2e2;border-radius:0;border-left:3px solid var(--red);color:#7f1d1d;margin:0 0 20px 0;font-size:13px">
+      <div style="padding:14px;background:#fee2e2;border-radius:0;border-left:3px solid var(--red);color:#7f1d1d;margin:20px 0 0;font-size:13px">
         <strong>⚠️ 문제:</strong> 같은 이름으로 실수로 선언해도 에러가 안 나요. 코드가 복잡해지면 찾기 어려운 버그가 됩니다.
       </div>
     </div>
@@ -355,7 +355,7 @@ console.log(x);  <span class="cm">// 20 (이전 값 사라짐)</span>
 }<br>
 example();
       </div>
-      <div style="padding:14px;background:#fee2e2;border-radius:0;border-left:3px solid var(--red);color:#7f1d1d;margin:0 0 20px 0;font-size:13px">
+      <div style="padding:14px;background:#fee2e2;border-radius:0;border-left:3px solid var(--red);color:#7f1d1d;margin:20px 0 0;font-size:13px">
         <strong>⚠️ 문제:</strong> if 블록 안에서 선언한 y가 if 블록 밖에서도 접근돼요. 예상과 다른 결과! (자세한 설명은 다음 강의 "스코프"에서)
       </div>
     </div>
@@ -376,7 +376,7 @@ console.log(score);  <span class="cm">// 200 (의도와 다름)</span><br><br>
 }<br>
 console.log(score);  <span class="cm">// 100 (원래대로)</span>
       </div>
-      <div style="padding:14px;background:var(--primary-light);border-radius:0 0 8px 8px;border-left:3px solid var(--primary);color:var(--primary-dark);margin:0 0 20px 0;font-size:13px">
+      <div style="padding:14px;background:var(--primary-light);border-radius:0;border-left:3px solid var(--primary);color:var(--primary-dark);margin:20px 0 0;font-size:13px">
         <strong>✅ let은 블록 단위로 범위가 나뉘어 안전합니다!</strong><br>
         var는 if 블록 내의 변수가 블록 밖에서도 접근돼요. 의도와 다른 결과!
       </div>
