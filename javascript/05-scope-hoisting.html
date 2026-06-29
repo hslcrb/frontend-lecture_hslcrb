@@ -123,6 +123,7 @@
     }
     .nav-item:hover { color: var(--primary); background: var(--primary-light); }
     .nav-item.active { color: var(--primary); border-left-color: var(--primary); background: var(--primary-light); font-weight: 600; }
+    .nav-item[href="#s1"] { color: var(--primary); border-left-color: var(--primary); background: var(--primary-light); font-weight: 600; }
     .nav-num { font-family: monospace; font-size: 11px; color: var(--muted); margin-right: 6px; }
 
     /* 모바일 버튼 */
@@ -583,13 +584,7 @@ function closeSidebar() {
   btn.textContent = '☰';
 }
 
-const sections = document.querySelectorAll('.section');
 const navItems = document.querySelectorAll('.nav-item');
-window.addEventListener('scroll', () => {
-  let cur = '';
-  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) cur = s.id; });
-  navItems.forEach(n => n.classList.toggle('active', cur === 's1' || cur === 's2' || cur === 's3'));
-});
 
 navItems.forEach(n => n.addEventListener('click', () => {
   if (window.innerWidth <= 768) closeSidebar();
