@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript 기초 - 연산자</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8FKR5BR401"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8FKR5BR401');
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f8f9fc;
+      --card: #ffffff;
+      --primary: #10b981;
+      --primary-light: #d1fae5;
+      --primary-dark: #065f46;
+      --text: #1e293b;
+      --sub: #64748b;
+      --muted: #94a3b8;
+      --border: #e2e8f0;
+      --code-bg: #1e1e2e;
+      --radius: 12px;
+      --red: #ef4444;
+    }
+    body {
+      font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: var(--card); border-right: 1px solid var(--border); padding: 24px 0; overflow-y: auto; z-index: 100; transition: transform 0.3s ease; }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+    .sidebar-title { font-size: 13px; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.05em; }
+    .sidebar-toggle { display: none; background: none; border: none; cursor: pointer; font-size: 18px; color: var(--sub); padding: 2px; }
+    .nav-home { display: flex; align-items: center; padding: 8px 20px 12px; font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .nav-home:hover { background: var(--primary-light); }
+    .nav-item { display: block; padding: 8px 20px; font-size: 13px; color: var(--sub); text-decoration: none; border-left: 3px solid transparent; transition: all 0.15s; }
+    .nav-item:hover { color: var(--primary); background: var(--primary-light); }
+    .nav-item.active { color: var(--primary); border-left-color: var(--primary); background: var(--primary-light); font-weight: 600; }
+    .nav-num { font-family: monospace; font-size: 11px; color: var(--muted); margin-right: 6px; }
+    .menu-btn { display: none; position: fixed; top: 12px; left: 12px; z-index: 200; background: var(--primary); color: #fff; border: none; border-radius: 8px; width: 40px; height: 40px; font-size: 18px; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 99; backdrop-filter: blur(2px); }
+    .sidebar-overlay.show { display: block; }
+    .main { margin-left: 220px; padding: 40px 40px 100px; max-width: 960px; }
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-220px); }
+      .sidebar.open { transform: translateX(0); }
+      .menu-btn { display: flex; }
+      .sidebar-toggle { display: block; }
+      .main { margin-left: 0; padding: 60px 16px 80px; }
+    }
+
+    .hero { text-align: center; padding: 60px 20px 48px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: var(--radius); color: #fff; margin-bottom: 48px; }
+    .hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+    .hero p { font-size: 16px; opacity: 0.9; }
+    .hero-badges { display: flex; gap: 8px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+    .hero-badge { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 12px; padding: 4px 12px; border-radius: 20px; }
+
+    .section { margin-bottom: 64px; scroll-margin-top: 24px; }
+    .section-header { margin-bottom: 24px; }
+    .section-num { font-size: 12px; font-weight: 700; color: var(--primary); letter-spacing: 0.1em; margin-bottom: 6px; }
+    .section-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+    .section-desc { font-size: 14px; color: var(--sub); line-height: 1.7; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; margin-top: 20px; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--sub); padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; gap: 8px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+
+    .code-block { background: var(--code-bg); padding: 20px; font-family: 'Fira Code', monospace; font-size: 13px; color: #cdd6f4; line-height: 2; overflow-x: auto; border-radius: 8px; }
+    .code-block .cm { color: #6c7086; }
+    .code-block .kw { color: #89b4fa; }
+    .code-block .str { color: #a6e3a1; }
+    .code-block .num { color: #f38ba8; }
+
+    .preview { padding: 20px; background: #f1f5f9; min-height: 60px; }
+    .preview-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.08em; margin-bottom: 12px; }
+
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    table th { background: var(--primary); color: white; padding: 12px; text-align: left; font-weight: 600; }
+    table td { padding: 12px; border-bottom: 1px solid var(--border); }
+    table tr:hover { background: var(--primary-light); }
+
+    .tip { border-left: 3px solid var(--primary); background: var(--primary-light); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; color: var(--primary-dark); margin-top: 16px; line-height: 1.7; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    ul, ol { margin: 15px 0 15px 20px; }
+    ul li, ol li { margin-bottom: 8px; color: var(--sub); line-height: 1.7; }
+
+    .compare-box { background: var(--primary-light); padding: 14px; border-radius: 0; border-left: 3px solid var(--primary); color: var(--primary-dark); margin: 20px 0 0 0; font-size: 13px; line-height: 1.7; }
+    .code-inline { background: #f1f5f9; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+
+    .controls { padding: 16px 20px; border-top: 1px solid var(--border); background: var(--card); }
+    .controls button { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--primary); color: #fff; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn">☰</button>
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">JAVASCRIPT 기초</div>
+    <button class="sidebar-toggle" onclick="closeSidebar()">✕</button>
+  </div>
+  <a class="nav-home" href="../index.html">메인으로</a>
+  <a class="nav-item" href="01-history.html"><span class="nav-num">01</span>JavaScript 역사</a>
+  <a class="nav-item" href="02-variable.html"><span class="nav-num">02</span>변수</a>
+  <a class="nav-item" href="03-data-types.html"><span class="nav-num">03</span>데이터타입</a>
+  <a class="nav-item active" href="#s1"><span class="nav-num">04</span>연산자</a>
+  <a class="nav-item" href="05-scope-hoisting.html"><span class="nav-num">05</span>스코프 & 호이스팅</a>
+</nav>
+
+<main class="main">
+
+  <div class="hero">
+    <h1>JavaScript 연산자</h1>
+    <p>값을 계산하고 비교하고 논리적으로 판단하는 도구</p>
+    <div class="hero-badges">
+      <span class="hero-badge">산술</span>
+      <span class="hero-badge">대입</span>
+      <span class="hero-badge">비교</span>
+      <span class="hero-badge">논리</span>
+      <span class="hero-badge">삼항</span>
+      <span class="hero-badge">우선순위</span>
+    </div>
+  </div>
+
+  <!-- ===== 01: 산술 연산자 ===== -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 01</div>
+      <div class="section-title">산술 연산자</div>
+      <div class="section-desc"><strong>숫자를 계산하는 가장 기본적인 연산자</strong>예요. 더하기, 빼기, 곱하기, 나누기!</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>4가지 기본 연산자</div>
+      <div class="code-block">
+<span class="cm">// 덧셈</span><br>
+<span class="num">10</span> + <span class="num">5</span>;        <span class="cm">// 15</span><br><br>
+<span class="cm">// 뺄셈</span><br>
+<span class="num">10</span> - <span class="num">5</span>;        <span class="cm">// 5</span><br><br>
+<span class="cm">// 곱셈</span><br>
+<span class="num">10</span> * <span class="num">5</span>;        <span class="cm">// 50</span><br><br>
+<span class="cm">// 나눗셈</span><br>
+<span class="num">10</span> / <span class="num">5</span>;        <span class="cm">// 2</span>
+      </div>
+      <div class="controls">
+        <button onclick="runArithmetic()">▶ 실행</button>
+      </div>
+      <div class="preview">
+        <div class="preview-label">OUTPUT</div>
+        <div id="arithmetic-result" style="padding:10px;background:white;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;color:var(--sub)">실행하세요 →</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>연산자 우선순위: 곱셈이 덧셈보다 먼저!</div>
+      <div class="code-block">
+<span class="cm">// 순서 없이: 왼쪽부터 계산</span><br>
+<span class="num">2</span> + <span class="num">3</span> * <span class="num">4</span>;  <span class="cm">// 14 (3*4=12 먼저, 2+12)</span><br><br>
+<span class="cm">// 괄호로 순서 지정</span><br>
+(<span class="num">2</span> + <span class="num">3</span>) * <span class="num">4</span>; <span class="cm">// 20 (괄호 먼저!)</span><br><br>
+<span class="cm">// 복잡한 계산</span><br>
+<span class="num">3</span> - <span class="num">5</span> * <span class="num">6</span> / <span class="num">2</span> + <span class="num">3</span>;  <span class="cm">// ?</span>
+      </div>
+      <div class="controls">
+        <button onclick="runComplex()">▶ 실행</button>
+      </div>
+      <div class="preview">
+        <div class="preview-label">OUTPUT</div>
+        <div id="complex-result" style="padding:10px;background:white;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;color:var(--sub)">실행하세요 →</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 02: 문자열 연결 ===== -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 02</div>
+      <div class="section-title">문자열 연결 (덧셈의 특수 기능)</div>
+      <div class="section-desc"><strong>+는 숫자도 계산하고, 문자도 연결해요!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>숫자 + 문자 = 문자 연결</div>
+      <div class="code-block">
+<span class="cm">// 숫자만</span><br>
+<span class="num">10</span> + <span class="num">5</span>;                <span class="cm">// 15 (계산)</span><br><br>
+<span class="cm">// 숫자 + 문자</span><br>
+<span class="num">10</span> + <span class="str">"5"</span>;              <span class="cm">// "105" (연결!)</span><br><br>
+<span class="cm">// 문자 + 숫자</span><br>
+<span class="str">"내 나이: "</span> + <span class="num">20</span>;    <span class="cm">// "내 나이: 20"</span><br><br>
+<span class="cm">// 문자 + 문자</span><br>
+<span class="str">"hello"</span> + <span class="str">"world"</span>;       <span class="cm">// "helloworld"</span>
+      </div>
+      <div class="controls">
+        <button onclick="runStringConcat()">▶ 실행</button>
+      </div>
+      <div class="preview">
+        <div class="preview-label">OUTPUT</div>
+        <div id="concat-result" style="padding:10px;background:white;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;color:var(--sub)">실행하세요 →</div>
+      </div>
+    </div>
+
+    <div class="tip">⚠️ <strong>주의:</strong> <code class="code-inline">10 + "5" = "105"</code> (계산이 아니라 연결!)<br>
+    문자와 숫자를 더하면 <strong>항상 문자</strong>가 돼요!
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 03: 대입 연산자 ===== -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 03</div>
+      <div class="section-title">대입 연산자</div>
+      <div class="section-desc"><strong>=와 산술 연산자를 합친 편리한 문법!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>산술 대입 연산자</div>
+      <div class="code-block">
+<span class="cm">// ❌ 기존 방법 (길어짐)</span><br>
+<span class="kw">let</span> x = <span class="num">10</span>;<br>
+x = x + <span class="num">5</span>;   <span class="cm">// 15</span><br><br>
+<span class="cm">// ✅ 대입 연산자 (간단!)</span><br>
+<span class="kw">let</span> y = <span class="num">10</span>;<br>
+y += <span class="num">5</span>;    <span class="cm">// 15</span><br><br>
+<span class="cm">// 모든 산술 연산자 가능</span><br>
+x -= <span class="num">3</span>;    <span class="cm">// x = x - 3</span><br>
+x *= <span class="num">2</span>;    <span class="cm">// x = x * 2</span><br>
+x /= <span class="num">4</span>;    <span class="cm">// x = x / 4</span>
+      </div>
+      <div class="controls">
+        <button onclick="runAssignment()">▶ 실행</button>
+      </div>
+      <div class="preview">
+        <div class="preview-label">OUTPUT</div>
+        <div id="assignment-result" style="padding:10px;background:white;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;color:var(--sub)">실행하세요 →</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 04: 증감 연산자 ===== -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 04</div>
+      <div class="section-title">증감 연산자 (전위 vs 후위)</div>
+      <div class="section-desc"><strong>가장 헷갈리는 연산자!</strong> 순서가 중요해요.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>++num (전위) vs num++ (후위)</div>
+      <div class="code-block">
+<span class="cm">// 전위: 먼저 증가, 그 다음 사용</span><br>
+<span class="kw">let</span> num = <span class="num">10</span>;<br>
+<span class="kw">let</span> result = ++num;  <span class="cm">// num이 11로 증가 → 그걸 사용</span><br>
+console.log(result, num);  <span class="cm">// 11, 11</span><br><br>
+<span class="cm">// 후위: 먼저 사용, 그 다음 증가</span><br>
+<span class="kw">let</span> num2 = <span class="num">10</span>;<br>
+<span class="kw">let</span> result2 = num2++;  <span class="cm">// 10을 사용 → 그 다음 11로 증가</span><br>
+console.log(result2, num2);  <span class="cm">// 10, 11</span>
+      </div>
+      <div class="controls">
+        <button onclick="runIncrement()">▶ 실행</button>
+      </div>
+      <div class="preview">
+        <div class="preview-label">OUTPUT</div>
+        <div id="increment-result" style="padding:10px;background:white;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;color:var(--sub)">실행하세요 →</div>
+      </div>
+    </div>
+
+    <div class="tip">💡 <strong>언제 차이가 날까?</strong><br>
+    값을 할당할 때만 차이가 난다!<br>
+    <code class="code-inline">i++</code>와 <code class="code-inline">++i</code> 혼자 쓸 때는 같아.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 05: 비교 연산자 ===== -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 05</div>
+      <div class="section-title">비교 연산자</div>
+      <div class="section-desc"><strong>항상 true 또는 false를 반환해요!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>대소 비교</div>
+      <div class="code-block">
+<span class="num">5</span> > <span class="num">3</span>;    <span class="cm">// true</span><br>
+<span class="num">5</span> < <span class="num">3</span>;    <span class="cm">// false</span><br>
+<span class="num">5</span> >= <span class="num">5</span>;   <span class="cm">// true (같아도 OK)</span><br>
+<span class="num">5</span> <= <span class="num">3</span>;   <span class="cm">// false</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>동등(==) vs 일치(===) - 매우 중요!</div>
+      <div class="code-block">
+<span class="cm">// == : 값만 같으면 true (타입 무시)</span><br>
+<span class="num">5</span> == <span class="str">"5"</span>;    <span class="cm">// true! (숫자와 문자는 다르지만)</span><br><br>
+<span class="cm">// === : 값과 타입이 모두 같아야 true</span><br>
+<span class="num">5</span> === <span class="str">"5"</span>;   <span class="cm">// false! (숫자와 문자는 다르다)</span><br>
+<span class="num">5</span> === <span class="num">5</span>;    <span class="cm">// true</span><br><br>
+<span class="cm">// != 와 !== 도 같은 원리</span><br>
+<span class="num">5</span> != <span class="str">"5"</span>;    <span class="cm">// false</span><br>
+<span class="num">5</span> !== <span class="str">"5"</span>;   <span class="cm">// true</span>
+      </div>
+      <div class="controls">
+        <button onclick="runComparison()">▶ 실행</button>
+      </div>
+      <div class="preview">
+        <div class="preview-label">OUTPUT</div>
+        <div id="comparison-result" style="padding:10px;background:white;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;color:var(--sub)">실행하세요 →</div>
+      </div>
+    </div>
+
+    <div class="compare-box">
+      ⭐ <strong>권장:</strong> 항상 <code class="code-inline">===</code>와 <code class="code-inline">!==</code>를 사용하세요!<br>
+      <code class="code-inline">==</code>는 예상 못한 버그를 만들어요.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 06: 논리 연산자 ===== -->
+  <section class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 06</div>
+      <div class="section-title">논리 연산자</div>
+      <div class="section-desc"><strong>true/false를 논리적으로 조합해요!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>AND (&&) - 둘 다 true여야 true</div>
+      <div class="code-block">
+<span class="kw">true</span> && <span class="kw">true</span>;      <span class="cm">// true</span><br>
+<span class="kw">true</span> && <span class="kw">false</span>;     <span class="cm">// false</span><br>
+<span class="kw">false</span> && <span class="kw">true</span>;     <span class="cm">// false</span><br>
+<span class="kw">false</span> && <span class="kw">false</span>;    <span class="cm">// false</span><br><br>
+<span class="cm">// 실제 예: 성인이면서 학생?</span><br>
+(<span class="num">age</span> >= <span class="num">18</span>) && (isStudent === <span class="kw">true</span>)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>OR (||) - 하나라도 true면 true</div>
+      <div class="code-block">
+<span class="kw">true</span> || <span class="kw">true</span>;      <span class="cm">// true</span><br>
+<span class="kw">true</span> || <span class="kw">false</span>;     <span class="cm">// true</span><br>
+<span class="kw">false</span> || <span class="kw">true</span>;     <span class="cm">// true</span><br>
+<span class="kw">false</span> || <span class="kw">false</span>;    <span class="cm">// false</span><br><br>
+<span class="cm">// 실제 예: WiFi 있거나 모바일 있으면 연결 가능</span><br>
+hasWiFi || hasMobileData
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>NOT (!) - 반대로 뒤집기</div>
+      <div class="code-block">
+!<span class="kw">true</span>;       <span class="cm">// false</span><br>
+!<span class="kw">false</span>;      <span class="cm">// true</span><br><br>
+<span class="cm">// 실제 예: 바쁘지 않으면 (자유로우면)</span><br>
+!isBusy
+      </div>
+      <div class="controls">
+        <button onclick="runLogic()">▶ 실행</button>
+      </div>
+      <div class="preview">
+        <div class="preview-label">OUTPUT</div>
+        <div id="logic-result" style="padding:10px;background:white;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;color:var(--sub)">실행하세요 →</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 07: 삼항 조건 연산자 ===== -->
+  <section class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 07</div>
+      <div class="section-title">삼항 조건 연산자</div>
+      <div class="section-desc"><strong>if/else를 한 줄로!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>조건 ? true일 때 : false일 때</div>
+      <div class="code-block">
+<span class="cm">// 문법</span><br>
+condition ? valueIfTrue : valueIfFalse;<br><br>
+<span class="cm">// 예시 1: 나이 확인</span><br>
+<span class="kw">let</span> age = <span class="num">20</span>;<br>
+<span class="kw">let</span> status = age >= <span class="num">18</span> ? <span class="str">"성인"</span> : <span class="str">"미성년자"</span>;<br>
+console.log(status);  <span class="cm">// "성인"</span><br><br>
+<span class="cm">// 예시 2: 점수 판정</span><br>
+<span class="kw">let</span> score = <span class="num">85</span>;<br>
+<span class="kw">let</span> result = score >= <span class="num">80</span> ? <span class="str">"합격"</span> : <span class="str">"불합격"</span>;
+      </div>
+      <div class="controls">
+        <button onclick="runTernary()">▶ 실행</button>
+      </div>
+      <div class="preview">
+        <div class="preview-label">OUTPUT</div>
+        <div id="ternary-result" style="padding:10px;background:white;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;color:var(--sub)">실행하세요 →</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 08: 우선순위 ===== -->
+  <section class="section" id="s8">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 08</div>
+      <div class="section-title">연산자 우선순위</div>
+      <div class="section-desc"><strong>연산자들이 계산되는 순서를 정확히 알아야 버그가 안 생겨요!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>우선순위 순서 (높은 순)</div>
+      <div class="preview">
+        <div class="preview-label">PRIORITY ORDER</div>
+        <table>
+          <thead>
+            <tr>
+              <th>순위</th>
+              <th>연산자</th>
+              <th>설명</th>
+              <th>예시</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1️⃣</td>
+              <td><code class="code-inline">()</code></td>
+              <td>괄호</td>
+              <td><code class="code-inline">(2+3)*4</code></td>
+            </tr>
+            <tr>
+              <td>2️⃣</td>
+              <td><code class="code-inline">++, --</code></td>
+              <td>후위 증감</td>
+              <td><code class="code-inline">i++</code></td>
+            </tr>
+            <tr>
+              <td>3️⃣</td>
+              <td><code class="code-inline">++, --</code></td>
+              <td>전위 증감</td>
+              <td><code class="code-inline">++i</code></td>
+            </tr>
+            <tr>
+              <td>4️⃣</td>
+              <td><code class="code-inline">!</code></td>
+              <td>NOT</td>
+              <td><code class="code-inline">!true</code></td>
+            </tr>
+            <tr>
+              <td>5️⃣</td>
+              <td><code class="code-inline">*, /</code></td>
+              <td>곱셈, 나눗셈</td>
+              <td><code class="code-inline">10*2/5</code></td>
+            </tr>
+            <tr>
+              <td>6️⃣</td>
+              <td><code class="code-inline">+, -</code></td>
+              <td>덧셈, 뺄셈</td>
+              <td><code class="code-inline">10+5-2</code></td>
+            </tr>
+            <tr>
+              <td>7️⃣</td>
+              <td><code class="code-inline">&lt;, &gt;, &lt;=, &gt;=</code></td>
+              <td>대소 비교</td>
+              <td><code class="code-inline">age&gt;20</code></td>
+            </tr>
+            <tr>
+              <td>8️⃣</td>
+              <td><code class="code-inline">==, ===, !=, !==</code></td>
+              <td>동등/일치</td>
+              <td><code class="code-inline">x===5</code></td>
+            </tr>
+            <tr>
+              <td>9️⃣</td>
+              <td><code class="code-inline">&amp;&amp;</code></td>
+              <td>AND</td>
+              <td><code class="code-inline">a&amp;&amp;b</code></td>
+            </tr>
+            <tr>
+              <td>🔟</td>
+              <td><code class="code-inline">||</code></td>
+              <td>OR</td>
+              <td><code class="code-inline">a||b</code></td>
+            </tr>
+            <tr>
+              <td>1️⃣1️⃣</td>
+              <td><code class="code-inline">? :</code></td>
+              <td>삼항</td>
+              <td><code class="code-inline">condition?a:b</code></td>
+            </tr>
+            <tr>
+              <td>1️⃣2️⃣</td>
+              <td><code class="code-inline">=, +=, -=...</code></td>
+              <td>대입</td>
+              <td><code class="code-inline">x=10</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>우선순위 예시</div>
+      <div class="code-block">
+<span class="cm">// 예시 1: 곱셈이 덧셈보다 먼저</span><br>
+<span class="num">2</span> + <span class="num">3</span> * <span class="num">4</span> = <span class="num">14</span>  <span class="cm">// 3*4=12 먼저, 2+12=14</span><br><br>
+<span class="cm">// 예시 2: 비교가 AND보다 먼저</span><br>
+age > <span class="num">20</span> && isStudent<br>
+<span class="cm">// 1단계: age > 20 (비교)</span><br>
+<span class="cm">// 2단계: 결과 && isStudent (AND)</span><br><br>
+<span class="cm">// 예시 3: 확실하지 않으면 괄호!</span><br>
+(<span class="num">2</span> + <span class="num">3</span>) * <span class="num">4</span> = <span class="num">20</span>  <span class="cm">// 괄호 먼저!</span>
+      </div>
+      <div class="controls">
+        <button onclick="runPriority()">▶ 실행</button>
+      </div>
+      <div class="preview">
+        <div class="preview-label">OUTPUT</div>
+        <div id="priority-result" style="padding:10px;background:white;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;color:var(--sub)">실행하세요 →</div>
+      </div>
+    </div>
+
+    <div class="tip">💡 <strong>팁:</strong> 확실하지 않으면 괄호를 쓰세요!<br>
+    <code class="code-inline">(2 + 3) * 4</code> ← 이렇게 명확하게 하는 게 코드 가독성도 좋아요!
+    </div>
+  </section>
+
+</main>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('show');
+}
+
+function runArithmetic() {
+  const result = document.getElementById('arithmetic-result');
+  let output = '';
+  output += '10 + 5 = ' + (10 + 5) + '\n';
+  output += '10 - 5 = ' + (10 - 5) + '\n';
+  output += '10 * 5 = ' + (10 * 5) + '\n';
+  output += '10 / 5 = ' + (10 / 5) + '\n';
+  result.textContent = output;
+}
+
+function runComplex() {
+  const result = document.getElementById('complex-result');
+  let output = '';
+  output += '2 + 3 * 4 = ' + (2 + 3 * 4) + ' (3*4=12 먼저, 2+12)\n';
+  output += '(2 + 3) * 4 = ' + ((2 + 3) * 4) + ' (괄호 먼저!)\n';
+  output += '3 - 5 * 6 / 2 + 3 = ' + (3 - 5 * 6 / 2 + 3) + '\n';
+  output += '  (5*6=30, 30/2=15, 3-15=-12, -12+3=-9)\n';
+  result.textContent = output;
+}
+
+function runStringConcat() {
+  const result = document.getElementById('concat-result');
+  let output = '';
+  output += '10 + 5 = ' + (10 + 5) + ' (숫자 계산)\n';
+  output += '10 + "5" = ' + (10 + "5") + ' (문자 연결!)\n';
+  output += '"내 나이: " + 20 = ' + ("내 나이: " + 20) + '\n';
+  output += '"hello" + "world" = ' + ("hello" + "world") + '\n';
+  result.textContent = output;
+}
+
+function runAssignment() {
+  const result = document.getElementById('assignment-result');
+  let output = '';
+  let x = 10;
+  output += '초기값: x = ' + x + '\n\n';
+  x += 5;
+  output += 'x += 5 → ' + x + '\n';
+  x *= 2;
+  output += 'x *= 2 → ' + x + '\n';
+  x /= 4;
+  output += 'x /= 4 → ' + x + '\n';
+  result.textContent = output;
+}
+
+function runIncrement() {
+  const result = document.getElementById('increment-result');
+  let output = '';
+  let num = 10;
+  let res1 = ++num;
+  output += '전위 ++num:\n';
+  output += '  result = ' + res1 + ', num = ' + num + '\n\n';
+  let num2 = 10;
+  let res2 = num2++;
+  output += '후위 num++:\n';
+  output += '  result = ' + res2 + ', num = ' + num2 + '\n';
+  result.textContent = output;
+}
+
+function runComparison() {
+  const result = document.getElementById('comparison-result');
+  let output = '';
+  output += '5 > 3 = ' + (5 > 3) + '\n';
+  output += '5 < 3 = ' + (5 < 3) + '\n';
+  output += '5 >= 5 = ' + (5 >= 5) + '\n\n';
+  output += '== (값만 비교):\n';
+  output += '5 == "5" = ' + (5 == "5") + ' ⚠️\n\n';
+  output += '=== (값과 타입 비교):\n';
+  output += '5 === "5" = ' + (5 === "5") + ' ✅\n';
+  output += '5 === 5 = ' + (5 === 5) + ' ✅\n';
+  result.textContent = output;
+}
+
+function runLogic() {
+  const result = document.getElementById('logic-result');
+  let output = '';
+  output += 'AND (&&):\n';
+  output += 'true && true = ' + (true && true) + '\n';
+  output += 'true && false = ' + (true && false) + '\n\n';
+  output += 'OR (||):\n';
+  output += 'true || false = ' + (true || false) + '\n';
+  output += 'false || false = ' + (false || false) + '\n\n';
+  output += 'NOT (!):\n';
+  output += '!true = ' + (!true) + '\n';
+  output += '!false = ' + (!false) + '\n';
+  result.textContent = output;
+}
+
+function runTernary() {
+  const result = document.getElementById('ternary-result');
+  let output = '';
+  let age = 20;
+  let status = age >= 18 ? "성인" : "미성년자";
+  output += '나이: ' + age + '\n';
+  output += 'age >= 18 ? "성인" : "미성년자"\n';
+  output += '결과: ' + status + '\n\n';
+  let score = 85;
+  let result2 = score >= 80 ? "합격" : "불합격";
+  output += '점수: ' + score + '\n';
+  output += 'score >= 80 ? "합격" : "불합격"\n';
+  output += '결과: ' + result2 + '\n';
+  result.textContent = output;
+}
+
+function runPriority() {
+  const result = document.getElementById('priority-result');
+  let output = '';
+  output += '2 + 3 * 4\n';
+  output += '= 2 + (3*4) → 곱셈 먼저!\n';
+  output += '= 2 + 12\n';
+  output += '= ' + (2 + 3 * 4) + '\n\n';
+  output += '(2 + 3) * 4\n';
+  output += '= 5 * 4 → 괄호 먼저!\n';
+  output += '= ' + ((2 + 3) * 4) + '\n';
+  result.textContent = output;
+}
+
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) cur = s.id; });
+  navItems.forEach(n => {
+    if (n.href.includes('04-operators')) n.classList.toggle('active', cur === 's1' || cur === 's2' || cur === 's3' || cur === 's4' || cur === 's5' || cur === 's6' || cur === 's7' || cur === 's8');
+    else n.classList.remove('active');
+  });
+});
+
+navItems.forEach(n => n.addEventListener('click', () => {
+  if (window.innerWidth <= 768) closeSidebar();
+}));
+</script>
+
+</body>
+</html>
