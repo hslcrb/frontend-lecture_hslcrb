@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript 기초 - 내장 객체</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8FKR5BR401"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8FKR5BR401');
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f8f9fc;
+      --card: #ffffff;
+      --primary: #10b981;
+      --primary-light: #d1fae5;
+      --primary-dark: #065f46;
+      --text: #1e293b;
+      --sub: #64748b;
+      --muted: #94a3b8;
+      --border: #e2e8f0;
+      --code-bg: #1e1e2e;
+      --radius: 12px;
+    }
+    body {
+      font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: var(--card); border-right: 1px solid var(--border); padding: 24px 0; overflow-y: auto; z-index: 100; transition: transform 0.3s ease; }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+    .sidebar-title { font-size: 13px; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.05em; }
+    .sidebar-toggle { display: none; background: none; border: none; cursor: pointer; font-size: 18px; color: var(--sub); padding: 2px; }
+    .nav-home { display: flex; align-items: center; padding: 8px 20px 12px; font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .nav-home:hover { background: var(--primary-light); }
+    .nav-item { display: block; padding: 8px 20px; font-size: 13px; color: var(--sub); text-decoration: none; border-left: 3px solid transparent; transition: all 0.15s; }
+    .nav-item:hover { color: var(--primary); background: var(--primary-light); }
+    .nav-item.active { color: var(--primary); border-left-color: var(--primary); background: var(--primary-light); font-weight: 600; }
+    .nav-num { font-family: monospace; font-size: 11px; color: var(--muted); margin-right: 6px; }
+    .menu-btn { display: none; position: fixed; top: 12px; left: 12px; z-index: 200; background: var(--primary); color: #fff; border: none; border-radius: 8px; width: 40px; height: 40px; font-size: 18px; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 99; backdrop-filter: blur(2px); }
+    .sidebar-overlay.show { display: block; }
+    .main { margin-left: 220px; padding: 40px 40px 100px; max-width: 960px; }
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-220px); }
+      .sidebar.open { transform: translateX(0); }
+      .menu-btn { display: flex; }
+      .sidebar-toggle { display: block; }
+      .main { margin-left: 0; padding: 60px 16px 80px; }
+    }
+
+    .hero { text-align: center; padding: 60px 20px 48px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: var(--radius); color: #fff; margin-bottom: 48px; }
+    .hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+    .hero p { font-size: 16px; opacity: 0.9; }
+    .hero-badges { display: flex; gap: 8px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+    .hero-badge { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 12px; padding: 4px 12px; border-radius: 20px; }
+
+    .section { margin-bottom: 64px; scroll-margin-top: 24px; }
+    .section-header { margin-bottom: 24px; }
+    .section-num { font-size: 12px; font-weight: 700; color: var(--primary); letter-spacing: 0.1em; margin-bottom: 6px; }
+    .section-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+    .section-desc { font-size: 14px; color: var(--sub); line-height: 1.7; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; margin-top: 20px; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--sub); padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; gap: 8px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+
+    .code-block { background: var(--code-bg); padding: 20px; font-family: 'Fira Code', monospace; font-size: 13px; color: #cdd6f4; line-height: 2; overflow-x: auto; border-radius: 8px; }
+    .code-block .cm { color: #6c7086; }
+    .code-block .kw { color: #89b4fa; }
+    .code-block .str { color: #a6e3a1; }
+    .code-block .num { color: #f38ba8; }
+
+    .preview { padding: 20px; background: #f1f5f9; }
+    .preview-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.08em; margin-bottom: 12px; }
+
+    .demo-box { padding: 16px; border: 2px dashed var(--primary); border-radius: 8px; background: rgba(209, 250, 229, 0.3); margin: 16px 0; }
+
+    .tip { border-left: 3px solid var(--primary); background: var(--primary-light); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; color: var(--primary-dark); margin-top: 16px; line-height: 1.7; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    ul, ol { margin: 15px 0 15px 20px; }
+    ul li, ol li { margin-bottom: 8px; color: var(--sub); line-height: 1.7; }
+
+    .code-inline { background: #f1f5f9; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+
+    .controls { padding: 16px 20px; border-top: 1px solid var(--border); background: var(--card); }
+    .controls button { font-size: 12px; padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--primary); color: #fff; cursor: pointer; margin-right: 8px; }
+
+    .output { background: white; padding: 12px; border: 1px solid var(--border); border-radius: 6px; font-family: monospace; font-size: 12px; color: var(--sub); white-space: pre-wrap; word-break: break-all; }
+  </style>
+</head>
+<body>
+
+<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn">☰</button>
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">JAVASCRIPT 기초</div>
+    <button class="sidebar-toggle" onclick="closeSidebar()">✕</button>
+  </div>
+  <a class="nav-home" href="../index.html">메인으로</a>
+  <a class="nav-item" href="01-history.html"><span class="nav-num">01</span>JavaScript 역사</a>
+  <a class="nav-item" href="02-variable.html"><span class="nav-num">02</span>변수</a>
+  <a class="nav-item" href="03-data-types.html"><span class="nav-num">03</span>데이터타입</a>
+  <a class="nav-item" href="04-operators.html"><span class="nav-num">04</span>연산자</a>
+  <a class="nav-item" href="05-scope-hoisting.html"><span class="nav-num">05</span>스코프 & 호이스팅</a>
+  <a class="nav-item" href="06-conditionals.html"><span class="nav-num">06</span>조건문</a>
+  <a class="nav-item" href="07-loops.html"><span class="nav-num">07</span>반복문</a>
+  <a class="nav-item" href="08-dom.html"><span class="nav-num">08</span>DOM 조작</a>
+  <a class="nav-item active" href="#s1"><span class="nav-num">09</span>내장 객체</a>
+</nav>
+
+<main class="main">
+
+  <div class="hero">
+    <h1>JavaScript 내장 객체</h1>
+    <p>JavaScript가 기본으로 제공하는 강력한 객체와 메서드들</p>
+    <div class="hero-badges">
+      <span class="hero-badge">Array</span>
+      <span class="hero-badge">String</span>
+      <span class="hero-badge">Math</span>
+      <span class="hero-badge">Date</span>
+      <span class="hero-badge">Object</span>
+    </div>
+  </div>
+
+  <!-- ===== 01: Array 메서드 ===== -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 01</div>
+      <div class="section-title">Array 객체 - 배열 기본 메서드</div>
+      <div class="section-desc"><strong>배열을 다루는 기본 메서드들!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Array 기본 메서드</div>
+      <div class="code-block">
+<span class="cm">// length: 배열의 길이</span><br>
+<span class="kw">const</span> arr = [<span class="str">"사과"</span>, <span class="str">"바나나"</span>, <span class="str">"오렌지"</span>];<br>
+arr.length;  <span class="cm">// 3</span><br><br>
+<span class="cm">// indexOf: 요소의 위치 찾기</span><br>
+arr.indexOf(<span class="str">"바나나"</span>);  <span class="cm">// 1</span><br><br>
+<span class="cm">// includes: 포함 여부 확인</span><br>
+arr.includes(<span class="str">"사과"</span>);  <span class="cm">// true</span><br><br>
+<span class="cm">// join: 요소들을 문자열로 합치기</span><br>
+arr.join(<span class="str">", "</span>);  <span class="cm">// "사과, 바나나, 오렌지"</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: Array 메서드</div>
+      <div class="demo-box">
+        <div style="margin-bottom: 12px;">
+          <button onclick="arrayDemo()">▶ Array 메서드 실행</button>
+        </div>
+        <div class="output" id="arrayOutput" style="min-height: 80px;">결과가 여기에 나타납니다</div>
+      </div>
+      <div class="code-block">
+<span class="kw">const</span> fruits = [<span class="str">"🍎 사과"</span>, <span class="str">"🍌 바나나"</span>, <span class="str">"🍊 오렌지"</span>];<br>
+console.log(<span class="str">`길이: ${fruits.length}`</span>);<br>
+console.log(<span class="str">`바나나 위치: ${fruits.indexOf("🍌 바나나")}`</span>);<br>
+console.log(<span class="str">`사과 포함?: ${fruits.includes("🍎 사과")}`</span>);<br>
+console.log(<span class="str">`결합: ${fruits.join(" | ")}`</span>);
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 02: String 메서드 ===== -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 02</div>
+      <div class="section-title">String 객체 - 문자열 메서드</div>
+      <div class="section-desc"><strong>문자열을 다루는 강력한 메서드들!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>String 메서드</div>
+      <div class="code-block">
+<span class="cm">// length: 문자열 길이</span><br>
+<span class="kw">const</span> str = <span class="str">"Hello JavaScript"</span>;<br>
+str.length;  <span class="cm">// 16</span><br><br>
+<span class="cm">// substring: 부분 추출</span><br>
+str.substring(<span class="num">0</span>, <span class="num">5</span>);  <span class="cm">// "Hello"</span><br><br>
+<span class="cm">// split: 문자열을 배열로 분할</span><br>
+str.split(<span class="str">" "</span>);  <span class="cm">// ["Hello", "JavaScript"]</span><br><br>
+<span class="cm">// toUpperCase / toLowerCase</span><br>
+str.toUpperCase();  <span class="cm">// "HELLO JAVASCRIPT"</span><br>
+str.toLowerCase();  <span class="cm">// "hello javascript"</span><br><br>
+<span class="cm">// replace: 문자열 치환</span><br>
+str.replace(<span class="str">"Hello"</span>, <span class="str">"Hi"</span>);  <span class="cm">// "Hi JavaScript"</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: String 메서드</div>
+      <div class="demo-box">
+        <div style="margin-bottom: 12px;">
+          <input type="text" id="stringInput" placeholder="문자열 입력" style="padding: 8px; border: 1px solid var(--border); border-radius: 6px; width: 100%;">
+          <button onclick="stringDemo()" style="margin-top: 8px;">▶ 메서드 실행</button>
+        </div>
+        <div class="output" id="stringOutput" style="min-height: 100px;">결과가 여기에 나타납니다</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 03: Math 객체 ===== -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 03</div>
+      <div class="section-title">Math 객체 - 수학 함수들</div>
+      <div class="section-desc"><strong>숫자 계산을 위한 필수 메서드들!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Math 메서드</div>
+      <div class="code-block">
+<span class="cm">// Math.floor: 버림</span><br>
+Math.floor(<span class="num">4.7</span>);  <span class="cm">// 4</span><br><br>
+<span class="cm">// Math.ceil: 올림</span><br>
+Math.ceil(<span class="num">4.2</span>);  <span class="cm">// 5</span><br><br>
+<span class="cm">// Math.round: 반올림</span><br>
+Math.round(<span class="num">4.5</span>);  <span class="cm">// 5</span><br><br>
+<span class="cm">// Math.max / Math.min: 최대/최소값</span><br>
+Math.max(<span class="num">10</span>, <span class="num">20</span>, <span class="num">5</span>);  <span class="cm">// 20</span><br>
+Math.min(<span class="num">10</span>, <span class="num">20</span>, <span class="num">5</span>);  <span class="cm">// 5</span><br><br>
+<span class="cm">// Math.random: 0~1 사이 난수</span><br>
+Math.random();  <span class="cm">// 0.123456...</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: Math 메서드</div>
+      <div class="demo-box">
+        <div style="margin-bottom: 12px;">
+          <button onclick="mathDemo()">▶ Math 메서드 실행</button>
+          <button onclick="diceGame()" style="margin-left: 8px;">🎲 주사위 굴리기</button>
+        </div>
+        <div class="output" id="mathOutput" style="min-height: 100px;">결과가 여기에 나타납니다</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 04: Date 객체 ===== -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 04</div>
+      <div class="section-title">Date 객체 - 날짜와 시간</div>
+      <div class="section-desc"><strong>현재 시간과 날짜를 다루기!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Date 메서드</div>
+      <div class="code-block">
+<span class="cm">// 현재 날짜/시간 생성</span><br>
+<span class="kw">const</span> now = <span class="kw">new</span> Date();<br><br>
+<span class="cm">// 연도, 월, 날짜 가져오기</span><br>
+now.getFullYear();   <span class="cm">// 2025</span><br>
+now.getMonth();      <span class="cm">// 5 (0-11, 6월)</span><br>
+now.getDate();       <span class="cm">// 29</span><br>
+now.getDay();        <span class="cm">// 1 (0-6, 월요일)</span><br><br>
+<span class="cm">// 시간, 분, 초</span><br>
+now.getHours();      <span class="cm">// 시간</span><br>
+now.getMinutes();    <span class="cm">// 분</span><br>
+now.getSeconds();    <span class="cm">// 초</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: Date 메서드</div>
+      <div class="demo-box">
+        <div style="margin-bottom: 12px;">
+          <button onclick="dateDemo()">▶ 현재 시간 보기</button>
+        </div>
+        <div class="output" id="dateOutput" style="min-height: 80px;">결과가 여기에 나타납니다</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 05: Object 메서드 ===== -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 05</div>
+      <div class="section-title">Object 메서드 - 객체 다루기</div>
+      <div class="section-desc"><strong>객체의 키와 값을 추출하기!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Object 메서드</div>
+      <div class="code-block">
+<span class="cm">// 객체 생성</span><br>
+<span class="kw">const</span> user = {<br>
+&nbsp;&nbsp;name: <span class="str">"찐망고"</span>,<br>
+&nbsp;&nbsp;age: <span class="num">25</span>,<br>
+&nbsp;&nbsp;job: <span class="str">"개발자"</span><br>
+};<br><br>
+<span class="cm">// Object.keys: 키만 추출</span><br>
+Object.keys(user);  <span class="cm">// ["name", "age", "job"]</span><br><br>
+<span class="cm">// Object.values: 값만 추출</span><br>
+Object.values(user);  <span class="cm">// ["찐망고", 25, "개발자"]</span><br><br>
+<span class="cm">// Object.entries: 키-값 쌍으로 추출</span><br>
+Object.entries(user);  <span class="cm">// [["name", "찐망고"], ...]</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: Object 메서드</div>
+      <div class="demo-box">
+        <div style="margin-bottom: 12px;">
+          <button onclick="objectDemo()">▶ Object 메서드 실행</button>
+        </div>
+        <div class="output" id="objectOutput" style="min-height: 100px;">결과가 여기에 나타납니다</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('show');
+}
+
+function arrayDemo() {
+  const output = document.getElementById('arrayOutput');
+  const fruits = ["🍎 사과", "🍌 바나나", "🍊 오렌지"];
+  
+  let result = '';
+  result += `배열: [${fruits.join(", ")}]\n\n`;
+  result += `▸ 길이: ${fruits.length}\n`;
+  result += `▸ 바나나 위치: ${fruits.indexOf("🍌 바나나")}\n`;
+  result += `▸ 사과 포함?: ${fruits.includes("🍎 사과")}\n`;
+  result += `▸ 결합 (, 로): ${fruits.join(", ")}\n`;
+  result += `▸ 결합 ( | 로): ${fruits.join(" | ")}\n`;
+  
+  output.textContent = result;
+}
+
+function stringDemo() {
+  const output = document.getElementById('stringOutput');
+  const input = document.getElementById('stringInput').value || "Hello JavaScript";
+  
+  let result = '';
+  result += `입력: "${input}"\n\n`;
+  result += `▸ 길이: ${input.length}\n`;
+  result += `▸ 처음 5글자: ${input.substring(0, 5)}\n`;
+  result += `▸ 대문자: ${input.toUpperCase()}\n`;
+  result += `▸ 소문자: ${input.toLowerCase()}\n`;
+  result += `▸ 공백으로 분할: [${input.split(" ").join(", ")}]\n`;
+  result += `▸ "Hello" → "Hi": ${input.replace("Hello", "Hi")}\n`;
+  
+  output.textContent = result;
+}
+
+function mathDemo() {
+  const output = document.getElementById('mathOutput');
+  
+  let result = '';
+  result += `Math.floor(4.7) = ${Math.floor(4.7)}\n`;
+  result += `Math.ceil(4.2) = ${Math.ceil(4.2)}\n`;
+  result += `Math.round(4.5) = ${Math.round(4.5)}\n`;
+  result += `Math.round(4.4) = ${Math.round(4.4)}\n\n`;
+  result += `Math.max(10, 20, 5) = ${Math.max(10, 20, 5)}\n`;
+  result += `Math.min(10, 20, 5) = ${Math.min(10, 20, 5)}\n\n`;
+  result += `Math.random() = ${Math.random().toFixed(4)}\n`;
+  
+  output.textContent = result;
+}
+
+function diceGame() {
+  const output = document.getElementById('mathOutput');
+  
+  let results = '';
+  results += '🎲 주사위 5번 굴린 결과:\n';
+  for (let i = 1; i <= 5; i++) {
+    const dice = Math.floor(Math.random() * 6) + 1;
+    results += `${i}번째: ${dice}\n`;
+  }
+  
+  output.textContent = results;
+}
+
+function dateDemo() {
+  const output = document.getElementById('dateOutput');
+  const now = new Date();
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+  
+  let result = '';
+  result += `현재 날짜 & 시간:\n\n`;
+  result += `▸ 년도: ${now.getFullYear()}년\n`;
+  result += `▸ 월: ${now.getMonth() + 1}월\n`;
+  result += `▸ 날짜: ${now.getDate()}일\n`;
+  result += `▸ 요일: ${days[now.getDay()]}\n`;
+  result += `▸ 시간: ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}\n\n`;
+  result += `▸ 전체: ${now.toString().substring(0, 24)}\n`;
+  
+  output.textContent = result;
+}
+
+function objectDemo() {
+  const output = document.getElementById('objectOutput');
+  const user = {
+    name: "찐망고",
+    age: 25,
+    job: "개발자",
+    location: "서울"
+  };
+  
+  let result = '';
+  result += `객체:\n`;
+  result += JSON.stringify(user, null, 2) + '\n\n';
+  result += `▸ 키들: ${Object.keys(user).join(", ")}\n`;
+  result += `▸ 값들: ${Object.values(user).join(", ")}\n\n`;
+  result += `▸ 키-값 쌍:\n`;
+  Object.entries(user).forEach(([key, value]) => {
+    result += `  ${key}: ${value}\n`;
+  });
+  
+  output.textContent = result;
+}
+
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) cur = s.id; });
+  navItems.forEach(n => {
+    if (n.href.includes('09-objects')) n.classList.toggle('active', cur.startsWith('s'));
+    else n.classList.remove('active');
+  });
+});
+
+navItems.forEach(n => n.addEventListener('click', () => {
+  if (window.innerWidth <= 768) closeSidebar();
+}));
+</script>
+
+</body>
+</html>
