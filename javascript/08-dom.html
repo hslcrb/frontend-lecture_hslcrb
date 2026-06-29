@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript 기초 - DOM 조작</title>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8FKR5BR401"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8FKR5BR401');
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f8f9fc;
+      --card: #ffffff;
+      --primary: #10b981;
+      --primary-light: #d1fae5;
+      --primary-dark: #065f46;
+      --text: #1e293b;
+      --sub: #64748b;
+      --muted: #94a3b8;
+      --border: #e2e8f0;
+      --code-bg: #1e1e2e;
+      --radius: 12px;
+    }
+    body {
+      font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: var(--card); border-right: 1px solid var(--border); padding: 24px 0; overflow-y: auto; z-index: 100; transition: transform 0.3s ease; }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+    .sidebar-title { font-size: 13px; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.05em; }
+    .sidebar-toggle { display: none; background: none; border: none; cursor: pointer; font-size: 18px; color: var(--sub); padding: 2px; }
+    .nav-home { display: flex; align-items: center; padding: 8px 20px 12px; font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .nav-home:hover { background: var(--primary-light); }
+    .nav-item { display: block; padding: 8px 20px; font-size: 13px; color: var(--sub); text-decoration: none; border-left: 3px solid transparent; transition: all 0.15s; }
+    .nav-item:hover { color: var(--primary); background: var(--primary-light); }
+    .nav-item.active { color: var(--primary); border-left-color: var(--primary); background: var(--primary-light); font-weight: 600; }
+    .nav-num { font-family: monospace; font-size: 11px; color: var(--muted); margin-right: 6px; }
+    .menu-btn { display: none; position: fixed; top: 12px; left: 12px; z-index: 200; background: var(--primary); color: #fff; border: none; border-radius: 8px; width: 40px; height: 40px; font-size: 18px; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 99; backdrop-filter: blur(2px); }
+    .sidebar-overlay.show { display: block; }
+    .main { margin-left: 220px; padding: 40px 40px 100px; max-width: 960px; }
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-220px); }
+      .sidebar.open { transform: translateX(0); }
+      .menu-btn { display: flex; }
+      .sidebar-toggle { display: block; }
+      .main { margin-left: 0; padding: 60px 16px 80px; }
+    }
+
+    .hero { text-align: center; padding: 60px 20px 48px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: var(--radius); color: #fff; margin-bottom: 48px; }
+    .hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+    .hero p { font-size: 16px; opacity: 0.9; }
+    .hero-badges { display: flex; gap: 8px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+    .hero-badge { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 12px; padding: 4px 12px; border-radius: 20px; }
+
+    .section { margin-bottom: 64px; scroll-margin-top: 24px; }
+    .section-header { margin-bottom: 24px; }
+    .section-num { font-size: 12px; font-weight: 700; color: var(--primary); letter-spacing: 0.1em; margin-bottom: 6px; }
+    .section-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+    .section-desc { font-size: 14px; color: var(--sub); line-height: 1.7; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; margin-top: 20px; }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--sub); padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; gap: 8px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+
+    .code-block { background: var(--code-bg); padding: 20px; font-family: 'Fira Code', monospace; font-size: 13px; color: #cdd6f4; line-height: 2; overflow-x: auto; border-radius: 8px; }
+    .code-block .cm { color: #6c7086; }
+    .code-block .kw { color: #89b4fa; }
+    .code-block .str { color: #a6e3a1; }
+    .code-block .num { color: #f38ba8; }
+
+    .preview { padding: 20px; background: #f1f5f9; }
+    .preview-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.08em; margin-bottom: 12px; }
+
+    .demo-box { padding: 16px; border: 2px dashed var(--primary); border-radius: 8px; background: rgba(209, 250, 229, 0.3); margin: 16px 0; }
+
+    .tip { border-left: 3px solid var(--primary); background: var(--primary-light); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; color: var(--primary-dark); margin-top: 16px; line-height: 1.7; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    ul, ol { margin: 15px 0 15px 20px; }
+    ul li, ol li { margin-bottom: 8px; color: var(--sub); line-height: 1.7; }
+
+    .compare-box { background: var(--primary-light); padding: 14px; border-radius: 0; border-left: 3px solid var(--primary); color: var(--primary-dark); margin: 20px 0 0 0; font-size: 13px; line-height: 1.7; }
+    .code-inline { background: #f1f5f9; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+
+    .controls { padding: 16px 20px; border-top: 1px solid var(--border); background: var(--card); }
+    .controls button { font-size: 12px; padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--primary); color: #fff; cursor: pointer; margin-right: 8px; }
+
+    button { cursor: pointer; font-weight: 600; }
+    input { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+    li { margin: 8px 0; padding: 8px; background: white; border-radius: 6px; border: 1px solid var(--border); }
+    .task-item { display: flex; justify-content: space-between; align-items: center; }
+  </style>
+</head>
+<body>
+
+<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn">☰</button>
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">JAVASCRIPT 기초</div>
+    <button class="sidebar-toggle" onclick="closeSidebar()">✕</button>
+  </div>
+  <a class="nav-home" href="../index.html">메인으로</a>
+  <a class="nav-item" href="01-history.html"><span class="nav-num">01</span>JavaScript 역사</a>
+  <a class="nav-item" href="02-variable.html"><span class="nav-num">02</span>변수</a>
+  <a class="nav-item" href="03-data-types.html"><span class="nav-num">03</span>데이터타입</a>
+  <a class="nav-item" href="04-operators.html"><span class="nav-num">04</span>연산자</a>
+  <a class="nav-item" href="05-scope-hoisting.html"><span class="nav-num">05</span>스코프 & 호이스팅</a>
+  <a class="nav-item" href="06-conditionals.html"><span class="nav-num">06</span>조건문</a>
+  <a class="nav-item" href="07-loops.html"><span class="nav-num">07</span>반복문</a>
+  <a class="nav-item active" href="#s1"><span class="nav-num">08</span>DOM 조작</a>
+</nav>
+
+<main class="main">
+
+  <div class="hero">
+    <h1>JavaScript DOM 조작</h1>
+    <p>HTML 요소를 선택하고, 생성하고, 수정하고, 삭제하는 방법</p>
+    <div class="hero-badges">
+      <span class="hero-badge">선택</span>
+      <span class="hero-badge">생성</span>
+      <span class="hero-badge">수정</span>
+      <span class="hero-badge">삭제</span>
+      <span class="hero-badge">이벤트</span>
+    </div>
+  </div>
+
+  <!-- ===== 01: 요소 선택 ===== -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 01</div>
+      <div class="section-title">요소 선택하기</div>
+      <div class="section-desc"><strong>HTML 요소를 찾는 첫 번째 단계!</strong> 4가지 방법이 있어요.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>4가지 선택 방법</div>
+      <div class="code-block">
+<span class="cm">// 1️⃣ ID로 선택 (가장 빠름)</span><br>
+<span class="kw">const</span> element = document.getElementById(<span class="str">"myId"</span>);<br><br>
+<span class="cm">// 2️⃣ Class로 선택 (여러 개)</span><br>
+<span class="kw">const</span> elements = document.getElementsByClassName(<span class="str">"myClass"</span>);<br><br>
+<span class="cm">// 3️⃣ Tag로 선택 (여러 개)</span><br>
+<span class="kw">const</span> elements = document.getElementsByTagName(<span class="str">"li"</span>);<br><br>
+<span class="cm">// 4️⃣ CSS 선택자 (모던 방식!) ⭐</span><br>
+<span class="kw">const</span> one = document.querySelector(<span class="str">".myClass"</span>);  <span class="cm">// 첫 번째만</span><br>
+<span class="kw">const</span> all = document.querySelectorAll(<span class="str">"li"</span>);  <span class="cm">// 모두</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: 아이디로 요소 찾기</div>
+      <div class="demo-box">
+        <p>ID가 "demo1"인 요소를 찾아보세요:</p>
+        <p id="demo1" style="color: var(--primary); font-weight: 600; margin-top: 8px;">안녕하세요! 저는 demo1입니다.</p>
+      </div>
+      <div class="code-block">
+<span class="kw">const</span> element = document.getElementById(<span class="str">"demo1"</span>);<br>
+element.textContent = <span class="str">"찾았다!"</span>;
+      </div>
+      <div class="controls">
+        <button onclick="runSelectById()">▶ 실행</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: querySelectorAll로 여러 개 선택</div>
+      <div class="demo-box">
+        <p>class="item"인 모든 요소를 선택하세요:</p>
+        <ul id="itemList" style="list-style: none; padding: 0; margin-top: 8px;">
+          <li class="item">항목 1</li>
+          <li class="item">항목 2</li>
+          <li class="item">항목 3</li>
+        </ul>
+      </div>
+      <div class="code-block">
+<span class="kw">const</span> items = document.querySelectorAll(<span class="str">".item"</span>);<br>
+console.log(items.length);  <span class="cm">// 3</span><br>
+items.forEach((item) => {<br>
+&nbsp;&nbsp;item.style.color = <span class="str">"red"</span>;<br>
+})
+      </div>
+      <div class="controls">
+        <button onclick="runSelectAll()">▶ 실행</button>
+      </div>
+    </div>
+
+    <div class="compare-box">
+      ⭐ <strong>추천:</strong> <code class="code-inline">querySelector</code>를 가장 많이 써요!<br>
+      CSS 선택자를 사용하기 때문에 가장 유연해요.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 02: 요소 생성/추가/제거 ===== -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 02</div>
+      <div class="section-title">요소 생성 & 추가 & 제거</div>
+      <div class="section-desc"><strong>HTML을 JavaScript로 동적으로 만들고 붙이고 지우기!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>요소 생성 & 추가</div>
+      <div class="code-block">
+<span class="cm">// 1️⃣ 요소 생성</span><br>
+<span class="kw">const</span> li = document.createElement(<span class="str">"li"</span>);<br><br>
+<span class="cm">// 2️⃣ 내용 추가</span><br>
+li.textContent = <span class="str">"새로운 항목"</span>;<br><br>
+<span class="cm">// 3️⃣ 요소에 붙이기</span><br>
+<span class="kw">const</span> list = document.getElementById(<span class="str">"myList"</span>);<br>
+list.appendChild(li);
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: 할 일 추가</div>
+      <div class="demo-box">
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <input type="text" id="taskInput" placeholder="할 일을 입력하세요" style="flex: 1;">
+          <button onclick="addTask()" style="background: var(--primary); color: white; border: none;">추가</button>
+        </div>
+        <ul id="taskList" style="list-style: none; padding: 0; margin: 0;">
+        </ul>
+      </div>
+      <div class="code-block">
+<span class="kw">function</span> addTask() {<br>
+&nbsp;&nbsp;<span class="kw">const</span> input = document.getElementById(<span class="str">"taskInput"</span>);<br>
+&nbsp;&nbsp;<span class="kw">const</span> list = document.getElementById(<span class="str">"taskList"</span>);<br><br>
+&nbsp;&nbsp;<span class="kw">const</span> li = document.createElement(<span class="str">"li"</span>);<br>
+&nbsp;&nbsp;li.textContent = input.value;<br>
+&nbsp;&nbsp;list.appendChild(li);<br>
+&nbsp;&nbsp;input.value = <span class="str">""</span>;  <span class="cm">// 입력창 비우기</span><br>
+}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>요소 제거</div>
+      <div class="code-block">
+<span class="cm">// 방법 1: 부모에서 제거</span><br>
+<span class="kw">const</span> parent = document.getElementById(<span class="str">"list"</span>);<br>
+<span class="kw">const</span> child = document.getElementById(<span class="str">"item"</span>);<br>
+parent.removeChild(child);<br><br>
+<span class="cm">// 방법 2: 요소가 자신을 제거 (더 간단!)</span><br>
+element.remove();
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: 마지막 할 일 삭제</div>
+      <div class="demo-box">
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button onclick="deleteLastTask()" style="background: var(--primary); color: white; border: none;">마지막 항목 삭제</button>
+        </div>
+        <ul id="deleteTaskList" style="list-style: none; padding: 0; margin: 0;">
+          <li style="display: flex; justify-content: space-between;">자바스크립트 공부</li>
+        </ul>
+      </div>
+      <div class="code-block">
+<span class="kw">function</span> deleteLastTask() {<br>
+&nbsp;&nbsp;<span class="kw">const</span> list = document.getElementById(<span class="str">"deleteTaskList"</span>);<br>
+&nbsp;&nbsp;<span class="kw">const</span> lastItem = list.lastElementChild;<br>
+&nbsp;&nbsp;<span class="kw">if</span> (lastItem) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lastItem.remove();<br>
+&nbsp;&nbsp;}<br>
+}
+      </div>
+    </div>
+
+    <div class="tip">⚠️ <strong>주의:</strong> <code class="code-inline">lastChild</code>는 텍스트 노드를 포함해요.<br>
+    요소만 선택하려면 <code class="code-inline">lastElementChild</code>를 사용하세요!
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 03: 텍스트/HTML 조작 ===== -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 03</div>
+      <div class="section-title">텍스트 & HTML 조작</div>
+      <div class="section-desc"><strong>요소 안의 내용을 바꾸는 두 가지 방법</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>textContent vs innerHTML</div>
+      <div class="code-block">
+<span class="cm">// textContent: 텍스트만 (안전함) ✅</span><br>
+element.textContent = <span class="str">"안녕하세요"</span>;<br><br>
+<span class="cm">// innerHTML: HTML도 포함 (위험할 수 있음)</span><br>
+element.innerHTML = <span class="str">"&lt;strong&gt;안녕하세요&lt;/strong&gt;"</span>;
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: 텍스트 바꾸기</div>
+      <div class="demo-box">
+        <p id="messageBox" style="background: var(--primary-light); padding: 12px; border-radius: 6px;">원래 텍스트</p>
+        <div style="margin-top: 12px;">
+          <button onclick="changeText()">텍스트 변경</button>
+          <button onclick="changeHTML()">HTML 추가</button>
+        </div>
+      </div>
+      <div class="code-block">
+<span class="kw">function</span> changeText() {<br>
+&nbsp;&nbsp;<span class="kw">const</span> box = document.getElementById(<span class="str">"messageBox"</span>);<br>
+&nbsp;&nbsp;box.textContent = <span class="str">"변경된 텍스트!"</span>;<br>
+}<br><br>
+<span class="kw">function</span> changeHTML() {<br>
+&nbsp;&nbsp;<span class="kw">const</span> box = document.getElementById(<span class="str">"messageBox"</span>);<br>
+&nbsp;&nbsp;box.innerHTML = <span class="str">"&lt;strong&gt;굵은 글자&lt;/strong&gt;"</span>;<br>
+}
+      </div>
+    </div>
+
+    <div class="compare-box">
+      ⭐ <strong>추천:</strong> 일반적으로 <code class="code-inline">textContent</code>를 사용하세요!<br>
+      HTML이 필요한 경우에만 <code class="code-inline">innerHTML</code>을 사용해요.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 04: 클래스 조작 ===== -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 04</div>
+      <div class="section-title">클래스 조작 (classList)</div>
+      <div class="section-desc"><strong>CSS 클래스를 JavaScript로 추가/제거하기!</strong> 가장 유용해요.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>classList 4가지 메서드</div>
+      <div class="code-block">
+<span class="cm">// 추가</span><br>
+element.classList.add(<span class="str">"active"</span>);<br><br>
+<span class="cm">// 제거</span><br>
+element.classList.remove(<span class="str">"active"</span>);<br><br>
+<span class="cm">// 토글 (있으면 제거, 없으면 추가)</span><br>
+element.classList.toggle(<span class="str">"active"</span>);<br><br>
+<span class="cm">// 포함 여부 확인</span><br>
+<span class="kw">if</span> (element.classList.contains(<span class="str">"active"</span>)) { }
+      </div>
+      <style>
+        .active-demo { background: var(--primary); color: white; padding: 12px; border-radius: 6px; transition: all 0.3s; }
+        .highlight { font-size: 18px; font-weight: 800; }
+      </style>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: 클래스 토글</div>
+      <div class="demo-box">
+        <p id="toggleBox" style="padding: 12px; border-radius: 6px; border: 2px solid var(--border); text-align: center;">버튼을 클릭하세요</p>
+        <div style="margin-top: 12px;">
+          <button onclick="toggleClass()">Active 토글</button>
+          <button onclick="toggleHighlight()">강조 토글</button>
+        </div>
+      </div>
+      <div class="code-block">
+<span class="kw">function</span> toggleClass() {<br>
+&nbsp;&nbsp;<span class="kw">const</span> box = document.getElementById(<span class="str">"toggleBox"</span>);<br>
+&nbsp;&nbsp;box.classList.toggle(<span class="str">"active-demo"</span>);<br>
+}
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 05: 스타일 조작 ===== -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 05</div>
+      <div class="section-title">스타일 조작</div>
+      <div class="section-desc"><strong>JavaScript로 CSS를 직접 바꾸기!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>스타일 수정</div>
+      <div class="code-block">
+<span class="cm">// CSS 속성명은 camelCase로</span><br>
+element.style.color = <span class="str">"red"</span>;<br>
+element.style.fontSize = <span class="str">"20px"</span>;<br>
+element.style.backgroundColor = <span class="str">"yellow"</span>;<br>
+element.style.display = <span class="str">"none"</span>;<br><br>
+<span class="cm">// 읽기</span><br>
+console.log(element.style.color);
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: 스타일 변경</div>
+      <div class="demo-box">
+        <p id="styleBox" style="padding: 12px; background: #f1f5f9; border-radius: 6px;">스타일을 바꿔보세요</p>
+        <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+          <button onclick="changeColor()">빨강</button>
+          <button onclick="changeBig()">크기 키우기</button>
+          <button onclick="changeHide()">숨기기/보이기</button>
+        </div>
+      </div>
+      <div class="code-block">
+<span class="kw">function</span> changeColor() {<br>
+&nbsp;&nbsp;<span class="kw">const</span> box = document.getElementById(<span class="str">"styleBox"</span>);<br>
+&nbsp;&nbsp;box.style.color = <span class="str">"red"</span>;<br>
+}
+      </div>
+    </div>
+
+    <div class="tip">💡 <strong>팁:</strong> CSS 속성명이 하이픈(-)이면 camelCase로 바꿔야 해요!<br>
+    예: <code class="code-inline">background-color</code> → <code class="code-inline">backgroundColor</code>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 06: 이벤트 처리 ===== -->
+  <section class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 06</div>
+      <div class="section-title">이벤트 처리</div>
+      <div class="section-desc"><strong>사용자 동작에 반응하기!</strong> 클릭, 입력, 마우스 움직임 등등.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>이벤트 리스너 추가</div>
+      <div class="code-block">
+<span class="cm">// 기본 문법</span><br>
+element.addEventListener(<span class="str">"이벤트"</span>, <span class="kw">function</span>() {<br>
+&nbsp;&nbsp;<span class="cm">// 실행될 코드</span><br>
+});<br><br>
+<span class="cm">// 화살표 함수</span><br>
+element.addEventListener(<span class="str">"click"</span>, () => {<br>
+&nbsp;&nbsp;console.log(<span class="str">"클릭됨!"</span>);<br>
+});
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>자주 쓰는 이벤트</div>
+      <div class="preview">
+        <div class="preview-label">COMMON EVENTS</div>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 8px;"><strong>click</strong></td>
+            <td style="padding: 8px;">마우스 클릭</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 8px;"><strong>input</strong></td>
+            <td style="padding: 8px;">입력창에 타이핑</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 8px;"><strong>change</strong></td>
+            <td style="padding: 8px;">입력값 변경 (엔터 후)</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 8px;"><strong>mouseover</strong></td>
+            <td style="padding: 8px;">마우스 올릴 때</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 8px;"><strong>mouseout</strong></td>
+            <td style="padding: 8px;">마우스 떠날 때</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px;"><strong>keydown</strong></td>
+            <td style="padding: 8px;">키 누를 때</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: 클릭 이벤트</div>
+      <div class="demo-box">
+        <button id="eventBtn" style="background: var(--primary); color: white; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600;">클릭하세요</button>
+        <p id="eventOutput" style="margin-top: 12px; color: var(--sub);">클릭 횟수: 0</p>
+      </div>
+      <div class="code-block">
+<span class="kw">let</span> count = <span class="num">0</span>;<br>
+<span class="kw">const</span> btn = document.getElementById(<span class="str">"eventBtn"</span>);<br><br>
+btn.addEventListener(<span class="str">"click"</span>, () => {<br>
+&nbsp;&nbsp;count++;<br>
+&nbsp;&nbsp;document.getElementById(<span class="str">"eventOutput"</span>).textContent = <span class="str">`클릭 횟수: ${count}`</span>;<br>
+});
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ===== 07: 요소 관계 ===== -->
+  <section class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num">CHAPTER 07</div>
+      <div class="section-title">요소 관계 (부모, 자식, 형제)</div>
+      <div class="section-desc"><strong>DOM 트리에서 요소들의 관계를 파악하기!</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>요소 관계 탐색</div>
+      <div class="code-block">
+<span class="cm">// 부모</span><br>
+element.parentElement<br><br>
+<span class="cm">// 자식 (직접 자식만)</span><br>
+element.children<br>
+element.firstElementChild<br>
+element.lastElementChild<br><br>
+<span class="cm">// 형제</span><br>
+element.nextElementSibling<br>
+element.previousElementSibling
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>실습: 부모/자식 찾기</div>
+      <div class="demo-box">
+        <div id="parent" style="border: 2px solid var(--primary); padding: 16px; border-radius: 8px;">
+          <p>부모 요소</p>
+          <div id="child1" style="background: var(--primary-light); padding: 8px; border-radius: 6px; margin: 8px 0;">자식 1</div>
+          <div id="child2" style="background: var(--primary-light); padding: 8px; border-radius: 6px; margin: 8px 0;">자식 2</div>
+        </div>
+        <div style="margin-top: 12px;">
+          <button onclick="findParent()">자식의 부모 찾기</button>
+          <button onclick="findChildren()">부모의 자식들 찾기</button>
+        </div>
+      </div>
+      <div class="code-block">
+<span class="cm">// 자식에서 부모로 가기</span><br>
+<span class="kw">const</span> child = document.getElementById(<span class="str">"child1"</span>);<br>
+<span class="kw">const</span> parent = child.parentElement;<br>
+console.log(parent.id);  <span class="cm">// "parent"</span><br><br>
+<span class="cm">// 부모에서 자식들로 가기</span><br>
+<span class="kw">const</span> parent = document.getElementById(<span class="str">"parent"</span>);<br>
+<span class="kw">const</span> children = parent.children;<br>
+console.log(children.length);  <span class="cm">// 2</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('show');
+}
+
+function runSelectById() {
+  const element = document.getElementById('demo1');
+  element.textContent = '찾았다! ✅';
+  element.style.color = '#10b981';
+  element.style.fontWeight = '700';
+}
+
+function runSelectAll() {
+  const items = document.querySelectorAll('.item');
+  items.forEach((item, index) => {
+    item.style.color = '#ef4444';
+    item.style.fontWeight = '600';
+  });
+}
+
+function addTask() {
+  const input = document.getElementById('taskInput');
+  const list = document.getElementById('taskList');
+  
+  if (input.value.trim() === '') {
+    alert('할 일을 입력하세요!');
+    return;
+  }
+  
+  const li = document.createElement('li');
+  li.textContent = input.value;
+  li.style.marginBottom = '8px';
+  li.style.padding = '8px';
+  li.style.background = 'white';
+  li.style.borderRadius = '6px';
+  li.style.border = '1px solid #e2e8f0';
+  
+  list.appendChild(li);
+  input.value = '';
+  input.focus();
+}
+
+function deleteLastTask() {
+  const list = document.getElementById('deleteTaskList');
+  const lastItem = list.lastElementChild;
+  if (lastItem) {
+    lastItem.remove();
+  }
+}
+
+function changeText() {
+  const box = document.getElementById('messageBox');
+  box.textContent = '변경된 텍스트! ✅';
+}
+
+function changeHTML() {
+  const box = document.getElementById('messageBox');
+  box.innerHTML = '<strong>굵은 글자로 변경됨! 💪</strong>';
+}
+
+function toggleClass() {
+  const box = document.getElementById('toggleBox');
+  box.classList.toggle('active-demo');
+}
+
+function toggleHighlight() {
+  const box = document.getElementById('toggleBox');
+  box.classList.toggle('highlight');
+}
+
+function changeColor() {
+  const box = document.getElementById('styleBox');
+  box.style.color = '#ef4444';
+  box.style.fontWeight = '700';
+}
+
+function changeBig() {
+  const box = document.getElementById('styleBox');
+  box.style.fontSize = '20px';
+}
+
+function changeHide() {
+  const box = document.getElementById('styleBox');
+  if (box.style.display === 'none') {
+    box.style.display = 'block';
+  } else {
+    box.style.display = 'none';
+  }
+}
+
+let clickCount = 0;
+const eventBtn = document.getElementById('eventBtn');
+if (eventBtn) {
+  eventBtn.addEventListener('click', () => {
+    clickCount++;
+    document.getElementById('eventOutput').textContent = `클릭 횟수: ${clickCount}`;
+  });
+}
+
+function findParent() {
+  const child = document.getElementById('child1');
+  const parent = child.parentElement;
+  
+  // 부모 요소 강조
+  parent.style.boxShadow = '0 0 0 3px #10b981';
+  parent.style.transition = 'all 0.3s';
+  
+  // 1초 후 원래대로
+  setTimeout(() => {
+    parent.style.boxShadow = 'none';
+  }, 1500);
+}
+
+function findChildren() {
+  const parent = document.getElementById('parent');
+  const children = parent.children;
+  
+  // 모든 자식 요소 강조
+  Array.from(children).forEach((child, index) => {
+    if (child.id.startsWith('child')) {
+      child.style.background = '#fbbf24';
+      child.style.fontWeight = '700';
+      child.style.transition = 'all 0.3s';
+    }
+  });
+  
+  // 1초 후 원래대로
+  setTimeout(() => {
+    Array.from(children).forEach((child) => {
+      if (child.id.startsWith('child')) {
+        child.style.background = '#d1fae5';
+        child.style.fontWeight = '400';
+      }
+    });
+  }, 1500);
+}
+
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) cur = s.id; });
+  navItems.forEach(n => {
+    if (n.href.includes('08-dom')) n.classList.toggle('active', cur.startsWith('s'));
+    else n.classList.remove('active');
+  });
+});
+
+navItems.forEach(n => n.addEventListener('click', () => {
+  if (window.innerWidth <= 768) closeSidebar();
+}));
+</script>
+
+</body>
+</html>
