@@ -18,7 +18,7 @@
   <link rel="apple-touch-icon" href="assets/img/favicon-32.png">
 
   <!-- 체계적 SEO 메타 태그 -->
-  <title>JJinMangGo Frontend Lab | HTML/CSS/JavaScript 강의자료 & 퀴즈</title>
+  <title>Frontend Lab | JJinMangGo HTML/CSS/JavaScript 강의자료 &amp; 퀴즈</title>
   <meta name="description" content="JJinMangGo Frontend Lab - HTML, CSS, Tailwind CSS, JavaScript 강의자료와 퀴즈 모음">
   <meta name="keywords" content="HTML, CSS, Tailwind CSS, JavaScript, Frontend, Grid, Flex, Position, Quiz, 강의자료, 찐망고">
   <meta name="author" content="JJinMangGo">
@@ -39,49 +39,544 @@
   <meta name="twitter:description" content="HTML, CSS, Tailwind CSS, JavaScript 강의자료와 실습 예제, 퀴즈를 제공하는 프론트엔드 학습 아카이브입니다.">
   <meta name="twitter:image" content="https://jjinmanggo.github.io/frontend-lecture/assets/img/og-jjinmanggo.png">
 
-  <!-- Pretendard Core Theme & Clean Components CSS -->
-  <link rel="stylesheet" href="assets/css/core-theme.css">
-  <link rel="stylesheet" href="assets/css/components.css">
+  <!-- 
+    인라인 스타일: 로컬 file:/// 더블클릭, CDN 지연, 외부 파일 차단 등 
+    어떤 환경에서도 100% 완벽하게 렌더링되도록 완전히 내장
+  -->
+  <style>
+    /* 1. Pretendard WebFont Full Weights */
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2') format('woff2');
+      font-weight: 100;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2') format('woff2');
+      font-weight: 200;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2') format('woff2');
+      font-weight: 300;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2') format('woff2');
+      font-weight: 800;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2') format('woff2');
+      font-weight: 900;
+      font-display: swap;
+    }
 
-  <!-- Auto Theme Engine -->
-  <script src="assets/js/theme-engine.js"></script>
+    /* 2. Theme Tokens (Light & Dark) */
+    :root {
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --surface-subtle: #f1f3f5;
+      --surface-hover: #ffffff;
+      
+      --border: #e9ecef;
+      --border-hover: #ced4da;
+      --border-focus: #111827;
+      
+      --text: #111827;
+      --text-sub: #4b5563;
+      --text-muted: #868e96;
+      
+      --nav-bg: rgba(248, 249, 250, 0.85);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      
+      --tag-bg: #f1f3f5;
+      --tag-text: #495057;
+      --tag-quiz-bg: #fef3c7;
+      --tag-quiz-text: #92400e;
+      --tag-lecture-bg: #e6fcf5;
+      --tag-lecture-text: #0ca678;
+    }
+
+    html.dark {
+      --bg: #0f1015;
+      --surface: #161822;
+      --surface-subtle: #1e212d;
+      --surface-hover: #1b1e2a;
+      
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.18);
+      --border-focus: #f3f4f6;
+      
+      --text: #f3f4f6;
+      --text-sub: #9ca3af;
+      --text-muted: #6b7280;
+      
+      --nav-bg: rgba(15, 16, 21, 0.85);
+      --card-bg: rgba(22, 24, 34, 0.8);
+      
+      --tag-bg: rgba(255, 255, 255, 0.06);
+      --tag-text: #d1d5db;
+      --tag-quiz-bg: rgba(245, 158, 11, 0.15);
+      --tag-quiz-text: #fbbf24;
+      --tag-lecture-bg: rgba(16, 185, 129, 0.15);
+      --tag-lecture-text: #34d399;
+    }
+
+    /* 3. Base Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      letter-spacing: -0.02em;
+      min-height: 100vh;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* 4. Accessibility Skip Link */
+    .skip-link {
+      position: fixed;
+      top: -100px;
+      left: 16px;
+      padding: 8px 16px;
+      background: var(--text);
+      color: var(--bg);
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 13px;
+      z-index: 99999;
+      text-decoration: none;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus {
+      top: 16px;
+      outline: 2px solid var(--border-focus);
+    }
+
+    /* 5. Sticky Clean Header */
+    .header-nav {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 58px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .nav-container {
+      max-width: 1080px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-badge {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 18px;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-sub);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      border-radius: 6px;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .theme-toggle-btn:hover {
+      color: var(--text);
+      border-color: var(--border-hover);
+      background: var(--surface-subtle);
+    }
+
+    /* 6. Minimal Hero (Original Text) */
+    .hero {
+      padding: 56px 20px 44px;
+      text-align: center;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 4.5vw, 36px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 3px 12px;
+      border-radius: 16px;
+      margin-top: 4px;
+    }
+
+    /* 7. Main Wrapper & Section Blocks */
+    .main-wrapper {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 48px 20px 80px;
+    }
+
+    .section-block {
+      margin-bottom: 48px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* 8. Auto-Layout Grid (Responsive) */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    @media (min-width: 900px) {
+      .card-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* 9. Clean Cards (No hover jump, No shadow gimmicks) */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+      background-color: var(--surface-hover);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+    }
+
+    .tag.lecture {
+      background: var(--tag-lecture-bg);
+      color: var(--tag-lecture-text);
+    }
+
+    .tag.quiz {
+      background: var(--tag-quiz-bg);
+      color: var(--tag-quiz-text);
+    }
+
+    /* Soon Card */
+    .card.soon {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .badge-soon {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--tag-bg);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    /* 10. Footer */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 20px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      background: var(--surface);
+    }
+  </style>
+
+  <!-- Auto Theme Switcher Script (Inline for Zero Latency) -->
+  <script>
+    (function() {
+      const KEY = 'frontend_lecture_theme';
+      function getInitialTheme() {
+        try {
+          const saved = localStorage.getItem(KEY);
+          if (saved) return saved;
+        } catch(e) {}
+        return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      }
+
+      function apply(theme) {
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        updateBtn(theme === 'dark');
+      }
+
+      function updateBtn(isDark) {
+        const btn = document.querySelector('.theme-toggle-btn');
+        if (!btn) return;
+        btn.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
+        btn.innerHTML = isDark
+          ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>'
+          : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+      }
+
+      const initTheme = getInitialTheme();
+      apply(initTheme);
+
+      document.addEventListener('DOMContentLoaded', () => {
+        apply(getInitialTheme());
+        const btn = document.querySelector('.theme-toggle-btn');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            const next = isDark ? 'light' : 'dark';
+            try { localStorage.setItem(KEY, next); } catch(e) {}
+            apply(next);
+          });
+        }
+
+        if (window.matchMedia) {
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            let saved = null;
+            try { saved = localStorage.getItem(KEY); } catch(e) {}
+            if (!saved) apply(e.matches ? 'dark' : 'light');
+          });
+        }
+      });
+    })();
+  </script>
 </head>
 <body>
 
-  <!-- 웹 접근성: 본문 바로가기 건너뛰기 링크 -->
+  <!-- 웹 접근성: 건너뛰기 링크 -->
   <a href="#main" class="skip-link">본문 바로가기</a>
 
-  <!-- 상단 헤더 내비게이션 -->
+  <!-- 상단 네비게이션 헤더 -->
   <header class="header-nav">
     <div class="nav-container">
-      <a href="index.html" class="brand-link" aria-label="Frontend Lab 홈">
-        <span>Frontend Lab</span>
+      <div class="brand-group">
+        <a href="index.html" class="brand-title">Frontend Lab</a>
         <span class="brand-badge">JJinMangGo</span>
-      </a>
+      </div>
 
-      <nav class="nav-menu" aria-label="섹션 바로가기">
-        <a href="#grid" class="nav-item-link">Grid</a>
-        <a href="#flex" class="nav-item-link">Flex</a>
-        <a href="#position" class="nav-item-link">Position</a>
-        <a href="#tailwind" class="nav-item-link">Tailwind</a>
-        <a href="#javascript" class="nav-item-link">JavaScript</a>
-        <a href="#html-quiz" class="nav-item-link">HTML 퀴즈</a>
-        <a href="#css-quiz" class="nav-item-link">CSS 퀴즈</a>
+      <nav class="nav-links" aria-label="섹션 바로가기">
+        <a href="#grid" class="nav-link">Grid</a>
+        <a href="#flex" class="nav-link">Flex</a>
+        <a href="#position" class="nav-link">Position</a>
+        <a href="#tailwind" class="nav-link">Tailwind</a>
+        <a href="#javascript" class="nav-link">JavaScript</a>
+        <a href="#html-quiz" class="nav-link">HTML 퀴즈</a>
+        <a href="#css-quiz" class="nav-link">CSS 퀴즈</a>
       </nav>
 
-      <div class="header-actions">
+      <div class="nav-actions">
         <!-- 미니멀 테마 토글 버튼 -->
-        <button class="theme-toggle" type="button" aria-label="테마 전환" title="다크/라이트 모드 전환"></button>
+        <button class="theme-toggle-btn" type="button" aria-label="테마 전환" title="다크/라이트 모드 전환"></button>
       </div>
     </div>
   </header>
 
-  <!-- 메인 히어로 (과장되지 않은 원본 문구) -->
+  <!-- 메인 히어로 (aa76f2c 원본 문구) -->
   <section class="hero">
     <div class="hero-inner">
       <h1 class="hero-title">Frontend Lab</h1>
       <p class="hero-desc">HTML/CSS/JavaScript 프론트엔드 강의자료 &amp; 퀴즈 모음</p>
-      <div class="hero-tag">JJinMangGo · GitHub Pages</div>
+      <div class="hero-badge">JJinMangGo · GitHub Pages</div>
     </div>
   </section>
 
@@ -93,7 +588,7 @@
       <div class="section-label">CSS GRID</div>
       <div class="card-grid">
         <a class="card" href="grid/grid-lecture.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📐</span>
           </div>
           <div class="card-body">
@@ -108,7 +603,7 @@
         </a>
 
         <a class="card" href="grid/css-grid-quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📝</span>
           </div>
           <div class="card-body">
@@ -129,7 +624,7 @@
       <div class="section-label">CSS FLEX</div>
       <div class="card-grid">
         <a class="card" href="flex/flex-lecture.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">🎯</span>
           </div>
           <div class="card-body">
@@ -143,7 +638,7 @@
         </a>
 
         <a class="card" href="flex/css-flex-quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📝</span>
           </div>
           <div class="card-body">
@@ -163,7 +658,7 @@
       <div class="section-label">CSS POSITION</div>
       <div class="card-grid">
         <a class="card" href="position/position-lecture.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📌</span>
           </div>
           <div class="card-body">
@@ -177,7 +672,7 @@
         </a>
 
         <a class="card" href="position/css-position-quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📝</span>
           </div>
           <div class="card-body">
@@ -197,7 +692,7 @@
       <div class="section-label">TAILWIND CSS</div>
       <div class="card-grid">
         <a class="card" href="tailwind/tailwind-lecture.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">🌊</span>
           </div>
           <div class="card-body">
@@ -212,7 +707,7 @@
         </a>
 
         <div class="card soon">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📝</span>
             <span class="badge-soon">준비중</span>
           </div>
@@ -233,7 +728,7 @@
       <div class="section-label">JAVASCRIPT 기초</div>
       <div class="card-grid">
         <a class="card" href="javascript/01-history.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">⚡</span>
           </div>
           <div class="card-body">
@@ -247,7 +742,7 @@
         </a>
 
         <a class="card" href="javascript/02-variable.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📝</span>
           </div>
           <div class="card-body">
@@ -261,7 +756,7 @@
         </a>
 
         <a class="card" href="javascript/03-data-types.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">🔢</span>
           </div>
           <div class="card-body">
@@ -275,7 +770,7 @@
         </a>
 
         <a class="card" href="javascript/04-operators.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">➕</span>
           </div>
           <div class="card-body">
@@ -289,7 +784,7 @@
         </a>
 
         <a class="card" href="javascript/05-scope-hoisting.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📝</span>
           </div>
           <div class="card-body">
@@ -303,7 +798,7 @@
         </a>
 
         <a class="card" href="javascript/06-conditionals.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">❓</span>
           </div>
           <div class="card-body">
@@ -317,7 +812,7 @@
         </a>
 
         <a class="card" href="javascript/07-loops.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">🔄</span>
           </div>
           <div class="card-body">
@@ -331,7 +826,7 @@
         </a>
 
         <a class="card" href="javascript/08-dom.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">🎨</span>
           </div>
           <div class="card-body">
@@ -345,7 +840,7 @@
         </a>
 
         <a class="card" href="javascript/09-objects.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📦</span>
           </div>
           <div class="card-body">
@@ -365,7 +860,7 @@
       <div class="section-label">UI/UX GESTALT</div>
       <div class="card-grid">
         <a class="card" href="uiux/gestalt.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">👁️</span>
           </div>
           <div class="card-body">
@@ -379,7 +874,7 @@
         </a>
 
         <a class="card" href="uiux/gestalt-theory.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📖</span>
           </div>
           <div class="card-body">
@@ -393,7 +888,7 @@
         </a>
 
         <a class="card" href="uiux/gestalt-quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📝</span>
           </div>
           <div class="card-body">
@@ -413,7 +908,7 @@
       <div class="section-label">HTML 퀴즈</div>
       <div class="card-grid">
         <a class="card" href="quiz/html_quiz1.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">🧩</span>
           </div>
           <div class="card-body">
@@ -427,7 +922,7 @@
         </a>
 
         <a class="card" href="quiz/html_quiz2.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">🧩</span>
           </div>
           <div class="card-body">
@@ -446,7 +941,7 @@
       <div class="section-label">CSS 퀴즈</div>
       <div class="card-grid">
         <a class="card" href="quiz/css-text-color-quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">🎨</span>
           </div>
           <div class="card-body">
@@ -460,7 +955,7 @@
         </a>
 
         <a class="card" href="quiz/css-font-quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">✍️</span>
           </div>
           <div class="card-body">
@@ -473,7 +968,7 @@
         </a>
 
         <a class="card" href="quiz/css-unit-quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📏</span>
           </div>
           <div class="card-body">
@@ -486,7 +981,7 @@
         </a>
 
         <a class="card" href="quiz/css-boxmodel-quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">📦</span>
           </div>
           <div class="card-body">
@@ -499,7 +994,7 @@
         </a>
 
         <a class="card" href="quiz/css_background-quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">🖼️</span>
           </div>
           <div class="card-body">
@@ -512,7 +1007,7 @@
         </a>
 
         <a class="card" href="quiz/css_combinator_quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">🔗</span>
           </div>
           <div class="card-body">
@@ -525,7 +1020,7 @@
         </a>
 
         <a class="card" href="quiz/css_priority_quiz.html">
-          <div class="card-header">
+          <div class="card-top">
             <span class="card-icon" aria-hidden="true">⚖️</span>
           </div>
           <div class="card-body">
@@ -541,7 +1036,7 @@
 
   </main>
 
-  <!-- 미니멀 푸터 (원본 카피라이트) -->
+  <!-- 미니멀 푸터 (aa76f2c 원본) -->
   <footer class="site-footer">
     <p>© 2025 JJinMangGo · Frontend Lecture</p>
   </footer>
