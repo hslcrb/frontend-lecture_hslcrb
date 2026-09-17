@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -37,6 +37,9 @@
     .sc-val { font-size: 24px; font-weight: 700; }
     .sc-label { font-size: 13px; color: #64748b; font-weight: 600; margin-top: 4px; }
   </style>
+  <!-- Core Theme & Auto Theme Engine -->
+  <link rel="stylesheet" href="../assets/css/core-theme.css">
+  <script src="../assets/js/theme-engine.js"></script>
 </head>
 <body>
 
@@ -194,7 +197,10 @@ var Q = [
   {
     cat: "메타데이터 코드",
     q: "[코드 완성] 메신저 링크 공유 시 페이지 미리보기 이미지 카드를 예쁘게 출력하기 위해 사용되는 Open Graph 메타 태그의 빈칸 속성 프로퍼티 이름은 무엇인가요?",
-    code: "<head>\n  <meta property=\"og:title\" content=\"시맨틱 마크업의 가치\">\n  <meta property=\"[ 빈칸 ]\" content=\"./assets/img/preview.png\">\n</head>",
+    code: "<head>\n  <meta property=\"og:title\" content=\"시맨틱 마크업의 가치\">\n  <meta property=\"[ 빈칸 ]\" content=\"./assets/img/preview.png\">\n  <!-- Core Theme & Auto Theme Engine -->
+  <link rel="stylesheet" href="../assets/css/core-theme.css">
+  <script src="../assets/js/theme-engine.js"></script>
+</head>",
     opts: ["og:image", "og:url", "og:description", "og:type"],
     ans: 0,
     ex: "공유 미리보기 카드에 띄울 대표 이미지 소스 경로는 <meta property=\"og:image\" ...> 속성명을 명시해 주어야 플랫폼 로봇이 이를 수집해 카드 UI로 가공합니다."
