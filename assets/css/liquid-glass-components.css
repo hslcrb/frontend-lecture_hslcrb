@@ -1,0 +1,297 @@
+/* ==========================================================================
+   Liquid Glass Components Override & Enhancement
+   기존 강의/퀴즈 페이지의 낡은 보라-핑크 그라디언트와 이모지 등 AI 티 요소를 척결하고,
+   liquid-glass-frontend 디자인 스펙(Apple Liquid Glass / Frosted Glass)을 일관되게 주입.
+   ========================================================================== */
+
+/* 1. 글로벌 타이포 & 배경 */
+body {
+  font-family: var(--lg-font-sans, 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif) !important;
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 2. 히어로 배너 (AI 티 나는 보라-핑크 그라디언트 완전 척결) */
+.hero,
+header.lecture-header,
+.quiz-header {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(30, 41, 59, 0.9)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 20px 48px -12px rgba(15, 23, 42, 0.35),
+              inset 0 1.5px 1px rgba(255, 255, 255, 0.35),
+              inset 0 -1px 1px rgba(255, 255, 255, 0.08) !important;
+  border-radius: 24px !important;
+  color: #ffffff !important;
+}
+
+.hero::before,
+header.lecture-header::before,
+.quiz-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(280px circle at var(--lg-mx, 25%) var(--lg-my, 0%), rgba(255, 255, 255, 0.28), transparent 65%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent 45%);
+  mix-blend-mode: screen;
+}
+
+.hero h1,
+header.lecture-header h1 {
+  font-size: clamp(2rem, 3.5vw, 2.5rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  color: #ffffff !important;
+}
+
+.hero p,
+header.lecture-header p {
+  color: rgba(255, 255, 255, 0.82) !important;
+  letter-spacing: -0.01em !important;
+}
+
+.hero-badge,
+.badge {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+  font-size: 11.5px !important;
+}
+
+/* 3. 사이드바 (프로스트 글래스) */
+.sidebar {
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(16px) saturate(180%) brightness(1.05) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) brightness(1.05) !important;
+  border-right: 1px solid rgba(226, 232, 240, 0.85) !important;
+  box-shadow: 4px 0 24px -4px rgba(15, 23, 42, 0.04) !important;
+}
+
+.sidebar-header {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+}
+
+.nav-home {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  color: #3b82f6 !important;
+  font-weight: 600 !important;
+}
+
+.nav-home:hover {
+  background: rgba(59, 130, 246, 0.08) !important;
+}
+
+.nav-item {
+  color: #475569 !important;
+  border-radius: 8px !important;
+  margin: 2px 10px !important;
+  padding: 8px 12px !important;
+  border-left: none !important;
+  transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.nav-item:hover {
+  color: #1d4ed8 !important;
+  background: rgba(59, 130, 246, 0.08) !important;
+  transform: translateX(2px) !important;
+}
+
+.nav-item.active {
+  color: #1d4ed8 !important;
+  background: rgba(59, 130, 246, 0.12) !important;
+  font-weight: 700 !important;
+}
+
+/* 모바일 햄버거 메뉴 */
+.menu-btn {
+  background: rgba(15, 23, 42, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  border-radius: 12px !important;
+}
+
+/* 4. 카드 / 서페이스 / 섹션 */
+.card,
+.quiz-card,
+.demo-wrap,
+.example-box {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border: 1px solid rgba(226, 232, 240, 0.85) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 6px 24px -4px rgba(15, 23, 42, 0.05),
+              inset 0 1px 1px rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
+}
+
+/* 5. 퀴즈 엔진 컴포넌트 */
+.prog-bg {
+  background: #e2e8f0 !important;
+  height: 8px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+}
+
+.prog-fill {
+  background: linear-gradient(90deg, #3b82f6, #2563eb) !important;
+  height: 8px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.3) !important;
+}
+
+.opt-btn {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.opt-btn:hover:not(:disabled) {
+  border-color: #3b82f6 !important;
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  transform: translateY(-1px) !important;
+}
+
+.opt-btn.correct {
+  background: #ecfdf5 !important;
+  border-color: #10b981 !important;
+  color: #065f46 !important;
+}
+
+.opt-btn.wrong {
+  background: #fef2f2 !important;
+  border-color: #ef4444 !important;
+  color: #991b1b !important;
+}
+
+.score-box {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 36px -8px rgba(15, 23, 42, 0.08) !important;
+}
+
+.score-num {
+  font-family: var(--lg-font-sans) !important;
+  font-weight: 800 !important;
+  color: #2563eb !important;
+  letter-spacing: -0.04em !important;
+}
+
+.nav-btn {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.nav-btn.primary {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3) !important;
+}
+
+.nav-btn.primary:hover {
+  background: #1d4ed8 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* 6. 본문 텍스트 & 코드 (단단한 불투명성 유지로 최고 가독성 보장) */
+.content-text,
+p,
+li,
+td,
+th {
+  color: #334155;
+}
+
+pre,
+code {
+  font-family: var(--lg-font-mono, 'JetBrains Mono', monospace) !important;
+}
+
+/* 7. 프리미엄 콜아웃 & 팁 박스 (AI 이모지 대체 스타일링) */
+.tip {
+  background: rgba(239, 246, 255, 0.75) !important;
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  border-left: 4px solid var(--lg-primary, #3b82f6) !important;
+  border-radius: 12px !important;
+  padding: 16px 20px !important;
+  margin: 18px 0 !important;
+  box-shadow: 0 4px 16px -2px rgba(59, 130, 246, 0.06) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  line-height: 1.7 !important;
+}
+
+.tip.purple {
+  background: rgba(245, 243, 255, 0.75) !important;
+  border-color: rgba(147, 51, 234, 0.2) !important;
+  border-left-color: #8b5cf6 !important;
+  box-shadow: 0 4px 16px -2px rgba(147, 51, 234, 0.06) !important;
+}
+
+.tip.blue {
+  background: rgba(239, 246, 255, 0.8) !important;
+  border-color: rgba(37, 99, 235, 0.25) !important;
+  border-left-color: #2563eb !important;
+}
+
+.hint-box {
+  background: rgba(254, 252, 232, 0.8) !important;
+  border: 1px solid rgba(234, 179, 8, 0.25) !important;
+  border-left: 4px solid #eab308 !important;
+  border-radius: 10px !important;
+  padding: 12px 18px !important;
+  margin-bottom: 18px !important;
+  color: #713f12 !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+.explanation {
+  background: rgba(240, 253, 244, 0.8) !important;
+  border: 1px solid rgba(34, 197, 94, 0.25) !important;
+  border-left: 4px solid #16a34a !important;
+  border-radius: 10px !important;
+  padding: 14px 18px !important;
+  margin-bottom: 20px !important;
+  color: #14532d !important;
+  line-height: 1.7 !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+.retry-btn,
+.result-btn {
+  background: linear-gradient(145deg, #1e293b, #0f172a) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.retry-btn:hover,
+.result-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
