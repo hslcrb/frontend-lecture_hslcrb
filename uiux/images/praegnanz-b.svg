@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 330" role="img" aria-labelledby="title desc">
-<title id="title">간결성 법칙 비교 그림 B</title>
-<desc id="desc">다섯 개의 원이 겹치는 위치에서 원의 윤곽선을 끊고, 교차 영역을 잎 모양의 독립된 조각으로 분리해 표현한 그림</desc>
-<g fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-<!-- 위쪽 왼쪽 원: 오른쪽 아래 교차부를 비움 -->
-<path d="M48 160 A92 92 0 1 1 202 92 A92 92 0 0 1 199 117"/>
-<path d="M199 117 A92 92 0 0 1 197 122"/>
-<!-- 위쪽 가운데 원: 양쪽 아래 교차부를 비움 -->
-<path d="M239 113 A92 92 0 0 1 236 92 A92 92 0 1 1 390 160"/>
-<!-- 위쪽 오른쪽 원: 왼쪽 아래 교차부를 비움 -->
-<path d="M428 122 A92 92 0 0 1 426 92 A92 92 0 1 1 580 160"/>
-<!-- 아래쪽 왼쪽 원: 위쪽 두 교차부를 비움 -->
-<path d="M136 207 A92 92 0 0 0 136 230 A92 92 0 1 0 290 162"/>
-<!-- 아래쪽 오른쪽 원: 위쪽 두 교차부를 비움 -->
-<path d="M328 162 A92 92 0 1 0 482 230 A92 92 0 0 0 482 207"/>
-<!-- 교차 영역을 독립적인 잎 모양으로 표현 -->
-<path d="M199 117 C222 123 239 139 246 162 C224 158 207 143 199 117 Z"/>
-<path d="M290 162 C283 139 266 123 239 113 C244 140 260 156 290 162 Z"/>
-<path d="M390 160 C397 137 412 122 428 117 C426 142 412 157 390 160 Z"/>
-<path d="M328 162 C335 139 351 123 390 113 C383 140 365 157 328 162 Z"/>
+<!-- Source replaced with the user-provided traced SVG -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="748" height="436" viewBox="0 0 748 436">
+<rect width="748" height="436" fill="#FDFDFD"/>
+<g fill="none" stroke="#111" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+<!-- upper three broken circles -->
+<path d="M82 183 C55 164 42 134 47 101 C52 66 76 38 109 27 C144 15 181 25 205 52 C228 77 234 111 223 142"/>
+<path d="M269 143 C258 111 264 77 287 52 C311 25 348 15 383 27 C416 38 440 66 445 101 C450 134 437 164 410 183"/>
+<path d="M456 183 C445 151 451 117 474 92 C498 65 535 55 570 67 C603 78 627 106 632 141 C637 174 624 204 597 223"/>
+<!-- lower two broken circles -->
+<path d="M176 204 C150 226 137 258 143 291 C149 326 174 353 208 363 C243 373 280 362 303 334 C325 307 330 272 317 241"/>
+<path d="M363 241 C350 272 355 307 377 334 C400 362 437 373 472 363 C506 353 531 326 537 291 C543 258 530 226 504 204"/>
+<!-- four separate lens-shaped intersection pieces, matching the reference structure -->
+<path d="M223 142 C247 145 266 160 276 183 C251 181 232 167 223 142 Z"/>
+<path d="M269 143 C294 145 313 160 322 184 C297 181 278 167 269 143 Z" transform="translate(-1 0) scale(-1 1) translate(-591 0)"/>
+<path d="M410 183 C420 160 439 145 463 142 C454 167 435 181 410 183 Z"/>
+<path d="M317 241 C292 238 273 223 263 200 C288 202 307 216 317 241 Z"/>
+<path d="M363 241 C388 238 407 223 417 200 C392 202 373 216 363 241 Z"/>
 </g>
 </svg>
