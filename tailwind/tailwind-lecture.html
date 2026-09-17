@@ -195,22 +195,19 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
 /* 라이브 데모 박스 */
 .demo-box { background: #fff; border: 2px dashed var(--border); border-radius: 8px; padding: 20px; margin-top: 12px; display: flex; align-items: center; justify-content: center; min-height: 80px; }
 </style>
-  <!-- Liquid Glass Frontend 디자인 시스템 -->
-  <link rel="stylesheet" href="../assets/css/liquid-glass-theme.css">
-  <link rel="stylesheet" href="../assets/css/liquid-glass-components.css">
 </head>
 <body>
 
-<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn"><img src="../assets/icons/menu.svg" width="18" height="18" alt="메뉴" style="filter: brightness(0) invert(1);" /></button>
+<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn">☰</button>
 <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-title">TAILWIND CSS 수업</div>
-    <button class="sidebar-toggle" onclick="closeSidebar()"><img src="../assets/icons/cross.svg" width="16" height="16" alt="닫기" /></button>
+    <button class="sidebar-toggle" onclick="closeSidebar()">✕</button>
   </div>
   <a class="nav-home" href="../index.html">
-    <img src="../assets/icons/home.svg" width="16" height="16" alt="" style="margin-right:6px; vertical-align:middle;" />메인으로
+    메인으로
   </a>
   <a class="nav-item active" href="#s1"><span class="nav-num">01</span>Tailwind란?</a>
   <a class="nav-item" href="#s2"><span class="nav-num">02</span>CDN 셋팅 (v4)</a>
@@ -226,7 +223,7 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
 
 <main class="main">
 
-  <div class="hero lg lg--frost-dark lg--interactive" data-glass>
+  <div class="hero">
     <h1>Tailwind CSS 완전정복</h1>
     <p>CSS를 클래스로 - 컴포넌트 단위 스타일링의 시작</p>
     <div class="hero-badges">
@@ -340,7 +337,7 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
           <div style="background:#fef9c3;border:2px solid #fde047;border-radius:10px;padding:16px;width:160px">
             <p style="font-size:11px;color:#713f12;font-weight:600;margin-bottom:10px">카드 컴포넌트</p>
             <div style="background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0">
-              <div style="height:60px;background:linear-gradient(145deg, #1e293b 0%, #0f172a 100%)"></div>
+              <div style="height:60px;background:linear-gradient(135deg,#667eea,#764ba2)"></div>
               <div style="padding:10px">
                 <p style="font-size:12px;font-weight:600">상품명</p>
                 <p style="font-size:11px;color:var(--sub)">67,500원</p>
@@ -642,7 +639,7 @@ body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg
       </div>
       <div class="preview">
         <div class="preview-label">LIVE PREVIEW</div>
-        <div style="width:180px;height:180px;background:linear-gradient(145deg, #1e293b 0%, #0f172a 100%);border-radius:12px;position:relative;margin:0 auto">
+        <div style="width:180px;height:180px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;position:relative;margin:0 auto">
           <span style="position:absolute;top:0;left:0;background:#111;color:#fff;font-size:13px;font-weight:700;padding:3px 8px;border-bottom-right-radius:6px">BEST</span>
           <div style="position:absolute;right:10px;bottom:10px;width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px">🛒</div>
         </div>
@@ -937,7 +934,5 @@ function setGrid(n, btn) {
   document.getElementById('grid-label').textContent = `grid grid-cols-${n} gap-2`;
 }
 </script>
-<!-- Liquid Glass 인터랙션 스크립트 -->
-<script src="../assets/js/liquid-glass.js"></script>
 </body>
 </html>

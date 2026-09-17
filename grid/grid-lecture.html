@@ -168,7 +168,7 @@ body {
 .hero {
   text-align: center;
   padding: 60px 20px 48px;
-  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: var(--radius);
   color: #fff;
   margin-bottom: 48px;
@@ -366,14 +366,11 @@ body {
 .badge-green { background: #d1fae5; color: #065f46; }
 .badge-amber { background: #fef3c7; color: #92400e; }
 </style>
-  <!-- Liquid Glass Frontend 디자인 시스템 -->
-  <link rel="stylesheet" href="../assets/css/liquid-glass-theme.css">
-  <link rel="stylesheet" href="../assets/css/liquid-glass-components.css">
 </head>
 <body>
 
 <!-- 햄버거 버튼 -->
-<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn"><img src="../assets/icons/menu.svg" width="18" height="18" alt="메뉴" style="filter: brightness(0) invert(1);" /></button>
+<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn">☰</button>
 <!-- 오버레이 -->
 <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
@@ -381,10 +378,10 @@ body {
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-title">CSS GRID 수업</div>
-    <button class="sidebar-toggle" onclick="closeSidebar()"><img src="../assets/icons/cross.svg" width="16" height="16" alt="닫기" /></button>
+    <button class="sidebar-toggle" onclick="closeSidebar()">✕</button>
   </div>
   <a class="nav-home" href="../index.html">
-    <img src="../assets/icons/home.svg" width="16" height="16" alt="" style="margin-right:6px; vertical-align:middle;" />메인으로
+    메인으로
   </a>
   <a class="nav-item active" href="#s1"><span class="nav-num">01</span>display: grid</a>
   <a class="nav-item" href="#s2"><span class="nav-num">02</span>repeat() + fr</a>
@@ -400,7 +397,7 @@ body {
 <main class="main">
 
   <!-- 히어로 -->
-  <div class="hero lg lg--frost-dark lg--interactive" data-glass>
+  <div class="hero">
     <h1>CSS Grid 완전정복</h1>
     <p>2차원 레이아웃의 모든 것 - 개념부터 실습까지</p>
     <div class="hero-badges">
@@ -1074,7 +1071,5 @@ function setGap(type, v) {
   else { g.style.columnGap = v + 'px'; document.getElementById('v-colgap').textContent = v + 'px'; }
 }
 </script>
-<!-- Liquid Glass 인터랙션 스크립트 -->
-<script src="../assets/js/liquid-glass.js"></script>
 </body>
 </html>

@@ -291,24 +291,21 @@ body {
   transition: all 0.3s;
 }
 </style>
-  <!-- Liquid Glass Frontend 디자인 시스템 -->
-  <link rel="stylesheet" href="../assets/css/liquid-glass-theme.css">
-  <link rel="stylesheet" href="../assets/css/liquid-glass-components.css">
 </head>
 <body>
 
 <!-- 햄버거 버튼 -->
-<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn"><img src="../assets/icons/menu.svg" width="18" height="18" alt="메뉴" style="filter: brightness(0) invert(1);" /></button>
+<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn">☰</button>
 <!-- 오버레이 -->
 <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-title">CSS POSITION 수업</div>
-    <button class="sidebar-toggle" onclick="closeSidebar()"><img src="../assets/icons/cross.svg" width="16" height="16" alt="닫기" /></button>
+    <button class="sidebar-toggle" onclick="closeSidebar()">✕</button>
   </div>
   <a class="nav-home" href="../index.html">
-    <img src="../assets/icons/home.svg" width="16" height="16" alt="" style="margin-right:6px; vertical-align:middle;" />메인으로
+    메인으로
   </a>
   <a class="nav-item active" href="#s1"><span class="nav-num">01</span>position 개요</a>
   <a class="nav-item" href="#s2"><span class="nav-num">02</span>relative</a>
@@ -322,7 +319,7 @@ body {
 
 <main class="main">
 
-  <div class="hero lg lg--frost-dark lg--interactive" data-glass>
+  <div class="hero">
     <h1>CSS Position 완전정복</h1>
     <p>요소의 위치를 자유롭게 - static부터 sticky까지</p>
     <div class="hero-badges">
@@ -454,7 +451,7 @@ body {
       <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 - 뱃지 위치 조절</div>
       <div class="preview">
         <div class="preview-label">LIVE PREVIEW - 뱃지(absolute)를 카드(relative) 위에 배치</div>
-        <div style="position:relative;width:200px;height:140px;background:linear-gradient(145deg, #1e293b 0%, #0f172a 100%);border-radius:12px;margin:0 auto" id="abs-parent">
+        <div style="position:relative;width:200px;height:140px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;margin:0 auto" id="abs-parent">
           <div style="padding:16px;color:#fff;font-size:13px;font-weight:600">카드 컨텐츠<br><span style="font-size:11px;opacity:0.7">position: relative</span></div>
           <div id="abs-badge" style="position:absolute;top:12px;right:12px;background:#fff;color:#764ba2;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;transition:all 0.3s">뱃지</div>
         </div>
@@ -775,7 +772,7 @@ body {
         <div class="preview-label">LIVE PREVIEW - 마우스 올려보세요</div>
         <div style="display:flex;gap:12px;justify-content:center">
           <div style="width:140px;height:100px;position:relative;overflow:hidden;border-radius:8px;cursor:pointer" class="hover-card">
-            <div style="width:100%;height:100%;background:linear-gradient(145deg, #1e293b 0%, #0f172a 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600">이미지 영역</div>
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600">이미지 영역</div>
             <div class="overlay-box" style="position:absolute;left:-100%;top:0;width:100%;height:100%;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;transition:left 0.4s">DERMA COSMETIC</div>
           </div>
           <div style="width:140px;height:100px;position:relative;overflow:hidden;border-radius:8px;cursor:pointer" class="hover-card">
@@ -886,7 +883,5 @@ function setStatic(v, btn) {
 }
 </script>
 
-<!-- Liquid Glass 인터랙션 스크립트 -->
-<script src="../assets/js/liquid-glass.js"></script>
 </body>
 </html>

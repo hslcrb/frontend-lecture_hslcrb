@@ -289,14 +289,11 @@ body {
   border-radius: 8px; padding: 14px; font-size: 12px; font-weight: 600; color: var(--sub);
 }
 </style>
-  <!-- Liquid Glass Frontend 디자인 시스템 -->
-  <link rel="stylesheet" href="../assets/css/liquid-glass-theme.css">
-  <link rel="stylesheet" href="../assets/css/liquid-glass-components.css">
 </head>
 <body>
 
 <!-- 햄버거 버튼 -->
-<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn"><img src="../assets/icons/menu.svg" width="18" height="18" alt="메뉴" style="filter: brightness(0) invert(1);" /></button>
+<button class="menu-btn" onclick="toggleSidebar()" id="menu-btn">☰</button>
 <!-- 오버레이 -->
 <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
@@ -304,10 +301,10 @@ body {
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-title">CSS FLEX 수업</div>
-    <button class="sidebar-toggle" onclick="closeSidebar()"><img src="../assets/icons/cross.svg" width="16" height="16" alt="닫기" /></button>
+    <button class="sidebar-toggle" onclick="closeSidebar()">✕</button>
   </div>
   <a class="nav-home" href="../index.html">
-    <img src="../assets/icons/home.svg" width="16" height="16" alt="" style="margin-right:6px; vertical-align:middle;" />메인으로
+    메인으로
   </a>
   <a class="nav-item active" href="#s1"><span class="nav-num">01</span>display: flex</a>
   <a class="nav-item" href="#s2"><span class="nav-num">02</span>flex-direction</a>
@@ -323,7 +320,7 @@ body {
 <main class="main">
 
   <!-- 히어로 -->
-  <div class="hero lg lg--frost-dark lg--interactive" data-glass>
+  <div class="hero">
     <h1>CSS Flex 완전정복</h1>
     <p>1차원 정렬의 모든 것 - 피그마 오토레이아웃과 1:1 비교</p>
     <div class="hero-badges">
@@ -1026,7 +1023,5 @@ function setAC(v) {
 }
 </script>
 
-<!-- Liquid Glass 인터랙션 스크립트 -->
-<script src="../assets/js/liquid-glass.js"></script>
 </body>
 </html>
