@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 330" role="img" aria-labelledby="title desc">
+<title id="title">간결성 법칙 비교 그림 A</title>
+<desc id="desc">세 개의 위쪽 원과 두 개의 아래쪽 원, 총 다섯 개의 완전한 원이 서로 겹쳐 있는 그림</desc>
+<g fill="none" stroke="#111" stroke-width="4">
+<circle cx="140" cy="125" r="92"/><circle cx="310" cy="125" r="92"/><circle cx="480" cy="125" r="92"/>
+<circle cx="225" cy="215" r="92"/><circle cx="395" cy="215" r="92"/>
+</g>
+</svg>
