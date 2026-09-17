@@ -1,154 +1,156 @@
 /* ==========================================================================
-   Core Design System - Inspired by rheehoseTechportpolio_nextjs
-   Minimalism | Liquid Glass | Scale | Web Accessibility | Auto Theme
+   Core Design System - Minimalist Liquid Glass & Pretendard
+   Clean Layout | Semantic Accessibility | System-sync Auto Theme
    ========================================================================== */
 
-/* 1. Typography - Paperozi Variable WebFont */
+/* 1. Typography - Pretendard Full Weight */
 @font-face {
-  font-family: 'Paperozi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2');
-  font-weight: 100;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Paperozi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2');
-  font-weight: 200;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Paperozi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2');
-  font-weight: 300;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Paperozi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Paperozi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Paperozi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2');
-  font-weight: 600;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Paperozi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Paperozi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
-  font-weight: 800;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Paperozi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2');
-  font-weight: 900;
-  font-display: swap;
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-display: swap;
 }
 
-/* 2. CSS Custom Properties & Color Tokens */
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-display: swap;
+}
+
+/* 2. Variables & Tokens (Minimalist, Refined, No Gimmicks) */
 :root {
-  /* Color Palette - Light Mode */
-  --background: #fafafa;
-  --foreground: #0a0a0b;
-  --card-bg: rgba(255, 255, 255, 0.78);
-  --card-border: rgba(0, 0, 0, 0.07);
-  --card-hover-border: rgba(2, 132, 199, 0.35);
+  --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  --text-primary: #0a0a0b;
-  --text-secondary: #52525b;
-  --text-muted: #8e8e93;
+  /* Light Theme */
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --surface-subtle: #f1f3f5;
+  --surface-hover: #ffffff;
   
-  --accent: #0284c7;
-  --accent-rgb: 2, 132, 199;
-  --accent-light: rgba(2, 132, 199, 0.08);
-  --accent-hover: #0369a1;
+  --border: #e9ecef;
+  --border-strong: #dee2e6;
+  --border-focus: #111827;
   
-  /* Liquid Glass - Light */
-  --glass-bg: rgba(255, 255, 255, 0.72);
-  --glass-active: rgba(255, 255, 255, 0.9);
-  --glass-border: rgba(0, 0, 0, 0.06);
-  --glass-rim-top: rgba(255, 255, 255, 0.95);
-  --glass-rim-bottom: rgba(0, 0, 0, 0.06);
-  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  --glass-shadow-hover: 0 18px 40px rgba(2, 132, 199, 0.08);
+  --text-main: #111827;
+  --text-sub: #4b5563;
+  --text-muted: #9ca3af;
   
-  /* Ambient Mesh Gradients - Light */
-  --bg-mesh-1: rgba(2, 132, 199, 0.05);
-  --bg-mesh-2: rgba(99, 102, 241, 0.035);
-  --bg-mesh-3: rgba(14, 165, 233, 0.035);
-  --bg-mesh-4: rgba(71, 85, 105, 0.025);
+  --accent: #111827;
+  --accent-light: rgba(17, 24, 39, 0.05);
+  
+  /* Refined Frosted Glass */
+  --glass-nav: rgba(248, 249, 250, 0.82);
+  --glass-card: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.07);
+  
+  --tag-bg: #f3f4f6;
+  --tag-text: #4b5563;
+  --tag-quiz-bg: #fef3c7;
+  --tag-quiz-text: #92400e;
+  --tag-lecture-bg: #ecfdf5;
+  --tag-lecture-text: #065f46;
 
-  /* Typography Scale */
-  --font-sans: 'Paperozi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --heading-weight: 800;
-  --body-weight: 400;
-  --letter-spacing: -0.035em;
-  --line-height-base: 1.65;
-  --line-height-heading: 1.15;
-  
-  /* Radius & Spacing */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  --radius-2xl: 36px;
-  --radius-full: 9999px;
-
-  /* Theme Transitions */
-  --theme-transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                      color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                      border-color 0.4s ease,
-                      box-shadow 0.4s ease;
+  /* Legacy Subpage Variable Mapping */
+  --card: var(--surface);
+  --primary: var(--text-main);
+  --primary-light: var(--surface-subtle);
+  --primary-dark: #000000;
+  --text: var(--text-main);
+  --sub: var(--text-sub);
+  --muted: var(--text-muted);
 }
 
-/* Dark Mode Tokens */
 html.dark {
-  --background: #090a0d;
-  --foreground: #f4f4f5;
-  --card-bg: rgba(16, 19, 26, 0.72);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --card-hover-border: rgba(56, 189, 248, 0.35);
-
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
-
-  --accent: #38bdf8;
-  --accent-rgb: 56, 189, 248;
-  --accent-light: rgba(56, 189, 248, 0.1);
-  --accent-hover: #7dd3fc;
-
-  /* Liquid Glass - Dark */
-  --glass-bg: rgba(13, 16, 23, 0.75);
-  --glass-active: rgba(22, 27, 36, 0.9);
+  /* Dark Theme */
+  --bg: #0d0e12;
+  --surface: #14161d;
+  --surface-subtle: #1c1f28;
+  --surface-hover: #191c25;
+  
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --border-focus: #f3f4f6;
+  
+  --text-main: #f3f4f6;
+  --text-sub: #9ca3af;
+  --text-muted: #6b7280;
+  
+  --accent: #f3f4f6;
+  --accent-light: rgba(243, 244, 246, 0.08);
+  
+  /* Refined Frosted Glass - Dark */
+  --glass-nav: rgba(13, 14, 18, 0.85);
+  --glass-card: rgba(20, 22, 29, 0.75);
   --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-rim-top: rgba(255, 255, 255, 0.2);
-  --glass-rim-bottom: rgba(0, 0, 0, 0.45);
-  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  --glass-shadow-hover: 0 20px 48px rgba(56, 189, 248, 0.12);
+  
+  --tag-bg: rgba(255, 255, 255, 0.06);
+  --tag-text: #d1d5db;
+  --tag-quiz-bg: rgba(245, 158, 11, 0.15);
+  --tag-quiz-text: #fbbf24;
+  --tag-lecture-bg: rgba(16, 185, 129, 0.15);
+  --tag-lecture-text: #34d399;
 
-  /* Ambient Mesh Gradients - Dark */
-  --bg-mesh-1: rgba(56, 189, 248, 0.06);
-  --bg-mesh-2: rgba(99, 102, 241, 0.04);
-  --bg-mesh-3: rgba(14, 165, 233, 0.04);
-  --bg-mesh-4: rgba(30, 41, 59, 0.09);
+  /* Legacy Subpage Variable Mapping */
+  --card: var(--surface);
+  --primary: var(--text-main);
+  --primary-light: var(--surface-subtle);
+  --primary-dark: #ffffff;
+  --text: var(--text-main);
+  --sub: var(--text-sub);
+  --muted: var(--text-muted);
 }
 
-/* 3. Base & Reset */
+/* 3. Base Reset */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -156,155 +158,50 @@ html.dark {
 }
 
 html {
-  scroll-behavior: smooth;
+  font-family: var(--font-family);
   font-size: 16px;
-  -webkit-text-size-adjust: 100%;
-}
-
-body {
-  font-family: var(--font-sans);
-  background-color: var(--background);
-  color: var(--foreground);
-  line-height: var(--line-height-base);
-  letter-spacing: var(--letter-spacing);
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-  transition: var(--theme-transition);
+  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 4. Ambient 4-Point Mesh Background */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 12% 15%, var(--bg-mesh-1) 0%, transparent 55%),
-    radial-gradient(circle at 88% 18%, var(--bg-mesh-2) 0%, transparent 55%),
-    radial-gradient(circle at 80% 82%, var(--bg-mesh-3) 0%, transparent 55%),
-    radial-gradient(circle at 20% 85%, var(--bg-mesh-4) 0%, transparent 55%),
-    var(--background);
-  filter: blur(100px);
-  pointer-events: none;
-  transform: translateZ(0);
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg);
+  color: var(--text-main);
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+  min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-/* 5. Liquid Glass System Utilities */
-.liquid-glass {
-  position: relative;
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  box-shadow:
-    inset 0 1.5px 1px var(--glass-rim-top),
-    inset 0 -1px 1px var(--glass-rim-bottom),
-    var(--glass-shadow);
-  transition: var(--theme-transition), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
-}
-
-.liquid-glass-card {
-  position: relative;
-  background: var(--card-bg);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-xl);
-  box-shadow:
-    inset 0 1.5px 1px var(--glass-rim-top),
-    inset 0 -1px 1px var(--glass-rim-bottom),
-    var(--glass-shadow);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-}
-
-.liquid-glass-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--card-hover-border);
-  box-shadow:
-    inset 0 2px 2px var(--glass-rim-top),
-    inset 0 -1px 1px var(--glass-rim-bottom),
-    var(--glass-shadow-hover);
-}
-
-/* Light specular sheen overlay */
-.liquid-glass-sheen {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 45%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 100%);
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-/* 6. Typography Scale & Minimalist Cleanliness */
-h1, h2, h3, h4, h5, h6 {
-  color: var(--text-primary);
-  font-weight: var(--heading-weight);
-  letter-spacing: -0.04em;
-  line-height: var(--line-height-heading);
-  text-wrap: balance;
-}
-
-p {
-  color: var(--text-secondary);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-/* 7. Web Accessibility (a11y) */
-/* Skip Link */
-.skip-nav {
+/* 4. Accessibility Skip Link */
+.skip-link {
   position: fixed;
   top: -100px;
   left: 20px;
-  background: var(--accent);
-  color: #ffffff;
-  padding: 12px 24px;
-  border-radius: var(--radius-md);
-  font-weight: 700;
-  font-size: 0.95rem;
-  z-index: 99999;
-  transition: top 0.25s ease-out;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  padding: 10px 18px;
+  background: var(--text-main);
+  color: var(--bg);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 100000;
+  transition: top 0.2s ease;
+  text-decoration: none;
 }
 
-.skip-nav:focus {
-  top: 20px;
-  outline: 3px solid #ffffff;
+.skip-link:focus {
+  top: 16px;
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
 }
 
-/* Touch Targets: minimum 48x48px */
-.a11y-target,
-button,
-.nav-link,
-.theme-toggle-btn {
-  min-height: 48px;
-  min-width: 48px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Focus Visible Rings for Keyboard Navigation */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--text-main);
   outline-offset: 3px;
 }
 
-/* Motion reduction preference */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -314,113 +211,55 @@ button,
   }
 }
 
-/* 8. Custom Minimalist Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: var(--bg);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--card-border);
-  border-radius: var(--radius-full);
+  background: var(--border-strong);
+  border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
-}
-
-::selection {
-  background: var(--accent);
-  color: #ffffff;
-}
-
-/* 9. Subpage Legacy Variable Compatibility & Glass Overrides */
-:root {
-  --bg: var(--background);
-  --card: var(--card-bg);
-  --primary: var(--accent);
-  --primary-light: var(--accent-light);
-  --primary-dark: var(--accent);
-  --text: var(--text-primary);
-  --sub: var(--text-secondary);
-  --muted: var(--text-muted);
-  --border: var(--card-border);
-  --code-bg: #181b22;
-}
-
-html.dark {
-  --bg: var(--background);
-  --card: var(--card-bg);
-  --primary: var(--accent);
-  --primary-light: var(--accent-light);
-  --primary-dark: var(--accent-hover);
-  --text: var(--text-primary);
-  --sub: var(--text-secondary);
-  --muted: var(--text-muted);
-  --border: var(--card-border);
-  --code-bg: #0d1017;
-}
-
-/* Subpage Liquid Glass Overrides */
+/* 5. Subpage Compatibility Styles (Clean & Flat) */
 .sidebar {
-  background: var(--glass-bg) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-  border-right: 1px solid var(--glass-border) !important;
+  background: var(--glass-nav) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-right: 1px solid var(--border) !important;
 }
 
 .nav-home:hover,
 .nav-item:hover,
 .nav-item.active {
-  background: var(--accent-light) !important;
-  color: var(--accent) !important;
+  background: var(--surface-subtle) !important;
+  color: var(--text-main) !important;
 }
 
-.quiz-container,
-.card,
-.question,
-.chapter-content,
-.slider-container,
-.tip-box,
-.hint-box,
-.code-wrap,
-pre {
-  border-color: var(--card-border) !important;
-}
-
-/* Universal Floating Theme Toggle for Subpages */
+/* Floating theme toggle for subpages */
 .floating-theme-toggle {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: var(--card-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--text-primary);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text-main);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 99999;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .floating-theme-toggle:hover {
-  transform: scale(1.1);
-  border-color: var(--accent);
-  background: var(--accent-light);
+  border-color: var(--text-main);
+  background: var(--surface-subtle);
 }
-
-.floating-theme-toggle:active {
-  transform: scale(0.95);
-}
-
