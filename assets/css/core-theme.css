@@ -1,0 +1,265 @@
+/* ==========================================================================
+   Core Design System - Minimalist Liquid Glass & Pretendard
+   Clean Layout | Semantic Accessibility | System-sync Auto Theme
+   ========================================================================== */
+
+/* 1. Typography - Pretendard Full Weight */
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-display: swap;
+}
+
+/* 2. Variables & Tokens (Minimalist, Refined, No Gimmicks) */
+:root {
+  --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Light Theme */
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --surface-subtle: #f1f3f5;
+  --surface-hover: #ffffff;
+  
+  --border: #e9ecef;
+  --border-strong: #dee2e6;
+  --border-focus: #111827;
+  
+  --text-main: #111827;
+  --text-sub: #4b5563;
+  --text-muted: #9ca3af;
+  
+  --accent: #111827;
+  --accent-light: rgba(17, 24, 39, 0.05);
+  
+  /* Refined Frosted Glass */
+  --glass-nav: rgba(248, 249, 250, 0.82);
+  --glass-card: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.07);
+  
+  --tag-bg: #f3f4f6;
+  --tag-text: #4b5563;
+  --tag-quiz-bg: #fef3c7;
+  --tag-quiz-text: #92400e;
+  --tag-lecture-bg: #ecfdf5;
+  --tag-lecture-text: #065f46;
+
+  /* Legacy Subpage Variable Mapping */
+  --card: var(--surface);
+  --primary: var(--text-main);
+  --primary-light: var(--surface-subtle);
+  --primary-dark: #000000;
+  --text: var(--text-main);
+  --sub: var(--text-sub);
+  --muted: var(--text-muted);
+}
+
+html.dark {
+  /* Dark Theme */
+  --bg: #0d0e12;
+  --surface: #14161d;
+  --surface-subtle: #1c1f28;
+  --surface-hover: #191c25;
+  
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --border-focus: #f3f4f6;
+  
+  --text-main: #f3f4f6;
+  --text-sub: #9ca3af;
+  --text-muted: #6b7280;
+  
+  --accent: #f3f4f6;
+  --accent-light: rgba(243, 244, 246, 0.08);
+  
+  /* Refined Frosted Glass - Dark */
+  --glass-nav: rgba(13, 14, 18, 0.85);
+  --glass-card: rgba(20, 22, 29, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  --tag-bg: rgba(255, 255, 255, 0.06);
+  --tag-text: #d1d5db;
+  --tag-quiz-bg: rgba(245, 158, 11, 0.15);
+  --tag-quiz-text: #fbbf24;
+  --tag-lecture-bg: rgba(16, 185, 129, 0.15);
+  --tag-lecture-text: #34d399;
+
+  /* Legacy Subpage Variable Mapping */
+  --card: var(--surface);
+  --primary: var(--text-main);
+  --primary-light: var(--surface-subtle);
+  --primary-dark: #ffffff;
+  --text: var(--text-main);
+  --sub: var(--text-sub);
+  --muted: var(--text-muted);
+}
+
+/* 3. Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-family);
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg);
+  color: var(--text-main);
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+  min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* 4. Accessibility Skip Link */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 20px;
+  padding: 10px 18px;
+  background: var(--text-main);
+  color: var(--bg);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 100000;
+  transition: top 0.2s ease;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 16px;
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--text-main);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+
+/* 5. Subpage Compatibility Styles (Clean & Flat) */
+.sidebar {
+  background: var(--glass-nav) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+.nav-home:hover,
+.nav-item:hover,
+.nav-item.active {
+  background: var(--surface-subtle) !important;
+  color: var(--text-main) !important;
+}
+
+/* Floating theme toggle for subpages */
+.floating-theme-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.floating-theme-toggle:hover {
+  border-color: var(--text-main);
+  background: var(--surface-subtle);
+}
