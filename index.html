@@ -180,19 +180,22 @@
     .skip-link {
       position: fixed;
       top: -100px;
-      left: 16px;
-      padding: 8px 16px;
+      left: 30px;
+      padding: 8px 18px;
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
       background: var(--text);
       color: var(--bg);
-      border-radius: 4px;
+      border-radius: 6px;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 14px;
       z-index: 99999;
       text-decoration: none;
       transition: top 0.2s ease;
     }
     .skip-link:focus {
-      top: 16px;
+      top: 20px;
       outline: 2px solid var(--border-focus);
     }
 
@@ -202,7 +205,7 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 58px;
+      height: 64px;
       background: var(--nav-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -210,7 +213,7 @@
       z-index: 1000;
       display: flex;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 30px;
     }
 
     .nav-container {
@@ -225,11 +228,11 @@
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .brand-title {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--text);
       text-decoration: none;
@@ -237,18 +240,22 @@
     }
 
     .brand-badge {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 500;
       color: var(--text-muted);
       border: 1px solid var(--border);
-      padding: 2px 7px;
-      border-radius: 4px;
+      padding: 4px 12px;
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
     }
 
     .nav-links {
       display: none;
       align-items: center;
-      gap: 18px;
+      gap: 20px;
     }
 
     @media (min-width: 768px) {
@@ -258,10 +265,13 @@
     }
 
     .nav-link {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 500;
       color: var(--text-sub);
       text-decoration: none;
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
       transition: color 0.15s ease;
     }
     .nav-link:hover {
@@ -271,17 +281,19 @@
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
-    /* Theme Toggle Button */
+    /* Theme Toggle Button (38px x 38px: 30px 이상) */
     .theme-toggle-btn {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-sub);
-      border-radius: 6px;
-      width: 36px;
-      height: 36px;
+      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      min-width: 30px;
+      min-height: 30px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -294,9 +306,9 @@
       background: var(--surface-subtle);
     }
 
-    /* 6. Minimal Hero (Original Text) */
+    /* 6. Minimal Hero */
     .hero {
-      padding: 56px 20px 44px;
+      padding: 60px 30px 48px;
       text-align: center;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -308,11 +320,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .hero-title {
-      font-size: clamp(28px, 4.5vw, 36px);
+      font-size: clamp(30px, 4.5vw, 40px);
       font-weight: 800;
       letter-spacing: -0.04em;
       color: var(--text);
@@ -320,45 +332,48 @@
     }
 
     .hero-desc {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 400;
       color: var(--text-sub);
       line-height: 1.6;
     }
 
     .hero-badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       background: var(--surface-subtle);
       border: 1px solid var(--border);
       color: var(--text-sub);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 500;
-      padding: 3px 12px;
-      border-radius: 16px;
-      margin-top: 4px;
+      padding: 4px 16px;
+      min-height: 30px;
+      border-radius: 20px;
+      margin-top: 6px;
     }
 
     /* 7. Main Wrapper & Section Blocks */
     .main-wrapper {
       max-width: 1080px;
       margin: 0 auto;
-      padding: 48px 20px 80px;
+      padding: 48px 30px 80px;
     }
 
     .section-block {
-      margin-bottom: 48px;
+      margin-bottom: 52px;
     }
 
     .section-label {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.08em;
       color: var(--text-muted);
       text-transform: uppercase;
-      margin-bottom: 16px;
+      margin-bottom: 30px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
     }
 
     .section-label::after {
@@ -368,11 +383,11 @@
       background: var(--border);
     }
 
-    /* 8. Auto-Layout Grid (Responsive) */
+    /* 8. Auto-Layout Grid (Responsive) - 간격 30px 이상 */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
+      gap: 30px;
     }
 
     @media (min-width: 900px) {
@@ -381,18 +396,18 @@
       }
     }
 
-    /* 9. Clean Cards (No hover jump, No shadow gimmicks) */
+    /* 9. Clean Cards - 내부 여백(padding) 30px 이상 */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 22px;
+      border-radius: 14px;
+      padding: 30px;
       text-decoration: none;
       color: var(--text);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 12px;
+      gap: 16px;
       transition: border-color 0.15s ease, background-color 0.15s ease;
     }
 
@@ -405,21 +420,28 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      min-height: 32px;
     }
 
+    /* 카드 아이콘 크기 (32px: 30px 이상) */
     .card-icon {
-      font-size: 22px;
+      font-size: 32px;
       line-height: 1;
+      min-width: 32px;
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .card-body {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .card-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--text);
@@ -427,7 +449,7 @@
     }
 
     .card-desc {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-sub);
       line-height: 1.6;
     }
@@ -435,16 +457,21 @@
     .card-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      padding-top: 10px;
+      gap: 8px;
+      padding-top: 16px;
       border-top: 1px solid var(--border);
     }
 
+    /* 태그 최소 높이 (30px 이상) */
     .tag {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 4px;
+      padding: 4px 12px;
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
       background: var(--tag-bg);
       color: var(--tag-text);
     }
@@ -465,21 +492,26 @@
       pointer-events: none;
     }
 
+    /* 준비중 뱃지 (30px 이상) */
     .badge-soon {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-muted);
       background: var(--tag-bg);
-      padding: 2px 7px;
-      border-radius: 4px;
+      padding: 4px 12px;
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
     }
 
-    /* 10. Footer */
+    /* 10. Footer - 좌우/상하 패딩 30px 이상 */
     .site-footer {
       border-top: 1px solid var(--border);
-      padding: 36px 20px;
+      padding: 40px 30px;
       text-align: center;
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-muted);
       background: var(--surface);
     }
