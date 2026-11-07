@@ -51,6 +51,14 @@ HTML 로드 순서: reset → tokens → base → layout → components → quiz
 - 선택 전 정답 색 노출 금지, disabled 버튼도 WCAG 수준으로 가독성 검토.
 - 텍스트가 보이는지 : quiz/html_quiz1.html, quiz/css_priority_quiz.html, quiz/css-boxmodel-quiz.html 등 필수 확인.
 
+## HTML/CSS 퀴즈 공통 템플릿 (필수)
+- CSS 7개 + HTML 2개는 같은 HTML 마크업, `assets/css/quiz-unified.css`, `assets/js/quiz-unified.js`를 사용한다.
+- 퀴즈 HTML에는 수업명 `<h1>`, 주제 설명, `#quiz-root`만 둔다. 파일별 CSS 또는 인라인 `<style>`/별도 렌더링 함수는 금지.
+- 문항은 `quiz/<페이지명>.data.js`의 `window.QUIZ_DATA`에 저장. 문제, 선택지, 정답, 힌트, 해설은 데이터로만 변경한다.
+- 문제 번호는 항상 `현재 번호 / 전체 문제 수`(예: `1 / 10`). 객관식·단답형을 모두 지원한다.
+- 공통 UI 변경은 기존 선언의 재설계를 원칙으로 한다. 페이지 끝에 보정 CSS를 덧붙여 해결하지 않는다.
+- 각 9개 HTML의 문제 선택·채점·해설·이전·다음·결과·다시 풀기 기능을 검증한다.
+
 ## 검증 체크
 - 31개 HTML의 외부 CSS 참조 오류/인라인 style 블록 없음.
 - 강의의 Flex, Grid, Position 작동 시연을 원래대로 사용할 수 있는가.
