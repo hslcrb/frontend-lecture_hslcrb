@@ -1,0 +1,9 @@
+/* Page defaults; do not change lesson-specific Flex/Grid demos. */
+body{font:400 16px/1.7 var(--font-body);color:var(--ink);background:var(--page);letter-spacing:-.015em}
+h1,h2,h3,h4{line-height:1.3;letter-spacing:-.035em}
+pre,code,kbd{font-family:var(--font-code)}
+pre{max-width:100%;overflow-x:auto}
+img{max-width:100%}
+a:hover{color:var(--primary-ui)}
+.course-ui :where(p,li){overflow-wrap:break-word}
+.course-ui :where(button,a,input,select,textarea):focus-visible{outline:3px solid var(--focus);outline-offset:3px}

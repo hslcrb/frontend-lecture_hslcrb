@@ -1,0 +1,59 @@
+/* Lesson-specific styles from quiz/css_combinator_quiz.html */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: #1a1a1a; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+  .card { background: #fff; border-radius: 16px; border: 1px solid #dde3ea; padding: 2rem; width: 100%; max-width: 740px; }
+
+  .prog-bg { background: #e2e8f0; border-radius: 99px; height: 6px; margin-bottom: 1.5rem; }
+  .prog-fill { height: 6px; border-radius: 99px; background: #4361ee; transition: width .3s; }
+
+  .q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: .6rem; }
+  .q-num { font-size: 13px; color: #94a3b8; }
+  .q-cat { font-size: 12px; padding: 2px 10px; border-radius: 99px; background: #eef2ff; color: #3730a3; }
+
+  .q-text { font-size: 15px; font-weight: 600; margin-bottom: 1rem; line-height: 1.65; }
+
+  /* 가계도 */
+  .tree-wrap { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px 20px; margin-bottom: 1rem; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.9; overflow-x: auto; }
+  .tree-wrap .tree-title { font-family: inherit; font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: .08em; margin-bottom: 6px; }
+  .t-root  { color: #1e40af; font-weight: 700; }
+  .t-child { color: #0f766e; font-weight: 600; }
+  .t-grand { color: #7c3aed; }
+  .t-sib   { color: #b45309; }
+  .t-hl    { background: #fef9c3; border-radius: 3px; padding: 0 3px; }
+
+  /* 힌트 */
+  .hint-box { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #4361ee; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 1rem; font-size: 13px; line-height: 1.75; color: #475569; }
+  .hint-title { font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: .07em; margin-bottom: 5px; }
+
+  /* 코드 블록 */
+  pre.code-block { background: #1e1e2e; color: #cdd6f4; border-radius: 10px; padding: 14px 18px; font-family: 'Courier New', monospace; font-size: 13px; margin-bottom: 1rem; white-space: pre; overflow-x: auto; line-height: 1.75; }
+
+  /* 선택지 */
+  .options { display: flex; flex-direction: column; gap: 9px; margin-bottom: 1.4rem; }
+  .opt-btn { text-align: left; background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 11px 16px; font-size: 13.5px; font-family: inherit; color: #1a1a1a; cursor: pointer; line-height: 1.5; transition: border-color .15s, background .15s; width: 100%; }
+  .opt-btn:hover:not(:disabled) { border-color: #4361ee; background: #eef2ff; color: #3730a3; }
+  .opt-btn.correct { background: #f0fdf4; border-color: #16a34a; color: #14532d; }
+  .opt-btn.wrong   { background: #fef2f2; border-color: #dc2626; color: #7f1d1d; }
+  .opt-btn:disabled { cursor: default; }
+
+  /* 해설 */
+  .explanation { background: #f8fafc; border-left: 3px solid #4361ee; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; color: #334155; line-height: 1.75; margin-bottom: 1.4rem; }
+
+  /* 네비 */
+  .nav-row { display: flex; justify-content: space-between; align-items: center; }
+  .nav-btn { padding: 8px 22px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; color: #1a1a1a; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .nav-btn:hover:not(:disabled) { background: #f1f5f9; }
+  .nav-btn:disabled { opacity: .4; cursor: default; }
+  .nav-btn.primary { background: #4361ee; color: #fff; border-color: #4361ee; }
+  .nav-btn.primary:hover { background: #3730a3; }
+  .nav-count { font-size: 13px; color: #94a3b8; }
+
+  /* 결과 */
+  .score-box { text-align: center; padding: 2rem 1rem; }
+  .score-num { font-size: 52px; font-weight: 700; color: #4361ee; }
+  .score-label { font-size: 16px; color: #64748b; margin: .3rem 0 1.5rem; }
+  .score-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .score-card { background: #f8fafc; border-radius: 10px; padding: 14px; }
+  .sc-val { font-size: 22px; font-weight: 700; }
+  .sc-label { font-size: 12px; color: #94a3b8; margin-top: 2px; }

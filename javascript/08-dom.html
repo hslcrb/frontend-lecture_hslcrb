@@ -13,102 +13,19 @@
     gtag('config', 'G-8FKR5BR401');
   </script>
 
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #f8f9fc;
-      --card: #ffffff;
-      --primary: #10b981;
-      --primary-light: #d1fae5;
-      --primary-dark: #065f46;
-      --text: #1e293b;
-      --sub: #64748b;
-      --muted: #94a3b8;
-      --border: #e2e8f0;
-      --code-bg: #1e1e2e;
-      --radius: 12px;
-    }
-    body {
-      font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-
-    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: var(--card); border-right: 1px solid var(--border); padding: 24px 0; overflow-y: auto; z-index: 100; transition: transform 0.3s ease; }
-    .sidebar.open { transform: translateX(0); }
-    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
-    .sidebar-title { font-size: 13px; font-weight: 700; color: var(--primary-dark); letter-spacing: 0.05em; }
-    .sidebar-toggle { display: none; background: none; border: none; cursor: pointer; font-size: 18px; color: var(--sub); padding: 2px; }
-    .nav-home { display: flex; align-items: center; padding: 8px 20px 12px; font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
-    .nav-home:hover { background: var(--primary-light); }
-    .nav-item { display: block; padding: 8px 20px; font-size: 13px; color: var(--sub); text-decoration: none; border-left: 3px solid transparent; transition: all 0.15s; }
-    .nav-item:hover { color: var(--primary); background: var(--primary-light); }
-    .nav-item.active { color: var(--primary); border-left-color: var(--primary); background: var(--primary-light); font-weight: 600; }
-    .nav-item[href="#s1"] { color: var(--primary); border-left-color: var(--primary); background: var(--primary-light); font-weight: 600; }
-    .nav-num { font-family: monospace; font-size: 11px; color: var(--muted); margin-right: 6px; }
-    .menu-btn { display: none; position: fixed; top: 12px; left: 12px; z-index: 200; background: var(--primary); color: #fff; border: none; border-radius: 8px; width: 40px; height: 40px; font-size: 18px; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 99; backdrop-filter: blur(2px); }
-    .sidebar-overlay.show { display: block; }
-    .main { margin-left: 220px; padding: 40px 40px 100px; max-width: 960px; }
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-220px); }
-      .sidebar.open { transform: translateX(0); }
-      .menu-btn { display: flex; }
-      .sidebar-toggle { display: block; }
-      .main { margin-left: 0; padding: 60px 16px 80px; }
-    }
-
-    .hero { text-align: center; padding: 60px 20px 48px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: var(--radius); color: #fff; margin-bottom: 48px; }
-    .hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
-    .hero p { font-size: 16px; opacity: 0.9; }
-    .hero-badges { display: flex; gap: 8px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
-    .hero-badge { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 12px; padding: 4px 12px; border-radius: 20px; }
-
-    .section { margin-bottom: 64px; scroll-margin-top: 24px; }
-    .section-header { margin-bottom: 24px; }
-    .section-num { font-size: 12px; font-weight: 700; color: var(--primary); letter-spacing: 0.1em; margin-bottom: 6px; }
-    .section-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
-    .section-desc { font-size: 14px; color: var(--sub); line-height: 1.7; }
-
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; margin-top: 20px; }
-    .card-title { font-size: 13px; font-weight: 600; color: var(--sub); padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; gap: 8px; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
-
-    .code-block { background: var(--code-bg); padding: 20px; font-family: 'Fira Code', monospace; font-size: 13px; color: #cdd6f4; line-height: 2; overflow-x: auto; border-radius: 8px; }
-    .code-block .cm { color: #6c7086; }
-    .code-block .kw { color: #89b4fa; }
-    .code-block .str { color: #a6e3a1; }
-    .code-block .num { color: #f38ba8; }
-
-    .preview { padding: 20px; background: #f1f5f9; }
-    .preview-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.08em; margin-bottom: 12px; }
-
-    .demo-box { padding: 16px; border: 2px dashed var(--primary); border-radius: 8px; background: rgba(209, 250, 229, 0.3); margin: 16px 0; }
-
-    .tip { border-left: 3px solid var(--primary); background: var(--primary-light); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; color: var(--primary-dark); margin-top: 16px; line-height: 1.7; }
-
-    .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-
-    ul, ol { margin: 15px 0 15px 20px; }
-    ul li, ol li { margin-bottom: 8px; color: var(--sub); line-height: 1.7; }
-
-    .compare-box { background: var(--primary-light); padding: 14px; border-radius: 0; border-left: 3px solid var(--primary); color: var(--primary-dark); margin: 20px 0 0 0; font-size: 13px; line-height: 1.7; }
-    .code-inline { background: #f1f5f9; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
-
-    .controls { padding: 16px 20px; border-top: 1px solid var(--border); background: var(--card); }
-    .controls button { font-size: 12px; padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--primary); color: #fff; cursor: pointer; margin-right: 8px; }
-
-    button { cursor: pointer; font-weight: 600; }
-    input { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
-    li { margin: 8px 0; padding: 8px; background: white; border-radius: 6px; border: 1px solid var(--border); }
-    .task-item { display: flex; justify-content: space-between; align-items: center; }
-  </style>
+  <link rel="stylesheet" href="../assets/css/reset.css">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/layout.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/quiz.css">
+<link rel="stylesheet" href="../assets/css/demos.css">
+<link rel="stylesheet" href="../assets/css/pages/javascript--08-dom.css">
   <!-- Core Theme & Auto Theme Engine -->
-  <link rel="stylesheet" href="../assets/css/core-theme.css">
-  <script src="../assets/js/theme-engine.js"></script>
+  
+  
 </head>
-<body>
+<body class="course-ui">
 
 <button class="menu-btn" onclick="toggleSidebar()" id="menu-btn">☰</button>
 <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
@@ -362,10 +279,7 @@ element.classList.toggle(<span class="str">"active"</span>);<br><br>
 <span class="cm">// 포함 여부 확인</span><br>
 <span class="kw">if</span> (element.classList.contains(<span class="str">"active"</span>)) { }
       </div>
-      <style>
-        .active-demo { background: var(--primary); color: white; padding: 12px; border-radius: 6px; transition: all 0.3s; }
-        .highlight { font-size: 18px; font-weight: 800; }
-      </style>
+      
     </div>
 
     <div class="card">
