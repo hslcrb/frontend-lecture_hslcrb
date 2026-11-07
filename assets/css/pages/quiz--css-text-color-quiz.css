@@ -4,15 +4,15 @@
 
     :root{
       --bg: var(--page);
-      --surface: #1a1a22;
-      --surface2: #22222e;
+      --surface: var(--panel);
+      --surface2: var(--panel-muted);
       --border: var(--line);
       --accent: #6c63ff;
       --accent2: #ff6584;
       --text: var(--ink);
-      --text-muted: #7a7a9a;
-      --correct: #3ecf8e;
-      --wrong: #ff4d6d;
+      --text-muted: var(--ink-sub);
+      --correct: var(--success-ui);
+      --wrong: var(--error-ui);
       --radius: 12px;
     }
 
@@ -128,7 +128,7 @@
       padding: 1px 7px;
       font-size: 13px;
       font-family: 'Courier New', monospace;
-      color: #b0a8ff;
+      color: #4437a9;
     }
 
     .preview-box {
@@ -174,7 +174,7 @@
       width: 100%;
     }
 
-    .opt:hover:not(:disabled) { border-color: var(--accent); background: #1e1e2e; }
+    .opt:hover:not(:disabled) { border-color: var(--accent); background: var(--primary-ui-pale); }
     .opt.correct  { border-color: var(--correct); background: rgba(62,207,142,0.1); color: var(--correct); }
     .opt.wrong    { border-color: var(--wrong);   background: rgba(255,77,109,0.1);  color: var(--wrong); }
     .opt:disabled { cursor: default; }
@@ -206,8 +206,8 @@
     }
 
     .feedback.show { display: block; }
-    .feedback.correct { background: rgba(62,207,142,0.1); border: 1px solid rgba(62,207,142,0.3); color: #5df0a8; }
-    .feedback.wrong   { background: rgba(255,77,109,0.1);  border: 1px solid rgba(255,77,109,0.3);  color: #ff7a94; }
+    .feedback.correct { background: #e9f7ef; border: 1px solid #a8dfc2; color: #135c3a; }
+    .feedback.wrong   { background: #fff0f2; border: 1px solid #f5b8c2; color: #8b1a31; }
 
     .feedback strong { display: block; margin-bottom: 4px; }
 
@@ -260,3 +260,10 @@
 
     .retry-btn:hover { opacity: 0.85; }
   
+
+/* Light-theme contrast: local quiz accents must stay readable against white surfaces. */
+.course-ui.is-quiz .q-num { color: #fff; }
+.course-ui.is-quiz .q-type { color: var(--ink-sub); background: var(--panel-muted); border-color: var(--line); }
+.course-ui.is-quiz .q-text code { background: var(--panel-muted); color: #4437a9; border-color: var(--line); }
+.course-ui.is-quiz .opt-key { color: var(--ink); }
+.course-ui.is-quiz .preview-box { color: var(--ink-sub); }
