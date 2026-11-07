@@ -59,6 +59,15 @@ HTML 로드 순서: reset → tokens → base → layout → components → quiz
 - 공통 UI 변경은 기존 선언의 재설계를 원칙으로 한다. 페이지 끝에 보정 CSS를 덧붙여 해결하지 않는다.
 - 각 9개 HTML의 문제 선택·채점·해설·이전·다음·결과·다시 풀기 기능을 검증한다.
 
+## 게슈탈트 3개 페이지 UI 패턴
+- `uiux/gestalt.html`, `uiux/gestalt-theory.html`, `uiux/gestalt-quiz.html`은 모두 `assets/css/gestalt-common.css`을 사용.
+- `gestalt-theory.html`을 레이아웃 기준으로 삼고, 제목·본문·카드·간격 및 하단 탭을 동일하게 유지.
+- 글꼴과 위계는 HTML/CSS 공통 퀴즈 토큰과 동일: `var(--font-body)`, H1 25~34px, 섹션 H2 20~25px, 본문 16px, 보조 14px, 키커 12px.
+- `gestalt-theory-demos.css`에는 이론 시각화만, `gestalt-quiz-demos.css`에는 문제/선택지와 예제 전용 규칙만 작성.
+- 3개 페이지 모두 상단과 **하단**에 게슈탈트 홈/법칙 해설/문제 풀기/전체 강의 네비게이션 포함. 현재 화면에는 `aria-current=page`를 명시.
+- 예전 `assets/css/pages/uiux--gestalt*.css` 3개는 폐기; 하단에 보정 CSS 덧붙이지 말고 원래 규칙을 편집한다.
+- 이론 이미지, 퀴즈 13개 선택형과 서술형 1개, 채점과 해설 스크립트는 변경 없이 유지.
+
 ## 검증 체크
 - 31개 HTML의 외부 CSS 참조 오류/인라인 style 블록 없음.
 - 강의의 Flex, Grid, Position 작동 시연을 원래대로 사용할 수 있는가.
