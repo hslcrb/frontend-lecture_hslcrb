@@ -129,22 +129,23 @@ body {
 .hero {
   text-align: center;
   padding: 60px 20px 48px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--panel);
   border-radius: var(--radius);
-  color: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
   margin-bottom: 48px;
 }
 .hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; letter-spacing: -1px; }
 .hero p { font-size: 16px; opacity: 0.85; }
 .hero-badges { display: flex; gap: 8px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
 .hero-badge {
-  background: rgba(255,255,255,0.2);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #fff;
+  background: var(--primary-ui-pale);
+  border: 1px solid var(--line);
+  color: var(--primary-ui-hover);
   font-size: 12px;
   padding: 4px 12px;
   border-radius: 20px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* ===== 섹션 ===== */

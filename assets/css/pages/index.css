@@ -82,30 +82,7 @@
       --tag-lecture-text: #0ca678;
     }
 
-    html.dark {
-      --bg: #0f1015;
-      --surface: #161822;
-      --surface-subtle: #1e212d;
-      --surface-hover: #1b1e2a;
-      
-      --border: rgba(255, 255, 255, 0.08);
-      --border-hover: rgba(255, 255, 255, 0.18);
-      --border-focus: #f3f4f6;
-      
-      --text: #f3f4f6;
-      --text-sub: #9ca3af;
-      --text-muted: #6b7280;
-      
-      --nav-bg: rgba(15, 16, 21, 0.85);
-      --card-bg: rgba(22, 24, 34, 0.8);
-      
-      --tag-bg: rgba(255, 255, 255, 0.06);
-      --tag-text: #d1d5db;
-      --tag-quiz-bg: rgba(245, 158, 11, 0.15);
-      --tag-quiz-text: #fbbf24;
-      --tag-lecture-bg: rgba(16, 185, 129, 0.15);
-      --tag-lecture-text: #34d399;
-    }
+    
 
     /* 3. Base Reset */
 
@@ -236,27 +213,7 @@
       gap: 12px;
     }
 
-    /* Theme Toggle Button (38px x 38px: 30px 이상) */
-    .theme-toggle-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-sub);
-      border-radius: 8px;
-      width: 38px;
-      height: 38px;
-      min-width: 30px;
-      min-height: 30px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .theme-toggle-btn:hover {
-      color: var(--text);
-      border-color: var(--border-hover);
-      background: var(--surface-subtle);
-    }
+    
 
     /* 6. Minimal Hero */
     .hero {

@@ -51,62 +51,6 @@
 <link rel="stylesheet" href="assets/css/quiz.css">
 <link rel="stylesheet" href="assets/css/demos.css">
 <link rel="stylesheet" href="assets/css/pages/index.css">
-
-  <!-- Auto Theme Switcher Script (Inline for Zero Latency) -->
-  <script>
-    (function() {
-      const KEY = 'frontend_lecture_theme';
-      function getInitialTheme() {
-        try {
-          const saved = localStorage.getItem(KEY);
-          if (saved) return saved;
-        } catch(e) {}
-        return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-      }
-
-      function apply(theme) {
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-        updateBtn(theme === 'dark');
-      }
-
-      function updateBtn(isDark) {
-        const btn = document.querySelector('.theme-toggle-btn');
-        if (!btn) return;
-        btn.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
-        btn.innerHTML = isDark
-          ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>'
-          : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
-      }
-
-      const initTheme = getInitialTheme();
-      apply(initTheme);
-
-      document.addEventListener('DOMContentLoaded', () => {
-        apply(getInitialTheme());
-        const btn = document.querySelector('.theme-toggle-btn');
-        if (btn) {
-          btn.addEventListener('click', () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            const next = isDark ? 'light' : 'dark';
-            try { localStorage.setItem(KEY, next); } catch(e) {}
-            apply(next);
-          });
-        }
-
-        if (window.matchMedia) {
-          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            let saved = null;
-            try { saved = localStorage.getItem(KEY); } catch(e) {}
-            if (!saved) apply(e.matches ? 'dark' : 'light');
-          });
-        }
-      });
-    })();
-  </script>
 </head>
 <body class="course-ui">
 
@@ -130,11 +74,6 @@
         <a href="#html-quiz" class="nav-link">HTML 퀴즈</a>
         <a href="#css-quiz" class="nav-link">CSS 퀴즈</a>
       </nav>
-
-      <div class="nav-actions">
-        <!-- 미니멀 테마 토글 버튼 -->
-        <button class="theme-toggle-btn" type="button" aria-label="테마 전환" title="다크/라이트 모드 전환"></button>
-      </div>
     </div>
   </header>
 
