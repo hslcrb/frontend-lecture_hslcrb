@@ -106,9 +106,9 @@
 
     .q-type {
       font-size: 11px;
-      color: var(--text-muted);
-      background: var(--surface2);
-      border: 1px solid var(--border);
+      color: var(--ink-sub);
+      background: var(--panel-muted);
+      border: 1px solid var(--line);
       border-radius: 99px;
       padding: 2px 10px;
     }
@@ -122,8 +122,8 @@
     }
 
     .q-text code {
-      background: var(--surface2);
-      border: 1px solid var(--border);
+      background: var(--panel-muted);
+      border: 1px solid var(--line);
       border-radius: 5px;
       padding: 1px 7px;
       font-size: 13px;
@@ -138,7 +138,7 @@
       padding: 14px 18px;
       margin-bottom: 18px;
       font-size: 12px;
-      color: var(--text-muted);
+      color: var(--ink-sub);
     }
 
     .preview-box .demo { margin-top: 10px; }
@@ -183,7 +183,8 @@
       width: 24px;
       height: 24px;
       border-radius: 6px;
-      background: var(--border);
+      background: var(--line);
+      color: var(--ink);
       font-size: 11px;
       font-weight: 700;
       display: grid;
@@ -259,11 +260,3 @@
     }
 
     .retry-btn:hover { opacity: 0.85; }
-  
-
-/* Light-theme contrast: local quiz accents must stay readable against white surfaces. */
-.course-ui.is-quiz .q-num { color: #fff; }
-.course-ui.is-quiz .q-type { color: var(--ink-sub); background: var(--panel-muted); border-color: var(--line); }
-.course-ui.is-quiz .q-text code { background: var(--panel-muted); color: #4437a9; border-color: var(--line); }
-.course-ui.is-quiz .opt-key { color: var(--ink); }
-.course-ui.is-quiz .preview-box { color: var(--ink-sub); }
