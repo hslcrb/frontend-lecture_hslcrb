@@ -32,6 +32,30 @@
  const analogyBox=document.createElement('div');analogyBox.className='ai-example';analogyBox.append(txt('strong','','쉽게 이해하기'),txt('p','',analogy));card.append(analogyBox);
  const caseBox=document.createElement('div');caseBox.className='ai-case';caseBox.append(txt('strong','','수업·실무 사례'),txt('p','',example));card.append(caseBox);
  const pointBox=document.createElement('div');pointBox.className='ai-point';pointBox.append(txt('strong','','핵심 기억하기'),txt('p','',point));card.append(pointBox);root.append(card)});
+ if(step===6){
+  const caseStudy=document.createElement('section');caseStudy.className='ai-topic';
+  caseStudy.append(
+   txt('div','ai-k','CASE STUDY · 실제 AI 서비스'),
+   txt('h2','','피클(Pickle) 사례: 편리한 개인화와 개인정보의 경계'),
+   txt('p','definition','한 이용자는 이메일 계정을 연결한 뒤, 다른 요청에서도 이메일에서 파악한 개인 정보가 활용되어 편리하면서도 놀랐다고 이야기했어요. 이는 이용자 경험담이며, 피클의 모든 사용자에게 같은 방식으로 작동한다는 뜻은 아니에요.')
+  );
+  const concepts=document.createElement('div');concepts.className='ai-example';
+  concepts.append(
+   txt('strong','','배운 개념을 연결해 보기'),
+   txt('p','','LLM: 요청과 자료를 언어로 이해하고 답변을 생성해요.'),
+   txt('p','','AI Agent · Tool: 허용된 이메일 검색 등 외부 기능을 이용해 작업을 진행할 수 있어요.'),
+   txt('p','','Context · Memory: 연결된 정보와 이전 맥락을 현재 요청에 참고할 수 있어요. 단, 데이터를 다시 조회하는 것과 장기 기억으로 저장하는 것은 달라요.'),
+   txt('p','','권한 · HITL: 정보 접근 범위와 중요한 행동의 사용자 확인·승인 단계를 설계해야 해요.')
+  );
+  const ux=document.createElement('div');ux.className='ai-case';
+  ux.append(
+   txt('strong','','AI UX 관점에서 생각하기'),
+   txt('p','','사용자가 이메일을 연결할 때 다른 요청에도 내용이 활용될 것을 예상했을까요? 어떤 정보를 활용했는지 확인하고, 연결 권한과 기억을 수정하거나 해제할 수 있을까요? 편의성만큼 정보 사용 범위와 통제 가능성도 중요해요.')
+  );
+  const takeaway=document.createElement('div');takeaway.className='ai-point';
+  takeaway.append(txt('strong','','핵심 기억하기'),txt('p','','제품 이름과 기술 개념을 구분하세요. 연결 권한, 실시간 자료 조회, 장기 기억, 자동 실행은 서로 다른 기능이에요. 실제 서비스의 정책과 설정은 공식 안내에서 별도로 확인해야 해요.'));
+  caseStudy.append(concepts,ux,takeaway);root.append(caseStudy);
+ }
  root.append(footer(step))
  }
  root.append(txt('p','ai-footer','JJinMangGo · Frontend Lab AI Learning'));
