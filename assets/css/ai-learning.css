@@ -29,7 +29,7 @@ body.ai-page{margin:0;background:var(--page);color:var(--ink);font:400 16px/1.7 
 .ai-example p,.ai-case p,.ai-point p{font-size:15px;line-height:1.75;margin:0}
 .ai-case{padding:16px 18px;border-left:4px solid var(--primary-ui);background:var(--primary-ui-pale);border-radius:0 10px 10px 0;margin:16px 0}
 .ai-point{padding-top:16px;border-top:1px solid var(--line);margin-top:16px}
-.ai-keywords{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 24px}
+.ai-keywords{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 18px}
 .ai-keywords span{background:var(--primary-ui-pale);color:var(--primary-ui-hover);border:1px solid var(--line);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:700}
 .ai-bottom{border-top:1px solid var(--line);margin:30px 0 0;padding-top:24px}
 .ai-bottom h2{font-size:16px;margin:0 0 12px}
