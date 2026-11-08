@@ -68,6 +68,16 @@ HTML 로드 순서: reset → tokens → base → layout → components → quiz
 - 예전 `assets/css/pages/uiux--gestalt*.css` 3개는 폐기; 하단에 보정 CSS 덧붙이지 말고 원래 규칙을 편집한다.
 - 이론 이미지, 퀴즈 13개 선택형과 서술형 1개, 채점과 해설 스크립트는 변경 없이 유지.
 
+## AI 학습 6단계
+- 홈 첫 번째 카테고리 `#ai` → `ai/index.html` → 이론/퀴즈 선택.
+- `ai/content.data.js`: 6단계 이론의 단일 원본. 각 단계는 5개 주제로 구성하며 정확한 개념, 쉬운 비유, 웹 수업·실무 사례, 핵심 기억하기를 포함한다.
+- `assets/js/ai-learning.js`: 이론 렌더러. `assets/css/ai-learning.css`: 이론 전용 UI. 두 파일은 6개 이론 페이지에서 재사용한다.
+- `ai/step-01.html`~`step-06.html`: 동일한 HTML 골격과 동일한 타이포 위계, 상단 단계 이동과 하단 퀴즈/이전·다음 이동.
+- `ai/quiz-01.html`~`quiz-06.html`: 기존 `assets/css/quiz-unified.css`, `assets/js/quiz-unified.js` 재사용. `quiz-XX.data.js`만 문제 데이터가 다르다. 각 10문항, 총 60문항.
+- 퀴즈가 참조하는 파일 경로는 HTML 기준 상대 경로이며 기존 수업 CSS에 덧씌우는 보정 CSS를 추가하지 않는다.
+- 이론 설명은 기술·제공 업체에 따라 세부 동작이 달라질 수 있으므로 특정 제품의 기능이나 권한을 보편적 사실로 단정하지 않는다.
+- 검증: JS 문법, 데이터 수량·정답 인덱스, 각 HTML 참조, 퀴즈 정답/오답·재시작, 모바일 가독성, 메인 첫 노출 확인.
+
 ## 검증 체크
 - 31개 HTML의 외부 CSS 참조 오류/인라인 style 블록 없음.
 - 강의의 Flex, Grid, Position 작동 시연을 원래대로 사용할 수 있는가.
