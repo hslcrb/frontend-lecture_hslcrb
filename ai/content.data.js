@@ -47,14 +47,14 @@ window.AI_LESSONS = [
     "id": 2,
     "title": "AI 에이전트와 하네스",
     "subtitle": "대답하는 AI와 실제 일을 처리하는 AI는 무엇이 다를까?",
-    "terms": "AI Agent · Tool · MCP · Skill · Harness · HITL",
+    "terms": "AI Agent · Codex · Claude Code · Antigravity · Tool · MCP · Skill · Harness · HITL",
     "blocks": [
       [
         "일반 채팅과 에이전트의 차이",
         "일반적인 채팅은 질문을 받아 답을 작성하는 데 초점을 둬요. AI 에이전트는 목표를 달성하기 위해 계획을 세우고, 허용된 도구를 사용하고, 결과를 확인하며 다음 행동을 선택할 수 있어요.",
-        "길 안내만 해주는 사람과, 목적지까지 가는 데 필요한 길을 찾고 예약까지 처리하는 비서를 비교해 보세요.",
-        "'모바일에서 카드가 깨져요'라는 요청을 받으면 에이전트는 파일을 읽고 CSS를 수정하고 테스트를 실행하는 흐름을 수행할 수 있어요. 단, 실제 도구와 권한이 있을 때만 가능해요.",
-        "에이전트는 모델만이 아니라 실행 절차와 도구가 결합된 시스템이에요."
+        "일반 채팅이 'CSS를 어떻게 고치면 될까요?'라는 질문에 방법을 알려주는 선생님이라면, 코딩 에이전트는 파일을 읽고 직접 수정하고 검사하는 작업자에 가까워요.",
+        "실제 제품으로는 OpenAI의 Codex, Anthropic의 Claude Code, Google의 Antigravity가 있어요. 예를 들어 '모바일에서 카드가 깨져요'라는 요청에 프로젝트 파일을 읽고 CSS를 고치고 테스트를 시도할 수 있어요. Codex와 Claude Code는 코딩 에이전트이고, Antigravity는 에이전트를 실행하고 관리하는 개발 플랫폼이에요. 단, 작업 범위는 연결된 도구·권한·실행 환경에 따라 달라져요.",
+        "ChatGPT·Claude·Gemini는 대화형 AI 서비스나 모델을 가리킬 때 쓰고, Codex·Claude Code·Antigravity는 에이전트 기반 개발 작업의 실제 제품 예시로 구분하세요. AI가 수정했다고 해도 결과 검수는 필요해요."
       ],
       [
         "도구(Tool)와 MCP는 무엇일까?",
