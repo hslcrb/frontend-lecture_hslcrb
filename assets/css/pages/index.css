@@ -374,6 +374,7 @@
     /* 태그 최소 높이 (30px 이상) */
     .tag {
       font-size: 12px;
+      text-decoration: none;
       font-weight: 500;
       padding: 4px 12px;
       min-height: 30px;
