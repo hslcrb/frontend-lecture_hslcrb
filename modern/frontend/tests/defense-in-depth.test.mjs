@@ -65,3 +65,16 @@ test('student data and admin editing are server protected',()=>{
   assert.match(admin,/request.headers.get\('Origin'\)!==url.origin/)
   assert.match(admin,/cms-write/)
 })
+
+test('teacher password and reset are Google-bound and stored in D1',()=>{
+  const auth=read('worker/teacher-auth.ts')
+  const api=read('worker/index.ts')
+  assert.match(auth,/teacherMatches\(identity,env\)/)
+  assert.match(auth,/PBKDF2/)
+  assert.match(auth,/getRandomValues/)
+  assert.match(auth,/lab_teacher_credentials/)
+  assert.match(auth,/lab_teacher_reset_tokens/)
+  assert.match(auth,/__Host-FLTeacher/)
+  assert.match(api,/validTeacherSession\(request,env,identity\)/)
+  assert.match(api,/handleTeacherAction\(request,env,identity\)/)
+})
