@@ -1,0 +1,5 @@
+/* Common demo frames; all demo behavior lives in separate page CSS. */
+.course-ui .preview{overflow-x:auto}
+.course-ui .preview-label{font-weight:700}
+.course-ui .controls{max-width:100%}
+.course-ui .controls :where(input,select){max-width:100%}
