@@ -133,10 +133,11 @@ export async function getQuiz(db:D1,slug:string):Promise<QuizRow|null> {
 export async function listManagedQuizzes(db:D1,publishedOnly=true) {
   const rows=await db.prepare(
     'SELECT slug,title,description,published_version,published_at,updated_at,'+
+    'json_array_length(draft_json) AS question_count,'+
     '(CASE WHEN published_json IS NULL THEN 0 ELSE 1 END) AS is_published FROM lab_quiz_sets '+
     (publishedOnly?'WHERE published_json IS NOT NULL ':'')+
     'ORDER BY updated_at DESC LIMIT 150'
-  ).all<{slug:string;title:string;description:string;published_version:number;published_at:string|null;updated_at:string;is_published:number}>()
+  ).all<{slug:string;title:string;description:string;published_version:number;published_at:string|null;updated_at:string;is_published:number;question_count:number}>()
   return rows.results??[]
 }
 export async function saveQuizDraft(db:D1,input:Record<string,unknown>,actor:string) {
