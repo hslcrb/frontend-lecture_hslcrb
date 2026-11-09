@@ -1,0 +1,42 @@
+/* Gestalt learning family — common layout & typography (theory is the reference).
+ * Foundation shared with unified CSS/HTML quizzes: tokens.css + reset.css. */
+body.gestalt-page{margin:0;background:var(--page);color:var(--ink);font:400 16px/1.7 var(--font-body);letter-spacing:-.015em;min-height:100vh}
+.gestalt-page h1,.gestalt-page h2,.gestalt-page h3{color:var(--ink);line-height:1.35;letter-spacing:-.035em}
+.gestalt-page p{margin:0 0 14px}
+.gestalt-page .hero{padding:54px 20px 30px;background:var(--panel);border-bottom:1px solid var(--line);color:var(--ink);text-align:center}
+.gestalt-page .hero>div,.gestalt-page .wrap{max-width:980px;margin:0 auto}
+.gestalt-page .hero .eyebrow{display:block;color:var(--primary-ui-hover);font-size:12px;letter-spacing:.08em;font-weight:800;background:var(--primary-ui-pale);border-radius:99px;padding:5px 14px;width:fit-content;margin:0 auto 12px}
+.gestalt-page .hero h1{font-size:clamp(25px,4vw,34px);font-weight:800;margin:0 0 8px}
+.gestalt-page .hero p{font-size:14px;color:var(--ink-sub);margin:0 auto;max-width:680px}
+.gestalt-page .wrap{padding:36px 20px 70px}
+.gestalt-page .nav{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:24px}
+.gestalt-page .nav a,.gestalt-page .bottom-tabs a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 15px;border:1px solid var(--line);background:var(--panel);color:var(--ink-sub);border-radius:9px;text-decoration:none;font-size:13px;font-weight:700;transition:background .15s,border-color .15s}
+.gestalt-page .nav a:hover,.gestalt-page .bottom-tabs a:hover{border-color:var(--primary-ui);background:var(--primary-ui-pale);color:var(--primary-ui-hover)}
+.gestalt-page .nav a.active,.gestalt-page .bottom-tabs a.active{background:var(--primary-ui);border-color:var(--primary-ui);color:#fff}
+.gestalt-page .box,.gestalt-page .intro,.gestalt-page .q,.gestalt-page .part,.gestalt-page .result,.gestalt-page .home-card,.gestalt-page .flow{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:clamp(20px,4vw,38px);margin-bottom:20px;box-shadow:0 6px 24px rgba(25,40,71,.035)}
+.gestalt-page .k{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--primary-ui-hover);margin-bottom:8px}
+.gestalt-page .box h2,.gestalt-page .intro h2,.gestalt-page .part h2{font-size:clamp(20px,3vw,25px);margin:0 0 15px;font-weight:750}
+.gestalt-page .box p,.gestalt-page .intro p,.gestalt-page .part p,.gestalt-page .home-card p{font-size:16px;line-height:1.75}
+.gestalt-page .box ul{padding-left:22px;margin:15px 0}
+.gestalt-page .box li+li{margin-top:6px}
+.gestalt-page .box .tip{border-top:1px solid var(--line);padding-top:16px;color:var(--ink-sub);font-size:14px;line-height:1.7;margin-top:20px}
+.gestalt-page .box .note{background:var(--primary-ui-pale);border-left:4px solid var(--primary-ui);border-radius:0 9px 9px 0;padding:14px 16px;font-size:14px;color:var(--ink)}
+.gestalt-page .box .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:20px 0}
+.gestalt-page .box .tools b{padding:14px;text-align:center;background:var(--panel-muted);border:1px solid var(--line);border-radius:10px;font-size:14px}
+.gestalt-page .demo,.gestalt-page .visual{display:grid;place-items:center;min-height:190px;overflow:hidden;padding:clamp(14px,3vw,26px);margin:20px 0;background:#f8fafc;border:1px solid var(--line);border-radius:12px}
+.gestalt-page .bottom-tabs{margin:34px 0 0;padding:24px 0 0;border-top:1px solid var(--line)}
+.gestalt-page .bottom-tabs h2{font-size:16px;font-weight:750;margin:0 0 12px}
+.gestalt-page .bottom-tabs .tab-links{display:flex;gap:8px;flex-wrap:wrap}
+.gestalt-page .bottom-tabs a{flex:1 1 140px}
+.gestalt-page .footer-note{font-size:12px;color:var(--ink-muted);text-align:center;margin:15px 0 0}
+.gestalt-page .menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:20px}
+.gestalt-page .menu .home-card{display:block;text-decoration:none;color:var(--ink);margin:0;transition:transform .15s,border-color .15s}
+.gestalt-page .menu .home-card:hover{transform:translateY(-2px);border-color:var(--primary-ui)}
+.gestalt-page .menu .home-card .num{display:inline-grid;place-items:center;min-width:42px;height:42px;padding:0 9px;border-radius:10px;background:var(--primary-ui-pale);color:var(--primary-ui-hover);font-size:13px;font-weight:800}
+.gestalt-page .menu .home-card h3{font-size:20px;margin:16px 0 8px}
+.gestalt-page .menu .home-card p{color:var(--ink-sub);font-size:15px}
+.gestalt-page .menu .home-card .go{display:inline-block;margin-top:8px;font-weight:750;color:var(--primary-ui-hover)}
+.gestalt-page .flow{color:var(--ink-sub);font-size:15px}
+.gestalt-page .flow strong{color:var(--ink)}
+.gestalt-page .rubin-caption{text-align:center;margin:10px 0 0;font-size:13px;color:var(--ink-sub)}
+@media(max-width:650px){.gestalt-page .hero{padding:40px 16px 25px}.gestalt-page .wrap{padding:24px 14px 50px}.gestalt-page .menu{grid-template-columns:1fr}.gestalt-page .bottom-tabs .tab-links{flex-direction:column}}

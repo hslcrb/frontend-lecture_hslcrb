@@ -1,0 +1,15 @@
+/* Reusable course shell */
+.course-ui .main-wrapper{max-width:var(--container);margin:0 auto;padding:48px 20px 80px}
+.course-ui .main{min-width:0}
+.course-ui .main>.hero{padding-block:44px 32px}
+.course-ui .main>.hero h1{font-size:clamp(1.9rem,3.5vw,2.9rem)}
+.course-ui .main>.section{scroll-margin-top:24px}
+.course-ui .section-title{font-size:clamp(1.3rem,2.5vw,1.8rem)}
+.course-ui .sidebar{width:var(--sidebar-width)}
+.course-ui .nav-item{min-height:40px}
+.course-ui .nav-item.active{font-weight:700}
+.course-ui .wrap{max-width:980px;margin:0 auto;padding:48px 20px}
+.course-ui .wrap>.box{margin-bottom:24px}
+.course-ui .app-header{max-width:760px;width:100%;margin:0 auto 24px;text-align:center}
+.course-ui .app-header h1{font-size:clamp(1.5rem,3vw,2rem)}
+@media(max-width:768px){.course-ui .main-wrapper,.course-ui .wrap{padding:28px 16px 60px}.course-ui .main>.section{min-width:0}}

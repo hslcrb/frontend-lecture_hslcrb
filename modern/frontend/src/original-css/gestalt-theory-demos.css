@@ -1,0 +1,21 @@
+/* Theory only: demonstrate perception, do not override the shared layout. */
+.gestalt-page .prox{display:flex;gap:50px}
+.gestalt-page .pg{display:grid;grid-template-columns:repeat(2,22px);gap:8px}
+.gestalt-page .dot{width:22px;height:22px;background:#64748b;border-radius:50%;display:inline-block}
+.gestalt-page .similar{display:flex;gap:16px}
+.gestalt-page .shape{width:44px;height:44px;background:#64748b;border-radius:50%}
+.gestalt-page .shape.blue{background:#4361ee}
+.gestalt-page .shape.sq{border-radius:6px}
+.gestalt-page .closure{width:130px;height:130px;border:18px solid #4361ee;border-right-color:transparent;border-radius:50%;transform:rotate(-20deg)}
+.gestalt-page .regions{display:flex;gap:30px}
+.gestalt-page .region{display:flex;gap:10px;padding:22px;background:#e0e7ff;border-radius:14px}
+.gestalt-page .region .dot{background:#4361ee}
+.gestalt-page .carousel{display:flex;gap:14px;width:650px;transform:translateX(85px)}
+.gestalt-page .carousel .card{width:170px;flex:0 0 170px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.gestalt-page .carousel .thumb{height:92px;background:#dbeafe;border-radius:9px;margin-bottom:10px}
+.gestalt-page .svg-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;width:100%}
+.gestalt-page .svg-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center}
+.gestalt-page .svg-panel strong{display:block;margin-bottom:12px;color:var(--ink)}
+.gestalt-page .svg-panel img{display:block;width:100%;height:260px;object-fit:contain}
+.gestalt-page .rubin-img{display:block;width:min(100%,330px);height:auto}
+@media(max-width:650px){.gestalt-page .prox{gap:24px}.gestalt-page .svg-compare{grid-template-columns:1fr}.gestalt-page .svg-panel img{height:auto}}
