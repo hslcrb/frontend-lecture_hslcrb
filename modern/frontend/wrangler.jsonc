@@ -49,5 +49,11 @@
       "pattern": "frontend-lab.rhee.life",
       "custom_domain": true
     }
-  ]
+  ],
+  "keep_vars": true,
+  "secrets": {
+    "required": [
+      "AUTH_PEPPER"
+    ]
+  }
 }
