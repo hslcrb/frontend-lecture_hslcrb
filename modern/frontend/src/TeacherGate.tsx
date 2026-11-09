@@ -1,5 +1,6 @@
 import {useEffect,useState,type FormEvent} from 'react'
 import TeacherWorkspace from './TeacherWorkspace'
+import BlueRenaissanceBrand from './BlueRenaissanceBrand'
 
 type Mode='loading'|'setup'|'login'|'forgot'|'reset'|'authorized'|'denied'
 type TeacherStatus={configured:boolean;authenticated:boolean;email:string}
@@ -92,13 +93,13 @@ export default function TeacherGate() {
   </div><TeacherWorkspace/></>
   if(mode==='loading')return <main className="onboard-shell" aria-live="polite">선생님 인증 상태를 확인하고 있습니다…</main>
   if(mode==='denied')return <main className="onboard-shell"><section className="onboard-panel">
-    <span className="onboard-kicker">TEACHER ACCESS</span><h1>관리자 접근 제한</h1>
+    <BlueRenaissanceBrand/><h1>관리자 접근 제한</h1>
     <p role="alert" className="onboard-error">{error}</p><p>이 공간은 지정된 선생님 Google 계정 전용입니다.</p>
     <a href="/">학생 강의실로 돌아가기</a>
   </section></main>
   return <main className="onboard-shell">
     <section className="onboard-panel" aria-labelledby="teacher-title">
-      <span className="onboard-kicker">FRONTEND LAB · TEACHER</span>
+      <BlueRenaissanceBrand/>
       <h1 id="teacher-title">{mode==='setup'?'관리자 비밀번호 최초 설정':mode==='reset'?'비밀번호 재설정':mode==='forgot'?'이메일 인증':'선생님 2차 인증'}</h1>
       <p>{mode==='setup'?'Google 계정 확인이 끝났습니다. 관리자 비밀번호를 처음 한 번 설정하면 D1에 해시로 저장됩니다.':
          mode==='reset'?'선생님 이메일로 발급받은 일회용 링크입니다. 새 비밀번호를 입력해 주세요.':
