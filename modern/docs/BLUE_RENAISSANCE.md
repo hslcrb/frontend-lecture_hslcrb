@@ -48,7 +48,7 @@ Cloudflare D1에 `lab_course_sources`를 별도 생성하고, GitHub `main`의 �
 - 로고 자산 경로: `modern/frontend/public/ui/blue-renaissance-logo.svg`
 - 배포 URL: `/ui/blue-renaissance-logo.svg`
 - 원본 SVG가 없을 때: **Blue Renaissance** 텍스트 워드마크를 대신 표시
-- **실제 사용자 제공 SVG 파일은 아직 첨부되지 않았습니다.** 따라서 이 경로에는 임의의 로고 이미지를 생성하지 않았고, 파일을 받으면 해당 이름으로 저장해 연결하면 됩니다.
+- **원본 SVG를 GitHub 저장소 `hslcrb/chatgptweb-transbank`에서 가져와 `blue-renaissance-logo.svg`로 반영했습니다.** 따라서 별도의 임의 이미지 생성 없이 사용자가 제공한 벡터 로고를 표시합니다.
 - 기존 학생용 Frontend Lab 명칭과 사이트의 수업 UI는 그대로 유지합니다.
 
 선생님 콘솔 왼쪽 상단의 이름만 바꾸는 것이 아니라, 강의 파일 라이브러리에서 **D1에 보관된 강의 수**, 원본 저장 위치, 신규 HTML 수업 생성, 정적 원본에서 D1로 선택적 동기화를 볼 수 있습니다.
@@ -79,7 +79,7 @@ Cloudflare D1에 `lab_course_sources`를 별도 생성하고, GitHub `main`의 �
 
 독립 GitHub 저장소 [hslcrb/frontend-lecture_hslcrb](https://github.com/hslcrb/frontend-lecture_hslcrb)의 `main`이 Cloudflare `frontend-lab-web` Worker와 연결되어 있습니다. `modern/frontend`에서 `npm test && npm run build`로 빌드되며, 배포 도메인은 https://frontend-lab.rhee.life 입니다.
 
-로고 SVG가 전달되면 원본을 확인한 후 **`blue-renaissance-logo.svg`** 이름으로 정리해 같은 경로에 추가해야 합니다. 선생님 관리자 화면 헤더는 이미 이 경로를 참조하므로 추가적인 런타임 설정은 불필요합니다.
+**로고 SVG가 확인되어 `blue-renaissance-logo.svg`로 추가되었습니다.** 선생님 관리자 화면 헤더는 이미 이 경로를 참조하므로 추가적인 런타임 설정은 불필요합니다.
 
 ## 7. 배포 검증 결과
 
@@ -89,6 +89,16 @@ Cloudflare D1에 `lab_course_sources`를 별도 생성하고, GitHub `main`의 �
 - 첫 검증 배포 버전: `317f74a6-7bb2-4a69-974f-02feae18668e`
 - 사이트: https://frontend-lab.rhee.life
 - 서버 제공 우선순위: 교사 게시본 D1 → 원본 D1 → 정적 파일.
-- 실제 로고 이미지 파일은 **미수신**. `blue-renaissance-logo.svg` 자리만 마련하고 영문 텍스트로 대체했습니다. AI 소스 파일이 별도 전달되더라도 실제 사이트에는 SVG만 사용합니다.
+- 로고 원본을 GitHub에서 확인해 `blue-renaissance-logo.svg`로 반영했습니다. 로딩 실패 시에는 텍스트로 대체합니다. AI 소스 파일이 별도 전달되더라도 실제 사이트에는 SVG만 사용합니다.
 
 **아직 검증하지 못한 것:** 교사 Google 계정으로 관리자 첫 비밀번호 생성·강의 편집·원본 동기화, 학생 Google 계정으로 D1 원본 HTML 확인, 브라우저 전체 퀴즈 채점 및 SVG 실제 적용. 정적 테스트/빌드 성공을 이 과정의 완료로 오해하지 마세요.
+
+## 8. 창조자 계정 및 권한 관리 (2026-11-09)
+
+- 창조자 `sea35652@gmail.com`: 고정 **0순위**, 관리자 임명·박탈 및 전체 CMS 운영.
+- 선생님 `spacejh72@gmail.com`: 고정 **1순위**, 기존 콘텐츠·학생 통계·퀴즈 운영.
+- 임명 관리자: 창조자가 기존 가입자 중 권한을 부여한 계정만 **2순위** 접근.
+- 다른 계정은 Google 로그인과 학생 학습만 허용하며 관리자 페이지에는 접근할 수 없습니다.
+- D1 `lab_admin_grants`와 `lab_admin_audit`에 권한과 이력을 분리 보관. 서버에서 JWT 계정과 별도 비밀번호 세션을 모두 확인.
+
+[권한 정책과 API 명세](CREATOR_RBAC.md)

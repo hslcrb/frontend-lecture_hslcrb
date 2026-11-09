@@ -83,3 +83,12 @@
 - Worker 코드의 D1 수업 원본 우선 제공, CMS 원본 목록 및 수업 동기화 로직, Blue Renaissance 브랜드 슬롯에 대한 Node 정적 테스트를 추가했습니다.
 - Cloudflare 자동 빌드 로그에서 **22개 테스트 PASS / 0개 FAIL**, Vite·TypeScript 빌드와 Workers 배포 성공을 확인했습니다.
 - **원본 디자인의 실제 브라우저 시각 회귀, 실사용 Google 계정으로 강의 열람·동기화, 교사 관리자 새 UI, 사용자 제공 SVG 로고 반영은 별도 검증이 필요합니다.**
+
+## F. Blue Renaissance 창조자 권한 체계 (2026-11-09)
+
+- 사용자 제공 Blue Renaissance SVG를 GitHub 원본에서 가져와 `modern/frontend/public/ui/blue-renaissance-logo.svg`로 반영했습니다.
+- D1 `lab_admin_grants`·`lab_admin_audit` 및 인덱스 생성 성공, 임시 계정의 관리자 임명·철회·정리 SQL 검증 성공.
+- 연결 Gmail `sea35652@gmail.com`을 창조자(0순위), 선생님 `spacejh72@gmail.com`을 1순위 계정으로 구분했습니다.
+- 창조자만 D1에서 다른 관리자 권한을 부여·철회할 수 있도록 서버 API, 로그인 세션 경계, 대시보드 권한 탭을 추가했습니다.
+- Cloudflare Workers Builds에서 **29개 Node 테스트 전부 통과**하고, TypeScript/Vite 및 Worker 배포 완료를 확인했습니다. 배포 ID `cc01cd25-f4ab-42b5-b784-4f46e5fadd88`.
+- **미검증:** 실제 창조자 Google 로그인 + 관리자 비밀번호 생성 및 임명 API 브라우저 E2E, 선생님 계정 인증, 이메일 복구 수신자 인증.

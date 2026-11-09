@@ -28,6 +28,17 @@
 - GitHub Actions는 사용하지 않고 **Cloudflare Workers Builds**로 자동 배포합니다.
 - 선생님 원저작권을 존중합니다. 공개 저장소라고 해서 저작물에 임의로 오픈소스 라이선스를 부여하지 않습니다.
 
+## 창조자·선생님 관리자 권한
+
+- **0순위 창조자:** `sea35652@gmail.com` — 전체 CMS 관리 + 가입 계정의 관리자 임명·박탈.
+- **1순위 선생님:** `spacejh72@gmail.com` — 강의·퀴즈·학생 학습 관리.
+- **2순위 임명 관리자:** 창조자가 권한을 부여한 계정만 CMS 접근 가능.
+- **일반 학생:** 마이페이지와 본인 성적만 이용.
+
+초기 대시보드 접근 가능 계정은 **창조자와 선생님 두 계정**입니다. 모두 Google 인증과 개인별 관리자 비밀번호가 필요합니다. 관리자 임명·박탈은 [권한 관리 설계](modern/docs/CREATOR_RBAC.md)에서 확인할 수 있습니다.
+
+Blue Renaissance CMS에는 [사용자가 제공한 실제 SVG 로고](modern/frontend/public/ui/blue-renaissance-logo.svg)가 반영되었습니다.
+
 ## 제작 기록과 운영 문서
 
 1. [2026-11-09 전체 제작 과정 기록](modern/docs/DEVELOPMENT_HISTORY.md) — 요구사항, 주요 결정, 시행착오, GitHub·Cloudflare 실제 작업.
