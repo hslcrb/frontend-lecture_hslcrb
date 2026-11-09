@@ -175,6 +175,47 @@
         </div>
       </div>
     </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot dot-blue"></span>fr 단위란?</div>
+      <div style="padding:20px;line-height:1.8">
+        <p><strong>fr(fraction)</strong>은 CSS Grid에서 <strong>사용 가능한 공간을 비율대로 나누는 단위</strong>예요. 1fr은 1px 또는 1%가 아니라 공간의 한 몫이에요.</p>
+        <p style="margin-top:10px">예를 들어 사용 가능한 공간이 400px이고 열이 <code>2fr 1fr 1fr</code>이라면 총 4몫이므로 원칙적으로 200px, 100px, 100px이 돼요. 실제 너비는 <code>gap</code>과 콘텐츠의 최소 너비에 영향을 받을 수 있어요.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot dot-amber"></span>fr과 auto의 차이 · Figma Hug contents 연결</div>
+      <div style="padding:20px;line-height:1.8">
+        <p><strong>fr</strong>은 남은 공간의 비율을 기준으로 열을 나누고, <strong>auto</strong>는 콘텐츠 크기를 고려해 열 너비를 정해요.</p>
+        <p style="margin-top:10px"><strong>피그마 연결:</strong> Figma Auto Layout의 <strong>Hug contents</strong>는 안에 들어 있는 콘텐츠 크기에 맞춰 요소를 감싸는 방식이에요. Grid의 <code>auto</code>와 이해하는 방향이 비슷해요. 반대로 <strong>Fill container</strong>는 남은 공간을 채운다는 점에서 <code>fr</code>과 비교해 볼 수 있어요.</p>
+        <p style="margin-top:10px"><strong>주의:</strong> Figma와 CSS Grid는 완전히 같은 규칙이 아니에요. 특히 <code>auto</code>는 콘텐츠만큼만 고정되는 것이 아니라 기본 <code>stretch</code> 동작으로 남는 공간을 더 차지할 수도 있어요.</p>
+      </div>
+      <div class="card-title"><span class="dot dot-green"></span>라이브 프리뷰 — 같은 콘텐츠, 서로 다른 열 너비</div>
+      <div class="preview">
+        <div class="preview-label">1fr 1fr — 같은 비율로 나누기</div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-bottom:16px">
+          <div class="pi">검색 입력창</div><div class="pi amber">검색</div>
+        </div>
+        <div class="preview-label">minmax(0,1fr) auto — Figma의 Fill + Hug와 비슷한 배치</div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-bottom:16px">
+          <div class="pi">검색 입력창</div><div class="pi amber" style="white-space:nowrap">검색</div>
+        </div>
+        <div class="preview-label">auto auto + justify-content:start — 콘텐츠 너비 중심</div>
+        <div style="display:grid;grid-template-columns:auto auto;justify-content:start;gap:8px">
+          <div class="pi" style="white-space:nowrap">검색 입력창</div><div class="pi amber" style="white-space:nowrap">검색</div>
+        </div>
+      </div>
+      <div class="code-block">
+<span class="cm">/* 균등한 두 열 */</span><br>
+<span class="prop">grid-template-columns</span>: <span class="val">1fr 1fr</span>;<br><br>
+<span class="cm">/* Figma의 Fill container + Hug contents와 비슷한 구성 */</span><br>
+<span class="prop">grid-template-columns</span>: <span class="val">minmax(0, 1fr) auto</span>;<br><br>
+<span class="cm">/* auto의 콘텐츠 중심 크기 확인 */</span><br>
+<span class="prop">grid-template-columns</span>: <span class="val">auto auto</span>;<br>
+<span class="prop">justify-content</span>: <span class="val">start</span>;
+      </div>
+    </div>
+    <div class="tip">💡 <strong>핵심:</strong> <code>fr</code>은 공간 분배, <code>auto</code>는 콘텐츠를 고려한 자동 크기예요. Figma의 Fill container ↔ fr, Hug contents ↔ auto는 <strong>개념을 이해하기 위한 비교이며 1:1 대응은 아니에요.</strong></div>
     <div class="tip">💡 <code>repeat(3, 1fr)</code>은 <code>1fr 1fr 1fr</code>과 완전히 동일해요. <code>repeat(2, 2fr 1fr)</code>처럼 패턴 반복도 가능해요!</div>
   </section>
 
