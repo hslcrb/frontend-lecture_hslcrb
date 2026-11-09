@@ -46,7 +46,7 @@ The CMS needs a D1 database (for documents), R2 bucket (media), and a PAYLOAD_SE
 
 The original GitHub Pages site at learn.jjinmango.kr is public. Its hosting is not controlled by this proposal: new Access authentication **does not retroactively protect the old public Pages URL**. Only the teacher can decide to switch the official domain, and should do so after real login/quiz/browser regression tests.
 
-Deployment is **not** complete merely because code is committed: Cloudflare currently requires R2 activation, and Google OAuth + private Supabase project have not been configured yet. Do not route students to a broken or publicly accessible staging site.
+Deployment is **not** complete merely because code is committed: the dedicated D1 database `frontend-lab-cms` was created on 2026-11-09; Cloudflare currently requires R2 activation, and Google OAuth + private Supabase project have not been configured yet. Do not route students to a broken or publicly accessible staging site.
 
 ### Copyright and contribution
 
