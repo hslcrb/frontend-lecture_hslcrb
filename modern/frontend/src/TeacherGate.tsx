@@ -9,7 +9,7 @@ async function call<T>(route:string, payload?:Record<string,unknown>):Promise<T>
     headers:payload?{'Content-Type':'application/json','X-Frontend-Lab':'teacher-auth'}:{},
     body:payload?JSON.stringify(payload):undefined,
   })
-  const body=await result.json().catch(()=>({}))
+  const body=await result.json().catch(()=>({})) as Record<string,unknown>
   if(!result.ok)throw new Error(typeof body.error==='string'?body.error:'요청 오류 ('+result.status+')')
   return body as T
 }
