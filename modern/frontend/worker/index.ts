@@ -98,7 +98,7 @@ export default {
         if(!isTeacher(identity,env))return error('교사 관리자만 접근할 수 있습니다.',403)
         if(!await validTeacherSession(request,env,identity))return error('선생님 비밀번호 인증이 필요합니다.',401)
         if(path==='/api/admin/learning'||path.startsWith('/api/admin/learning/')||
-           path==='/api/admin/quizzes'||path==='/api/admin/quiz') {
+           path.startsWith('/api/admin/quiz')) {
           return wrap(await handleTeacherLearningApi(request,env,identity))
         }
         return wrap(await handleAdminApi(request,env,identity))
