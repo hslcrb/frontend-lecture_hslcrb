@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import './admin.css'
 
 type Kind = 'html'|'css'|'js'
@@ -6,7 +6,7 @@ interface ManifestItem { path:string; kind:Kind; title:string }
 interface EditedItem { path:string;kind:Kind;updated_at:string;has_published:number;hidden:number;has_pending_draft:number }
 interface Page {
   path:string;kind:Kind;source:string;hidden:boolean;published:boolean;
-  hasDraft:boolean;originalExists:boolean;updatedAt:string|null;publishedAt:string|null
+  hasDraft:boolean;originalExists:boolean;originalStorage?:'d1'|'static';updatedAt:string|null;publishedAt:string|null
 }
 interface Version {
   id:number;action:string;actor_email:string;created_at:string;previous_hidden:number;
@@ -25,6 +25,8 @@ export default function Admin() {
   const [source,setSource]=useState('')
   const [history,setHistory]=useState<Version[]>([])
   const [search,setSearch]=useState('')
+  const [courseCount,setCourseCount]=useState(0)
+  const [newCoursePath,setNewCoursePath]=useState('')
   const [email,setEmail]=useState('')
   const [roster,setRoster]=useState<Array<{student_name:string;email:string;created_at:string}>>([])
   const [busy,setBusy]=useState(false)
@@ -33,7 +35,8 @@ export default function Admin() {
   const [ready,setReady]=useState(false)
 
   async function refreshList() {
-    const data=await api<{original:{items:ManifestItem[]};edited:EditedItem[]}>('/api/admin/manifest')
+    const data=await api<{original:{items:ManifestItem[]};edited:EditedItem[];courses?:Array<{path:string}>}>('/api/admin/manifest')
+    setCourseCount(data.courses?.length??0)
     const combined=new Map<string,ManifestItem>()
     for(const item of data.original?.items??[]) combined.set(item.path,item)
     for(const item of data.edited??[])if(!combined.has(item.path))
@@ -75,6 +78,36 @@ export default function Admin() {
   const status=edited.find(item=>item.path===selected)
   const unsaved=Boolean(page && page.source!==source)
 
+  function createCourse(event:FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setError('');setNotice('')
+    const path=newCoursePath.trim()
+    if(!/^\/(?:ai|grid|flex|position|tailwind|javascript|quiz|uiux)\/(?:[\w.-]+\/)*[\w.-]+\.html?$/i.test(path)){
+      setError('새 강의 경로는 /ai/lesson-name.html 같은 형식으로 입력해 주세요.')
+      return
+    }
+    if(!files.some(x=>x.path===path)){
+      const newItem:ManifestItem={path,kind:'html',title:'새 강의 · '+path}
+      setFiles(prev=>[...prev,newItem].sort((a,b)=>a.path.localeCompare(b.path,'ko')))
+    }
+    setSelected(path)
+    setNewCoursePath('')
+    setNotice('새 강의 경로를 선택했습니다. HTML을 입력하고 초안 저장 후 게시해 주세요.')
+  }
+  async function syncBundled() {
+    if(busy||!page||page.kind!=='html')return
+    if(!window.confirm('현재 배포 파일의 HTML을 D1 원본 저장소로 동기화할까요? CMS 게시본은 변경되지 않습니다.'))return
+    setBusy(true);setError('');setNotice('')
+    try{
+      const result=await api<{ok:boolean;changed:boolean}>('/api/admin/course/sync',{
+        method:'POST',headers:{'Content-Type':'application/json','X-Frontend-Lab':'cms-write'},
+        body:JSON.stringify({path:selected})
+      })
+      await Promise.all([load(selected),refreshList()])
+      setNotice(result.changed?'배포된 HTML 원본을 D1에 동기화했습니다. CMS 수정본은 유지됩니다.':'D1에 이미 동일한 원본이 저장되어 있습니다.')
+    }catch(e){setError(e instanceof Error?e.message:'원본 동기화 실패')}
+    finally{setBusy(false)}
+  }
   async function action(type:'saveDraft'|'publish'|'hide'|'show'|'restore',versionId?:number) {
     if(busy)return
     if(type==='restore'&&!window.confirm('선택한 이전 버전을 현재 게시본으로 복원할까요?'))return
@@ -97,7 +130,7 @@ export default function Admin() {
   }
   return <main className="cms-shell">
     <header className="cms-head">
-      <div><span className="cms-eyebrow">JJinMangGo · Frontend Lab</span><h1>강의 자료 관리</h1>
+      <div><span className="cms-eyebrow">Blue Renaissance CMS</span><h1>강의 자료 관리</h1>
         <p>Cloudflare Workers Free + D1 · 강의·퀴즈·CSS·JavaScript</p></div>
       <div className="cms-account"><span>{email||'관리자 인증 확인 중'}</span><a href="/">학생 화면</a></div>
     </header>
@@ -106,6 +139,13 @@ export default function Admin() {
     <div className="cms-grid">
       <aside className="cms-side">
         <div className="cms-side-head"><strong>강의·파일 목록</strong><span>{files.length}개</span></div>
+        <p className="cms-db-info">D1 강의 원본 {courseCount}개 · 게시된 수정본은 별도 관리</p>
+        <form className="cms-create-course" onSubmit={createCourse}>
+          <label htmlFor="cms-new-path">새 강의 만들기</label>
+          <input id="cms-new-path" placeholder="/ai/new-lesson.html" value={newCoursePath}
+            onChange={e=>setNewCoursePath(e.target.value)} maxLength={200}/>
+          <button type="submit" disabled={!newCoursePath.trim()}>경로 만들기</button>
+        </form>
         <label htmlFor="cms-search" className="cms-visually-hidden">파일 검색</label>
         <input id="cms-search" placeholder="강의 이름 또는 경로 검색" value={search} onChange={event=>setSearch(event.target.value)}/>
         <div className="cms-file-list">
@@ -132,7 +172,7 @@ export default function Admin() {
             <div className="cms-editor-title">
               <div><span className="cms-eyebrow">{page.kind.toUpperCase()} 파일</span>
                 <h2>{selected==='/'?'메인 홈페이지':selected}</h2>
-                <p>{page.published?'CMS 게시 중':page.originalExists?'원본 GitHub 자료 사용 중':'신규 자료'} · {page.hidden?'학생 화면에서 숨김':'학생에게 공개'}{unsaved?' · 저장하지 않은 변경 있음':''}</p>
+                <p>{page.published?'CMS 수정본 게시 중':page.originalStorage==='d1'?'D1 원본 강의 제공 중':page.originalExists?'배포 원본 파일 사용 중':'신규 자료'} · {page.hidden?'학생 화면에서 숨김':'학생에게 공개'}{unsaved?' · 저장하지 않은 변경 있음':''}</p>
               </div>
               <div className="cms-editor-actions">
                 <button type="button" disabled={busy||!source.trim()} onClick={()=>void action('saveDraft')}>초안 저장</button>
@@ -161,6 +201,7 @@ export default function Admin() {
               {selected!=='/'?<a href={selected} target="_blank" rel="noopener noreferrer">학생 강의 화면 확인</a>:
                 <a href="/" target="_blank" rel="noopener noreferrer">메인 화면 확인</a>}
               <button type="button" onClick={()=>{void load(selected)}} disabled={busy}>마지막 저장본 다시 불러오기</button>
+              {page.kind==='html'&&page.originalExists&&<button type="button" onClick={()=>void syncBundled()} disabled={busy}>배포본 → D1 원본 동기화</button>}
             </div>
           </>
         }
