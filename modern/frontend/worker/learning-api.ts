@@ -1,11 +1,10 @@
 import type { D1 } from './free-db'
 import type { VerifiedIdentity } from './auth'
-import { getPublished } from './free-db'
 import {
   ensureStudentId, myLearningSummary, learningOverview, teacherStudentDetail, getQuiz,
   listManagedQuizzes, validateQuizDraft, gradeAnswers, redactQuestion,
   saveQuizDraft, publishQuiz, unpublishQuiz, restoreQuiz, quizVersions,
-  saveAttempt, type Question, type LegacyKey, type Answer,
+  saveAttempt, type Answer,
 } from './learning-db'
 
 interface Env {
@@ -32,13 +31,6 @@ async function content(req:Request,maxLength=160000):Promise<Record<string,unkno
   if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('요청 값이 올바르지 않습니다.')
   return data as Record<string,unknown>
 }
-async function legacyCatalog(env:Env,req:Request):Promise<LegacyKey[]>{
-  const u=new URL('/original-quiz-keys.json',req.url)
-  const res=await env.ASSETS.fetch(new Request(u.toString()))
-  if(!res.ok)throw new Error('기존 퀴즈 점수 카탈로그를 찾지 못했습니다.')
-  const data=await res.json() as {items:LegacyKey[]}
-  return Array.isArray(data.items)?data.items:[]
-}
 const toAnswers=(raw:unknown):Answer[]=>{
   if(!Array.isArray(raw)||raw.length>100)throw new Error('답안 배열이 올바르지 않습니다.')
   return raw.map(v=>{
@@ -64,10 +56,10 @@ export async function handleStudentLearningApi(
       return json(await myLearningSummary(env.DB,identity))
     }
     if(url.pathname==='/api/quiz/catalog' && req.method==='GET'){
-      const [managed,legacy]=await Promise.all([listManagedQuizzes(env.DB),legacyCatalog(env,req)])
+      const managed=await listManagedQuizzes(env.DB)
       return json({managed:managed.map(q=>({
         slug:q.slug,title:q.title,description:q.description,version:q.published_version,kind:'managed'
-      })),legacy:legacy.map(q=>({path:q.path,title:q.title,count:q.keys.length,kind:'legacy'}))})
+      })),legacy:[]})
     }
     const managed=url.pathname.match(/^\/api\/quiz\/managed\/([a-z0-9-]{3,60})(?:\/submit)?$/)
     if(managed){
@@ -95,25 +87,6 @@ export async function handleStudentLearningApi(
       }
       return bad('지원하지 않는 요청입니다.',405)
     }
-    if(url.pathname==='/api/quiz/legacy/submit' && req.method==='POST'){
-      const input=await content(req,18000)
-      if(typeof input.path!=='string'||input.path.length>220||!/^\/(?:ai|quiz|flex|grid|position)\/[\w.-]+\.html$/i.test(input.path))
-        return bad('기존 퀴즈 경로를 확인해 주세요.')
-      const legacy=(await legacyCatalog(env,req)).find(q=>q.path===input.path)
-      if(!legacy)return bad('점수 저장을 지원하지 않는 퀴즈입니다.',404)
-      // If a teacher replaced the underlying JS through raw CMS, the build-time key is stale.
-      // Reject inaccurate grading instead of reporting misleading verified scores.
-      const override=await getPublished(env.DB,legacy.dataPath)
-      if(override.state!=='original')return bad('관리자가 수정한 기존 퀴즈는 새 채점 기준이 필요합니다.',409)
-      const answers=toAnswers(input.answers)
-      const graded=gradeAnswers(legacy.keys.map(k=>({answer:k.answer})),answers)
-      const profile=await ensureStudentId(env.DB,identity)
-      const attemptId=await saveAttempt(env.DB,identity,profile,{
-        quizKey:'legacy:'+legacy.path,title:legacy.title,kind:'legacy',
-        version:0,correct:graded.correct,total:graded.total,score:graded.score
-      })
-      return json({attemptId,score:graded.score,correct:graded.correct,total:graded.total})
-    }
     return bad('학습 API 경로가 없습니다.',404)
   }catch(e) {
     const message=safeMessage(e)
@@ -132,20 +105,6 @@ export async function handleTeacherLearningApi(
       const id=url.searchParams.get('studentId')??''
       const found=await teacherStudentDetail(env.DB,id)
       return found?json(found):bad('학생을 찾을 수 없습니다.',404)
-    }
-    if(url.pathname==='/api/admin/quiz/legacy'&&req.method==='GET'){
-      const entries=await legacyCatalog(env,req)
-      return json({items:entries.map(q=>({path:q.path,title:q.title,count:q.keys.length}))})
-    }
-    if(url.pathname==='/api/admin/quiz/import'&&req.method==='GET'){
-      const path=url.searchParams.get('path')??''
-      const entry=(await legacyCatalog(env,req)).find(q=>q.path===path)
-      if(!entry||!Array.isArray(entry.editable))return bad('원본 문제를 불러올 수 없습니다.',404)
-      const suggested=('original-'+path.replace(/^\//,'').replace(/\.html$/,'').replace(/\//g,'-'))
-        .toLowerCase().replace(/[^a-z0-9-]/g,'-').slice(0,60)
-      return json({slug:suggested,title:entry.title,
-        description:'기존 강의의 문제를 가져와 별도로 편집한 관리형 퀴즈',
-        questions:validateQuizDraft(entry.editable)})
     }
     if(url.pathname==='/api/admin/quizzes'&&req.method==='GET')
       return json({quizzes:await listManagedQuizzes(env.DB,false)})
