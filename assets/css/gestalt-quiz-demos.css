@@ -1,0 +1,51 @@
+/* Gestalt quiz only: questions, controls, solution and practical UI visuals. */
+.gestalt-page .intro{padding:clamp(20px,4vw,34px)}
+.gestalt-page .part{background:var(--primary-ui-pale);border-color:#c9d3fa}
+.gestalt-page .part h2{margin-bottom:0}
+.gestalt-page .q{padding:clamp(20px,4vw,34px)}
+.gestalt-page .q h2{font-size:19px;font-weight:750;margin:8px 0 18px;line-height:1.6;word-break:keep-all}
+.gestalt-page .q .k{font-variant-numeric:tabular-nums}
+.gestalt-page .options{display:grid;gap:9px}
+.gestalt-page .option{display:flex;align-items:flex-start;gap:12px;min-height:50px;padding:13px 15px;background:var(--panel);border:1px solid var(--line);border-radius:10px;cursor:pointer;line-height:1.6}
+.gestalt-page .option:hover{border-color:var(--primary-ui);background:var(--primary-ui-pale)}
+.gestalt-page .option:has(input:checked){border-color:var(--primary-ui);background:var(--primary-ui-pale)}
+.gestalt-page .option input{margin-top:5px;accent-color:var(--primary-ui)}
+.gestalt-page .letter{flex:0 0 24px;width:24px;height:24px;display:grid;place-items:center;background:var(--panel-muted);border-radius:7px;font-size:12px;font-weight:750}
+.gestalt-page .check,.gestalt-page .submit{display:inline-flex;align-items:center;justify-content:center;min-height:44px;background:var(--primary-ui);color:#fff;border:1px solid var(--primary-ui);border-radius:9px;padding:10px 18px;font:700 14px/1.4 var(--font-body);cursor:pointer}
+.gestalt-page .check{margin-top:15px}
+.gestalt-page .ans{display:none;margin-top:14px;padding:15px 18px;background:#e9f7ef;color:#135c3a;border-left:4px solid #18794e;border-radius:0 10px 10px 0;font-size:14px;line-height:1.7}
+.gestalt-page .ans.on{display:block}
+.gestalt-page .option.correct{background:#e9f7ef;border-color:#18794e}
+.gestalt-page .option.wrong{background:#fff0f2;border-color:#b4233b}
+.gestalt-page .visual img{max-width:230px;max-height:190px;width:auto;height:auto}
+.gestalt-page .products{display:flex;gap:18px;width:100%}
+.gestalt-page .product{flex:1}
+.gestalt-page .pic{height:80px;background:#dbeafe;border-radius:9px;margin-bottom:8px}
+.gestalt-page .product b,.gestalt-page .product small{display:block}
+.gestalt-page .region{padding:22px;background:#e0e7ff;border-radius:14px;display:flex;gap:10px}
+.gestalt-page .dot{width:22px;height:22px;border-radius:50%;background:#4361ee;display:inline-block}
+.gestalt-page .carousel{display:flex;gap:12px;width:560px;transform:translateX(80px)}
+.gestalt-page .carousel .card{width:145px;flex:0 0 145px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+.gestalt-page .carousel .thumb{height:76px;background:#dbeafe;border-radius:8px}
+.gestalt-page .hierarchy{width:min(100%,560px);background:#fff;padding:26px;border:1px solid var(--line);border-radius:12px}
+.gestalt-page .hierarchy .eyebrow{font-size:12px;color:var(--primary-ui-hover);font-weight:800}
+.gestalt-page .hierarchy h3{font-size:28px;margin:5px 0}
+.gestalt-page .hierarchy p{font-size:14px;color:var(--ink-sub);margin:0}
+.gestalt-page .modal-scene{position:relative;width:min(100%,560px);height:230px;background:#cbd5e1;border-radius:14px;overflow:hidden}
+.gestalt-page .fake-page{padding:22px}
+.gestalt-page .fake-line{height:12px;background:#94a3b8;border-radius:5px;margin:10px 0}
+.gestalt-page .fake-line.short{width:55%}
+.gestalt-page .dim{position:absolute;inset:0;background:#0f172a99;display:grid;place-items:center}
+.gestalt-page .modal{width:62%;background:#fff;border-radius:14px;padding:24px;box-shadow:0 18px 45px #0005}
+.gestalt-page .modal b{color:var(--ink)}
+.gestalt-page .modal button{margin-top:12px;padding:8px 13px;border:0;border-radius:7px;background:var(--primary-ui);color:#fff}
+.gestalt-page .challenge{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.gestalt-page .challenge .c{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+.gestalt-page .challenge .img{height:70px;background:#dbeafe;border-radius:8px;margin-bottom:8px}
+.gestalt-page textarea{display:block;width:100%;min-height:120px;padding:13px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+.gestalt-page .result{text-align:center;display:none}
+.gestalt-page .result.on{display:block}
+.gestalt-page .score{font-size:48px;font-weight:800;color:var(--primary-ui);margin:6px 0}
+.gestalt-page .submit{display:flex;width:100%;font-size:16px;padding:14px;margin-bottom:20px}
+.gestalt-page .reset{margin-top:12px;border:0;background:none;color:var(--ink-sub);text-decoration:underline;cursor:pointer;font:700 14px var(--font-body);padding:10px}
+@media(max-width:650px){.gestalt-page .products,.gestalt-page .challenge{gap:10px}.gestalt-page .carousel{width:440px}.gestalt-page .modal{width:75%;padding:16px}}
