@@ -1,4 +1,5 @@
-import {useEffect,useMemo,useState,type FormEvent} from 'react'
+import {useEffect,useState,type FormEvent} from 'react'
+import OriginalHome from './OriginalHome'
 import TeacherGate from './TeacherGate'
 import MyPage,{learningJson} from './MyPage'
 import PracticeQuiz from './PracticeQuiz'
@@ -21,70 +22,7 @@ interface Catalog{lessons:LessonItem[];quizzes:QuizItem[]}
 type Phase='loading'|'register'|'ready'|'error'
 
 function LibraryHome({session}:{session:Session}){
-  const [catalog,setCatalog]=useState<Catalog|null>(null)
-  const [search,setSearch]=useState('')
-  const [category,setCategory]=useState('전체')
-  const [error,setError]=useState('')
-  useEffect(()=>{
-    let canceled=false
-    void learningJson<Catalog>('/api/content/catalog')
-      .then(result=>{if(!canceled)setCatalog(result)})
-      .catch(e=>{if(!canceled)setError(e instanceof Error?e.message:'강의 목록 조회 실패')})
-    return()=>{canceled=true}
-  },[])
-  const categories=useMemo(()=>
-    ['전체',...new Set(catalog?.lessons.map(x=>x.category).filter(Boolean)??[])],[catalog])
-  const filter=search.trim().toLowerCase()
-  const lessons=useMemo(()=>catalog?.lessons.filter(item=>
-    (category==='전체'||item.category===category) &&
-    (item.title+' '+item.summary+' '+item.category).toLowerCase().includes(filter))??[],[catalog,category,filter])
-  const quizzes=useMemo(()=>catalog?.quizzes.filter(item=>
-    (item.title+' '+item.description).toLowerCase().includes(filter))??[],[catalog,filter])
-  return <div className="native-page">
-    <header className="native-topbar"><a className="native-logo" href="/">Frontend Lab</a>
-      <nav aria-label="학습 메뉴"><a href="/me">마이페이지</a>{session.teacher&&<a href="/admin">CMS</a>}</nav>
-    </header>
-    <main className="native-home">
-      <div className="native-hero">
-        <span className="native-overline">LEARNING SPACE</span>
-        <h1>배움의 모든 과정, 한 공간에서.</h1>
-        <p>{session.studentName}님, 강의를 선택하거나 문제를 풀어보세요. 학습 기록은 내 마이페이지에 저장됩니다.</p>
-      </div>
-      <div className="native-search-row">
-        <label htmlFor="native-search" className="native-sr-only">강의와 문제 검색</label>
-        <input id="native-search" placeholder="강의 또는 문제 검색" value={search} onChange={e=>setSearch(e.target.value)}/>
-        <span>{catalog?catalog.lessons.length+'개 강의 · '+catalog.quizzes.length+'개 퀴즈':'콘텐츠를 불러오는 중'}</span>
-      </div>
-      {error&&<p role="alert" className="native-error">{error}</p>}
-      <section className="native-section" aria-labelledby="native-lesson-heading">
-        <div className="native-section-heading"><div><span className="native-overline">COURSES</span><h2 id="native-lesson-heading">강의</h2></div>
-          <div className="native-filters" role="group" aria-label="강의 분류">
-            {categories.map(name=><button key={name} type="button" className={category===name?'active':''}
-              onClick={()=>setCategory(name)}>{name}</button>)}
-          </div>
-        </div>
-        {!catalog?<p className="native-muted">강의를 불러오는 중입니다…</p>:
-          lessons.length?<div className="native-course-grid">
-            {lessons.map(item=><a key={item.slug} href={'/learn/'+item.slug} className="native-course-card">
-              <span className="native-overline">{item.category}</span><h3>{item.title}</h3>
-              <p>{item.summary||'강의 내용 확인하기'}</p><span className="native-card-bottom">강의 열기 <span aria-hidden="true">›</span></span>
-            </a>)}
-          </div>:<p className="native-muted">해당하는 강의가 없습니다.</p>}
-      </section>
-      <section className="native-section" aria-labelledby="native-quiz-heading">
-        <div className="native-section-heading"><div><span className="native-overline">PRACTICE</span><h2 id="native-quiz-heading">문제풀이</h2></div></div>
-        {!catalog?<p className="native-muted">문제 목록을 불러오는 중입니다…</p>:
-          quizzes.length?<div className="native-course-grid">
-            {quizzes.map(item=><a key={item.slug} href={'/practice/'+item.slug} className="native-course-card">
-              <span className="native-overline">{item.question_count} QUESTIONS</span>
-              <h3>{item.title}</h3><p>{item.description||'개념을 확인하고 점수를 기록하세요.'}</p>
-              <span className="native-card-bottom">문제 풀기 <span aria-hidden="true">›</span></span>
-            </a>)}
-          </div>:<p className="native-muted">해당하는 문제가 없습니다.</p>}
-      </section>
-    </main>
-    <footer className="native-foot">Frontend Lab · 학습 서비스</footer>
-  </div>
+  return <OriginalHome teacher={Boolean(session.teacher)}/>
 }
 
 function StudentApp(){
