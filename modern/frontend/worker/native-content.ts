@@ -42,6 +42,13 @@ async function jsonInput(req:Request) {
 export async function studentContentApi(req:Request,env:Env):Promise<Response>{
   if(req.method!=='GET')return fail('허용되지 않는 요청입니다.',405)
   const url=new URL(req.url)
+  if(url.pathname==='/api/content/home'){
+    const row=await env.DB.prepare(
+      "SELECT title,published_html,revision FROM br_lessons WHERE slug='home' AND published=1"
+    ).first<{title:string;published_html:string|null;revision:number}>()
+    if(!row?.published_html)return fail('홈페이지 콘텐츠를 찾을 수 없습니다.',404)
+    return reply({title:row.title,html:row.published_html,sourcePath:'/',revision:row.revision})
+  }
   if(url.pathname==='/api/content/catalog'){
     const [lessons,quizzes]=await Promise.all([
       env.DB.prepare(
