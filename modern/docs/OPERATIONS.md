@@ -113,3 +113,15 @@ Cloudflare Access 앱의 AUD가 `modern/frontend/wrangler.jsonc`의 `CF_ACCESS_A
 **선생님 공식 저장소에는 여기서 PR을 생성하지 않습니다.** 원본 변경·병합은 별도의 허가가 필요한 독립 작업입니다.
 
 참고: [Cloudflare 계정 직접 연결 방식과 배포 내역](DEPLOYMENT.md) / [검증 체크리스트](VALIDATION.md).
+
+## Blue Renaissance CMS D1 강의 라이브러리 (2026-11-09)
+
+- CMS 정식 내부 이름: **Blue Renaissance**.
+- D1 테이블 `lab_course_sources`에 강의 HTML 43개 + 홈페이지 본문 1개를 총 **44개**, 약 **429KiB**로 저장했습니다.
+- 새 D1 migration: `modern/frontend/migrations/0004_blue_renaissance_courses.sql`.
+- 학생 강의 URL은 변하지 않으며 **D1 게시 수정본 > D1 원본 > 정적 HTML** 순서로 제공됩니다.
+- 교사 CMS 강의 라이브러리에서 새 HTML 강의 경로를 만든 후 초안 저장과 게시를 할 수 있습니다.
+- 원본 수업이 GitHub에서 바뀌었을 때, 관리자 화면에서 해당 강의의 **배포본 → D1 원본 동기화**를 선택적으로 실행합니다. 기존 CMS 게시본을 덮어쓰지 않습니다.
+- 정적 CSS/JS/이미지와 원본 강의의 정적 사본은 유지합니다. D1은 원본 수업 본문과 편집본만 저장하는 무료 하이브리드입니다.
+- 공식 SVG 로고를 아직 전달받지 못해 `/ui/blue-renaissance-logo.svg` 경로를 예약하고, 현재는 **Blue Renaissance** 텍스트 워드마크를 표시합니다.
+- 상세 문서: [Blue Renaissance CMS 설계](BLUE_RENAISSANCE.md).
