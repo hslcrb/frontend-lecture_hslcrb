@@ -1,6 +1,6 @@
 import type { D1 } from './free-db'
 import type { VerifiedIdentity } from './auth'
-import { teacherMatches } from './teacher-auth'
+import type {CmsRole} from './roles'
 import { getCourseSource, listCourseSources, isCoursePath, syncCourseFromBuild } from './course-db'
 import {
   pathKind,findEntry,contentHistory,contentList,saveDraft,
@@ -21,9 +21,6 @@ function reply(data: unknown,status=200):Response {
   }})
 }
 
-export function isTeacher(identity: VerifiedIdentity, env: AdminEnv): boolean {
-  return teacherMatches(identity,env)
-}
 
 async function originalSource(request: Request, env: AdminEnv, path: string):Promise<string> {
   const archived=await getCourseSource(env.DB,path)
@@ -54,9 +51,9 @@ async function viewEntry(request: Request, env: AdminEnv, path:string) {
 
 /** Caller MUST validate signed Access identity and exact teacher allowlist first. */
 export async function handleAdminApi(
-  request:Request, env:AdminEnv, identity: VerifiedIdentity,
+  request:Request, env:AdminEnv, identity: VerifiedIdentity,role:CmsRole,
 ):Promise<Response> {
-  if(!isTeacher(identity,env))return reply({error:'선생님 관리자 계정만 접근할 수 있습니다.'},403)
+  if(role==='student')return reply({error:'관리자 권한이 필요합니다.'},403)
   const url=new URL(request.url)
   const route=url.pathname
   try {

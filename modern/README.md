@@ -44,3 +44,14 @@ Detailed [feature design and privacy boundaries](docs/LEARNING_ANALYTICS.md) and
 - Branding: the teacher console top left displays **Blue Renaissance CMS** in the original minimal design system. The requested SVG file path is `modern/frontend/public/ui/blue-renaissance-logo.svg`. **The user's actual SVG is not yet attached**; a text wordmark is used until then.
 
 See [Blue Renaissance CMS details](docs/BLUE_RENAISSANCE.md), [learning analytics](docs/LEARNING_ANALYTICS.md), and [operations](docs/OPERATIONS.md).
+
+## Creator and teacher administrator hierarchy
+
+- **Creator (rank 0):** Google identity `sea35652@gmail.com`; owns role grants/revocation and all CMS content privileges.
+- **Teacher (rank 1):** Google identity `spacejh72@gmail.com`; manages course content, quizzes and learning analytics, but cannot assign administrator rights.
+- **Delegated administrators (rank 2):** initially none. The creator can promote or revoke registered users inside the `/admin` role-management tab; changes are audited in D1.
+- **Students (rank 3):** Google sign-in + separately entered name; no CMS access.
+- CMS requests require both the verified Google Access JWT and an account-specific password session.
+- Blue Renaissance official logo copied unchanged from `hslcrb/chatgptweb-transbank` to `public/ui/blue-renaissance-logo.svg`.
+
+[Creator role architecture and governance](docs/CREATOR_RBAC.md).
