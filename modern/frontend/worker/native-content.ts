@@ -42,6 +42,15 @@ async function jsonInput(req:Request) {
 export async function studentContentApi(req:Request,env:Env):Promise<Response>{
   if(req.method!=='GET')return fail('허용되지 않는 요청입니다.',405)
   const url=new URL(req.url)
+  if(url.pathname==='/api/content/ai-steps'){
+    const data=await env.DB.prepare(
+      "SELECT slug,title,summary,published_html FROM br_lessons WHERE slug LIKE 'ai-step-%' AND published=1 ORDER BY slug LIMIT 6"
+    ).all<{slug:string;title:string;summary:string;published_html:string|null}>()
+    return reply({steps:(data.results??[]).map(row=>({
+      slug:row.slug,title:row.title,summary:row.summary,
+      terms:/<p class="ai-terms">([^<]*)<\/p>/.exec(row.published_html??'')?.[1]??''
+    }))})
+  }
   if(url.pathname==='/api/content/home'){
     const row=await env.DB.prepare(
       "SELECT title,published_html,revision FROM br_lessons WHERE slug='home' AND published=1"
