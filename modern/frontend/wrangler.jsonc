@@ -10,13 +10,40 @@
     "run_worker_first": true
   },
   "observability": {
-    "enabled": false
+    "enabled": true,
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.1
+    },
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 0.1
+    }
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "frontend-lab-cms",
       "database_id": "84a90c4b-fdc4-4bc0-9030-acf7ba26f069"
+    }
+  ],
+  "vars": {
+    "CF_ACCESS_TEAM_DOMAIN": "long-flower-8d9c.cloudflareaccess.com",
+    "CF_ACCESS_AUD": "9223d412d1840b0bd76ae01e4eb4d2ebe44311aebfa633e3eb37e1d7af70c925",
+    "TEACHER_EMAIL": "spacejh72@gmail.com",
+    "STUDENT_STORAGE": "d1",
+    "EMAIL_FROM": "no-reply@rhee.life"
+  },
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "destination_address": "spacejh72@gmail.com"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "frontend-lab.rhee.life",
+      "custom_domain": true
     }
   ]
 }
