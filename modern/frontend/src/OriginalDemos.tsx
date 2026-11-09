@@ -31,7 +31,7 @@ export default function OriginalDemos({html,sourcePath}:{html:string;sourcePath:
   function onChange(event:FormEvent<HTMLDivElement>){
     const el=event.target
     if(!(el instanceof HTMLSelectElement))return
-    const index=Array.from(ref.current?.querySelectorAll('select')??[]).indexOf(el)
+    const index=Array.from(ref.current?.querySelectorAll('select')??[]).findIndex(node=>(node as unknown)===el)
     if(index>=0)setSelects(old=>({...old,[index]:el.value}))
   }
   function onClick(event:MouseEvent<HTMLDivElement>){
@@ -80,7 +80,7 @@ export default function OriginalDemos({html,sourcePath}:{html:string;sourcePath:
         label.textContent=current+(/px$/.test(previous)?'px':/%$/.test(previous)?'%':'')
       }
     })
-    const selectsNodes=Array.from(root.querySelectorAll<HTMLSelectElement>('select'))
+    const selectsNodes=Array.from(root.querySelectorAll('select')) as unknown as HTMLSelectElement[]
     selectsNodes.forEach((el,i)=>{if(selects[i]!==undefined)el.value=selects[i]})
     root.querySelector('#sidebar')?.classList.toggle('open',sidebarOpen)
     root.querySelector('#overlay')?.classList.toggle('show',sidebarOpen)
@@ -164,7 +164,7 @@ export default function OriginalDemos({html,sourcePath}:{html:string;sourcePath:
       if(flexBox)flexBox.style.flexWrap=wrap
       style('p8-wrap','width',valueAt(8,100)+'%')
       text('v-wrap8',valueAt(8,100)+'%')
-      const ac=q<HTMLSelectElement>('ac-sel')
+      const ac=q('ac-sel') as HTMLSelectElement|null
       if(ac)ac.disabled=wrap!=='wrap'
       const s1=number(tabs.s1,1)===1
       style('p1-box','display',s1?'flex':'block')
