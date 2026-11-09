@@ -89,7 +89,7 @@ test('legacy quiz catalog generates protected answers and importable questions',
 test('protected original answer catalog and teacher-only analytics routes are server enforced',()=>{
   const worker=fs.readFileSync(path.join(root,'worker/index.ts'),'utf8')
   assert.match(worker,/path==='\/original-quiz-keys\.json'/)
-  assert.match(worker,/validTeacherSession\(request,env,identity\)/)
+  assert.match(worker,/validTeacherSession\(request,env,identity,role\)/)
   assert.match(worker,/handleTeacherLearningApi\(request,env,identity\)/)
   assert.match(worker,/handleStudentLearningApi\(request,env,identity\)/)
   assert.match(worker,/if\(!enrolled\)return error/)
