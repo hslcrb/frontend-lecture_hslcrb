@@ -4,7 +4,29 @@ import BlueRenaissanceBrand from './BlueRenaissanceBrand'
 
 type Mode='loading'|'setup'|'login'|'forgot'|'reset'|'authorized'|'denied'
 type CmsRole='creator'|'teacher'|'admin'
-type TeacherStatus={configured:boolean;authenticated:boolean;email:string;role:CmsRole;rank:number}
+type KdfDetails = { scheme: string; salt: string; iterations: number; ticket?: string }
+type TeacherStatus={configured:boolean;authenticated:boolean;email:string;role:CmsRole;rank:number;kdf:KdfDetails|null}
+function decodeBase64Url(value:string):Uint8Array {
+  const binary=atob(value.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-value.length%4)%4))
+  return Uint8Array.from(binary,c=>c.charCodeAt(0))
+}
+function encodeBase64Url(bytes:Uint8Array):string {
+  let binary=''
+  for(const b of bytes)binary+=String.fromCharCode(b)
+  return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/g,'')
+}
+async function derivePasswordProof(password:string,kdf:KdfDetails):Promise<string> {
+  if(kdf.scheme!=='client_pbkdf2_hmac_v1'||!(/^[A-Za-z0-9_-]{22}$/.test(kdf.salt))||
+    kdf.iterations!==120000)throw new Error('지원하지 않는 관리자 인증 설정입니다.')
+  const encoder=new TextEncoder()
+  const baseKey=await crypto.subtle.importKey('raw',encoder.encode(password),'PBKDF2',false,['deriveBits'])
+  const salt=decodeBase64Url(kdf.salt)
+  const proof=await crypto.subtle.deriveBits(
+    {name:'PBKDF2',hash:'SHA-256',iterations:kdf.iterations,salt:salt as BufferSource},
+    baseKey,256
+  )
+  return encodeBase64Url(new Uint8Array(proof))
+}
 async function call<T>(route:string, payload?:Record<string,unknown>):Promise<T> {
   const result=await fetch(route,{
     method:payload?'POST':'GET',credentials:'same-origin',cache:'no-store',
@@ -25,6 +47,7 @@ export default function TeacherGate() {
   const [mode,setMode]=useState<Mode>('loading')
   const [email,setEmail]=useState('')
   const [role,setRole]=useState<CmsRole>('teacher')
+  const [kdf,setKdf]=useState<KdfDetails|null>(null)
   const [password,setPassword]=useState('')
   const [confirm,setConfirm]=useState('')
   const [busy,setBusy]=useState(false)
@@ -39,9 +62,13 @@ export default function TeacherGate() {
         if(closed)return
         setEmail(status.email)
         setRole(status.role)
+        setKdf(status.kdf)
         const fragment=new URLSearchParams(window.location.hash.slice(1))
         const token=fragment.get('reset')
         if(token&&/^[a-zA-Z0-9_-]{40,50}$/.test(token)){
+          const reset=await call<{kdf:KdfDetails}>('/api/teacher/kdf?purpose=reset')
+          if(closed)return
+          setKdf(reset.kdf)
           setResetToken(token)
           setMode('reset')
         }else setMode(status.authenticated?'authorized':status.configured?'login':'setup')
@@ -62,14 +89,19 @@ export default function TeacherGate() {
     }
     setBusy(true)
     try{
+      if(!kdf)throw new Error('인증 초기화 정보가 없습니다. 새로고침 후 다시 시도해 주세요.')
+      // 120k PBKDF2 happens in the browser, not on a 10ms Workers Free CPU.
+      const credentials=kdf.scheme==='server_pbkdf2_v1' && mode==='login'
+        ? {password}
+        : {proof:await derivePasswordProof(password,kdf),salt:kdf.salt,ticket:kdf.ticket}
       if(mode==='login'){
-        await call('/api/teacher/login',{password})
+        await call('/api/teacher/login',credentials)
         setMode('authorized')
       }else if(mode==='setup'){
-        await call('/api/teacher/setup',{password})
+        await call('/api/teacher/setup',credentials)
         setMode('authorized')
       }else if(mode==='reset'){
-        await call('/api/teacher/reset/confirm',{password,token:resetToken})
+        await call('/api/teacher/reset/confirm',{...credentials,token:resetToken})
         // Clear the sensitive fragment once the token is consumed.
         window.history.replaceState(null,'',window.location.pathname)
         setResetToken('')
@@ -91,7 +123,7 @@ export default function TeacherGate() {
   }
   async function logout(){
     setBusy(true)
-    try{await call('/api/teacher/logout',{});setMode('login')}
+    try{await call('/api/teacher/logout',{});window.location.reload()}
     catch(e){setError(e instanceof Error?e.message:'로그아웃 실패')}
     finally{setBusy(false)}
   }
