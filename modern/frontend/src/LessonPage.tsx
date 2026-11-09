@@ -1,5 +1,5 @@
 import {useEffect,useMemo,useState} from 'react'
-import parse from 'html-react-parser'
+import OriginalDemos from './OriginalDemos'
 import {learningJson} from './MyPage'
 import AiLesson from './AiLesson'
 
@@ -114,5 +114,5 @@ export default function LessonPage(){
   if(/^ai-(?:index|step-\d{2})$/.test(data.slug))return <AiLesson data={data}/>
   // The surrounding source page shell (header/sidebar/layout) is included in D1 HTML.
   // Render these same elements through React instead of changing their hierarchy.
-  return <>{parse(content)}</>
+  return <OriginalDemos html={content} sourcePath={data.sourcePath}/>
 }
