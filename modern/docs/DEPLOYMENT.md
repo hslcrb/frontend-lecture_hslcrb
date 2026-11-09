@@ -4,7 +4,7 @@
 
 Payload's official with-cloudflare-d1 runtime is pre-committed under `modern/cms`, NOT generated at deployment. Official source: https://github.com/payloadcms/payload/tree/main/templates/with-cloudflare-d1
 
-**Paid Workers is currently required for Payload's bundled size.** R2 was NOT enabled on the connected Cloudflare account when checked on 2026-11-09; activation is a manual account-level step that may require billing approval. Existing Cloudflare D1 and other services are intentionally not altered.
+**Paid Workers is currently required for Payload's bundled size.** R2 was NOT enabled on the connected Cloudflare account when checked on 2026-11-09; activation is a manual account-level step that may require billing approval. A dedicated D1 database named `frontend-lab-cms` has been created (ID `84a90c4b-fdc4-4bc0-9030-acf7ba26f069`, APAC); no pre-existing D1 databases were changed.
 
 ## 1 — Google Cloud OAuth (user action)
 
@@ -38,10 +38,10 @@ After reviewing account pricing, enable R2 in your Cloudflare account dashboard.
     cd modern/cms
     corepack enable
     pnpm install
-    pnpm exec wrangler d1 create frontend-lab-cms
+    # D1 frontend-lab-cms was already created on 2026-11-09.
     pnpm exec wrangler r2 bucket create frontend-lab-cms
 
-Insert the returned new **D1 database ID** into `modern/cms/wrangler.jsonc`. Check the real R2 bucket name and all bindings. Generate a long random PAYLOAD_SECRET and store it using `pnpm exec wrangler secret put PAYLOAD_SECRET`.
+The new **D1 database ID** has already been inserted into `modern/cms/wrangler.jsonc`. Check the real R2 bucket name and all bindings. Generate a long random PAYLOAD_SECRET and store it using `pnpm exec wrangler secret put PAYLOAD_SECRET`.
 
 The original Payload template includes baseline migrations for its Users/Media collections. **Generate and review a new migration for lecture-pages, lecture-assets, versions and lab-settings** (from `modern/cms`):
 
