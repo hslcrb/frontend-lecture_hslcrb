@@ -11,7 +11,7 @@ type Tab='analytics'|'questions'|'files'|'roles'
 const tabs:Array<{id:Tab;label:string;description:string}>=[
   {id:'analytics',label:'학습 현황',description:'학생별 점수·통계'},
   {id:'questions',label:'문제 관리',description:'문항 추가·수정·게시'},
-  {id:'files',label:'강의 라이브러리',description:'D1 강의·HTML·CSS·JS 편집'},
+  {id:'files',label:'강의 라이브러리',description:'강의·파일·버전 관리'},
 ]
 export default function TeacherWorkspace({role}:{role:CmsRole}){
   const [selected,setSelected]=useState<Tab>('analytics')

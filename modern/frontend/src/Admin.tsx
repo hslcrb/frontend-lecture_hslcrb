@@ -96,7 +96,7 @@ export default function Admin() {
   }
   async function syncBundled() {
     if(busy||!page||page.kind!=='html')return
-    if(!window.confirm('현재 배포 파일의 HTML을 D1 원본 저장소로 동기화할까요? CMS 게시본은 변경되지 않습니다.'))return
+    if(!window.confirm('기본 강의 파일을 다시 가져올까요? 현재 게시된 수정본은 그대로 유지됩니다.'))return
     setBusy(true);setError('');setNotice('')
     try{
       const result=await api<{ok:boolean;changed:boolean}>('/api/admin/course/sync',{
@@ -104,7 +104,7 @@ export default function Admin() {
         body:JSON.stringify({path:selected})
       })
       await Promise.all([load(selected),refreshList()])
-      setNotice(result.changed?'배포된 HTML 원본을 D1에 동기화했습니다. CMS 수정본은 유지됩니다.':'D1에 이미 동일한 원본이 저장되어 있습니다.')
+      setNotice(result.changed?'강의 원본을 갱신했습니다. 게시된 수정본은 그대로 유지됩니다.':'강의 원본이 이미 최신 상태입니다.')
     }catch(e){setError(e instanceof Error?e.message:'원본 동기화 실패')}
     finally{setBusy(false)}
   }
@@ -139,7 +139,7 @@ export default function Admin() {
     <div className="cms-grid">
       <aside className="cms-side">
         <div className="cms-side-head"><strong>강의·파일 목록</strong><span>{files.length}개</span></div>
-        <p className="cms-db-info">D1 강의 원본 {courseCount}개 · 게시된 수정본은 별도 관리</p>
+        <p className="cms-db-info">등록된 강의 {courseCount}개 · 수정 이력 보존</p>
         <form className="cms-create-course" onSubmit={createCourse}>
           <label htmlFor="cms-new-path">새 강의 만들기</label>
           <input id="cms-new-path" placeholder="/ai/new-lesson.html" value={newCoursePath}
@@ -172,7 +172,7 @@ export default function Admin() {
             <div className="cms-editor-title">
               <div><span className="cms-eyebrow">{page.kind.toUpperCase()} 파일</span>
                 <h2>{selected==='/'?'메인 홈페이지':selected}</h2>
-                <p>{page.published?'CMS 수정본 게시 중':page.originalStorage==='d1'?'D1 원본 강의 제공 중':page.originalExists?'배포 원본 파일 사용 중':'신규 자료'} · {page.hidden?'학생 화면에서 숨김':'학생에게 공개'}{unsaved?' · 저장하지 않은 변경 있음':''}</p>
+                <p>{page.published?'CMS 수정본 게시 중':page.originalStorage==='d1'?'기본 강의 제공 중':page.originalExists?'배포 원본 파일 사용 중':'신규 자료'} · {page.hidden?'학생 화면에서 숨김':'학생에게 공개'}{unsaved?' · 저장하지 않은 변경 있음':''}</p>
               </div>
               <div className="cms-editor-actions">
                 <button type="button" disabled={busy||!source.trim()} onClick={()=>void action('saveDraft')}>초안 저장</button>
@@ -201,7 +201,7 @@ export default function Admin() {
               {selected!=='/'?<a href={selected} target="_blank" rel="noopener noreferrer">학생 강의 화면 확인</a>:
                 <a href="/" target="_blank" rel="noopener noreferrer">메인 화면 확인</a>}
               <button type="button" onClick={()=>{void load(selected)}} disabled={busy}>마지막 저장본 다시 불러오기</button>
-              {page.kind==='html'&&page.originalExists&&<button type="button" onClick={()=>void syncBundled()} disabled={busy}>배포본 → D1 원본 동기화</button>}
+              {page.kind==='html'&&page.originalExists&&<button type="button" onClick={()=>void syncBundled()} disabled={busy}>강의 원본 갱신</button>}
             </div>
           </>
         }
