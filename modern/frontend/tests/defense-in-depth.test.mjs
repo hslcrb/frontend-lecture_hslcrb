@@ -19,11 +19,12 @@ test('Access JWT is signature checked with remote JWKS',()=>{
   assert.match(s,/algorithms: \['RS256'\]/)
   assert.doesNotMatch(s,/Cf-Access-Authenticated-User-Email/)
 })
-test('optional Supabase student table has strict RLS and zero public grants',()=>{
-  const sql=fs.readFileSync(path.join(modern,'supabase/migrations/20261109000000_frontend_lab_students.sql'),'utf8')
-  assert.match(sql,/enable row level security/)
-  assert.match(sql,/revoke all on table public.frontend_lab_students from public, anon, authenticated/)
-  assert.doesNotMatch(sql,/create policy\s+.*\s+to anon/i)
+test('Blue Renaissance uses Cloudflare D1 as the sole learning database',()=>{
+  const worker=read('worker/index.ts')
+  const config=JSON.parse(read('wrangler.jsonc'))
+  assert.equal(config.d1_databases[0].binding,'DB')
+  assert.doesNotMatch(worker,/lookupStudent|saveStudent|SUPABASE_URL|SUPABASE_SERVICE_ROLE_KEY/)
+  assert.equal(config.vars.STUDENT_STORAGE,'d1')
 })
 test('browser imports no server credentials',()=>{
   for(const x of ['src/main.tsx','src/App.tsx','src/portal.css']){
