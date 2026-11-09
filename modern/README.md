@@ -9,9 +9,17 @@ Live URL: https://frontend-lab.rhee.life
 - Recovery: one-time link emailed to teacher address by Cloudflare Email Service; requires that teacher first verifies the Cloudflare Email Routing destination-address invitation. Link usable once for 15 minutes, protected by Google login too.
 - D1 CMS: draft/publish/hide/restore HTML, JS and CSS, plus teacher-only student roster.
 - Database: frontend-lab-cms, 6 lab tables. No R2, Payload, or paid Worker required.
-- Source: hslcrb/frontend-lecture_hslcrb; Cloudflare Workers Builds monitors feat/cloudflare-free-d1-cms-20261109. GitHub Actions not used.
+- Source: hslcrb/frontend-lecture_hslcrb; Cloudflare Workers Builds uses the Fork's main after the documented merge; the historical development branch remains as an archive. GitHub Actions not used.
 - Cloudflare build and Worker deployment successful (140 assets). Real browser login/enrollment/password E2E NOT yet verified by the teacher.
 
 Original lesson files and the teacher's original repository are unchanged. Upstream PR postponed until user's explicit final approval.
 
-[Deployment and next steps](docs/DEPLOYMENT.md) | [Security](docs/SECURITY.md)
+## Project documentation
+
+- [Full development history and decisions](docs/DEVELOPMENT_HISTORY.md)
+- [System architecture, D1 model and auth flows](docs/ARCHITECTURE.md)
+- [Deployment, operations, recovery and rollback](docs/OPERATIONS.md)
+- [Tests performed vs. outstanding browser validation](docs/VALIDATION.md)
+- [Deployment and next steps](docs/DEPLOYMENT.md) | [Security](docs/SECURITY.md)
+
+The original professor's public site and official repository were not changed by this project. Public GitHub hosting does not imply a right to relicense the lectures.

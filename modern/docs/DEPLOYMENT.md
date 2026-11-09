@@ -3,7 +3,8 @@
 Production: https://frontend-lab.rhee.life
 Cloudflare Worker: frontend-lab-web
 GitHub source: hslcrb/frontend-lecture_hslcrb
-GitHub branch: feat/cloudflare-free-d1-cms-20261109
+GitHub production branch: main (fork)
+Historical development branch: feat/cloudflare-free-d1-cms-20261109
 Build root: modern/frontend
 Build: npm test && npm run build
 Deploy: npx wrangler deploy
@@ -30,3 +31,7 @@ D1 ID: 84a90c4b-fdc4-4bc0-9030-acf7ba26f069
 Students can be from any Google account, but Cloudflare Access Free seat and Workers/D1 usage limits remain. D1 records only Access subject, verified email, entered name and timestamps. Before classroom rollout the teacher should approve data handling purpose, notice, retention and deletion.
 
 No paid Payload, R2, or Supabase project is necessary. No upstream PR sent.
+
+## Project documentation
+
+See [full development history](DEVELOPMENT_HISTORY.md), [architecture](ARCHITECTURE.md), [operations and rollback](OPERATIONS.md), and [validation checklist](VALIDATION.md).
