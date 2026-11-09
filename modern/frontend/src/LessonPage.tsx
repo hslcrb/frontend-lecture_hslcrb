@@ -1,95 +1,118 @@
 import {useEffect,useMemo,useState} from 'react'
 import parse from 'html-react-parser'
 import {learningJson} from './MyPage'
-import './native.css'
+import AiLesson from './AiLesson'
 
 interface Lesson {
-  slug:string;title:string;category:string;summary:string;html:string;
-  sourcePath:string;revision:number
+  slug:string;title:string;category:string;summary:string;
+  html:string;sourcePath:string;revision:number
 }
-interface Catalogue{
+interface Catalogue {
   lessons:Array<{slug:string;title:string;source_path:string}>
   quizzes:Array<{slug:string;title:string;legacy_path:string|null}>
 }
 /**
- * Legacy course text is stored in D1, not in a static HTML route.
- * Render through React only after stripping executable markup and handlers.
+ * Convert server-stored course markup to safe React elements while keeping
+ * the original DOM structure and CSS class names. No legacy executable JS
+ * file is imported: lecture HTML is content, not a separate web app.
  */
-export function safeLessonHtml(html:string,sourcePath:string,catalog:Catalogue|null):string{
-  const documentObject=new DOMParser().parseFromString(html,'text/html')
-  documentObject.querySelectorAll(
-    'script,iframe,object,embed,form,input,button,select,textarea,style,link,meta,base,svg,math,template'
-  ).forEach(element=>element.remove())
-  const root=documentObject.body
+export function safeLessonHtml(html:string,sourcePath:string,catalog:Catalogue|null):string {
+  const doc=new DOMParser().parseFromString(html,'text/html')
+  // Preserve original static demo markup, controls and SVG artwork; disallow execution.
+  doc.querySelectorAll(
+    'script,iframe,object,embed,style,link,meta,base,template,foreignObject,animate,set'
+  ).forEach(el=>el.remove())
+  for(const form of Array.from(doc.querySelectorAll('form'))){
+    form.replaceWith(...Array.from(form.childNodes))
+  }
   const lookup=new Map<string,string>()
-  for(const lesson of catalog?.lessons??[])lookup.set(lesson.source_path,'/learn/'+lesson.slug)
-  for(const quiz of catalog?.quizzes??[])if(quiz.legacy_path)lookup.set(quiz.legacy_path,'/practice/'+quiz.slug)
-  for(const el of Array.from(root.querySelectorAll('*'))){
-    for(const attr of Array.from(el.attributes)){
-      const name=attr.name.toLowerCase()
-      if(name.startsWith('on')||name==='srcdoc'||name==='style'||name==='formaction'){
-        el.removeAttribute(attr.name);continue
+  for(const item of catalog?.lessons??[])lookup.set(item.source_path,'/learn/'+item.slug)
+  for(const item of catalog?.quizzes??[])if(item.legacy_path)
+    lookup.set(item.legacy_path,'/practice/'+item.slug)
+  for(const el of Array.from(doc.body.querySelectorAll('*'))){
+    for(const attribute of Array.from(el.attributes)){
+      const key=attribute.name.toLowerCase()
+      if(key.startsWith('on')||key==='srcdoc'||key==='formaction'){
+        el.removeAttribute(attribute.name)
+        continue
       }
-      if(name==='href'||name==='src'||name==='poster'){
-        const raw=attr.value.trim()
-        if(raw.startsWith('#'))continue
+      if(key==='style'){
+        const style=attribute.value
+        if(style.length>4000||/(?:url\s*\(|@import|expression\s*\(|behavior\s*:|binding\s*:)/i.test(style))
+          el.removeAttribute(attribute.name)
+        continue
+      }
+      if(key==='href'||key==='src'||key==='poster'||key==='xlink:href'){
+        const value=attribute.value.trim()
+        if(value.startsWith('#'))continue
         try{
-          const candidate=new URL(raw,new URL(sourcePath,window.location.origin))
-          if(!['http:','https:'].includes(candidate.protocol)){
-            el.removeAttribute(attr.name);continue
+          const target=new URL(value,new URL(sourcePath,window.location.origin))
+          if(!['https:','http:'].includes(target.protocol)){
+            el.removeAttribute(attribute.name)
+            continue
           }
-          if(candidate.origin===window.location.origin){
-            const routed=lookup.get(candidate.pathname)
-            el.setAttribute(attr.name,routed? routed+candidate.hash : candidate.pathname+candidate.search+candidate.hash)
-          }else if(name==='href') {
+          if(target.origin===window.location.origin){
+            const route=lookup.get(target.pathname)
+            el.setAttribute(attribute.name,route?route+target.hash:target.pathname+target.search+target.hash)
+          }else if(key==='href'&&el.tagName==='A'){
             el.setAttribute('rel','noopener noreferrer')
-          }else {
-            // Remote images are permitted, never remote scripts or executable embeds.
-            if(el.tagName!=='IMG')el.removeAttribute(attr.name)
+          }else if(el.tagName!=='IMG'){
+            el.removeAttribute(attribute.name)
           }
-        }catch{el.removeAttribute(attr.name)}
+        }catch{el.removeAttribute(attribute.name)}
       }
     }
+    if(el.tagName==='INPUT'){
+      const field=el as HTMLInputElement
+      if(field.type==='file'||field.type==='password')field.remove()
+    }
   }
-  return root.innerHTML
+  return doc.body.innerHTML
 }
-
+const lazyStyles:Record<string,()=>Promise<unknown>>=import.meta.glob('./original-css/pages/*.css')
+function cssKey(path:string){
+  const relative=path.replace(/^\//,'').replace(/\.(?:html|htm)$/i,'').replace(/\//g,'--')
+  const base='./original-css/pages/'+relative+'.css'
+  if(lazyStyles[base])return base
+  return './original-css/pages/'+relative+'-htm.css'
+}
 export default function LessonPage(){
   const slug=window.location.pathname.split('/').filter(Boolean)[1]??''
   const [data,setData]=useState<Lesson|null>(null)
   const [catalog,setCatalog]=useState<Catalogue|null>(null)
-  const [loading,setLoading]=useState(true)
   const [error,setError]=useState('')
+  const [loading,setLoading]=useState(true)
   useEffect(()=>{
     let disposed=false
+    const previous=document.body.className
+    const previousTitle=document.title
     void Promise.all([
       learningJson<Lesson>('/api/content/lesson/'+encodeURIComponent(slug)),
       learningJson<Catalogue>('/api/content/catalog')
-    ]).then(([lesson,items])=>{if(!disposed){setData(lesson);setCatalog(items);setLoading(false)}})
-      .catch(e=>{if(!disposed){setError(e instanceof Error?e.message:'강의를 불러올 수 없습니다.');setLoading(false)}})
-    return()=>{disposed=true}
+    ]).then(async ([lesson,listing])=>{
+      if(disposed)return
+      if(/^\/uiux\//.test(lesson.sourcePath))document.body.className=
+        'gestalt-page '+(lesson.sourcePath.includes('theory')?'gestalt-theory':'gestalt-home')
+      else if(lesson.sourcePath.startsWith('/ai/'))document.body.className='ai-page'
+      else document.body.className='course-ui'
+      if(!lesson.sourcePath.startsWith('/ai/')){
+        const key=cssKey(lesson.sourcePath)
+        if(lazyStyles[key])await lazyStyles[key]()
+      }
+      if(disposed)return
+      setData(lesson)
+      setCatalog(listing)
+      setLoading(false)
+      document.title=lesson.title+' | Frontend Lab'
+    }).catch(e=>{if(!disposed){setError(e instanceof Error?e.message:'강의를 불러오지 못했습니다.');setLoading(false)}})
+    return()=>{disposed=true;document.body.className=previous;document.title=previousTitle}
   },[slug])
-  const body=useMemo(()=>data?safeLessonHtml(data.html,data.sourcePath,catalog):'',[data,catalog])
-  useEffect(()=>{if(data)document.title=data.title+' · Frontend Lab'},[data])
-  if(loading)return <main className="native-page"><p>강의를 불러오는 중입니다…</p></main>
-  if(!data)return <main className="native-page"><a href="/">강의실</a><p role="alert">{error}</p></main>
-  return <main className="native-page">
-    <header className="native-topbar">
-      <a className="native-logo" href="/">Frontend Lab</a>
-      <nav aria-label="학습 이동"><a href="/">전체 강의</a><a href="/me">마이페이지</a></nav>
-    </header>
-    <div className="native-lesson-layout">
-      <aside className="native-lesson-rail">
-        <span className="native-overline">{data.category}</span>
-        <h1>{data.title}</h1>
-        {data.summary&&<p>{data.summary}</p>}
-        <p className="native-meta">강의 콘텐츠 · 업데이트 버전 {data.revision}</p>
-        <a href="/">다른 강의 보기</a>
-      </aside>
-      <article className="native-reading-content course-ui" aria-label="강의 본문">
-        {parse(body)}
-      </article>
-    </div>
-    <footer className="native-foot">Frontend Lab · 수업 자료</footer>
-  </main>
+  const content=useMemo(()=>data?safeLessonHtml(data.html,data.sourcePath,catalog):'',[data,catalog])
+  if(loading)return <main className="onboard-shell" aria-live="polite">강의를 불러오는 중입니다…</main>
+  if(error||!data)return <main className="onboard-shell"><a href="/">Frontend Lab 홈</a>
+    <p role="alert">{error||'강의를 찾을 수 없습니다.'}</p></main>
+  if(/^ai-(?:index|step-\d{2})$/.test(data.slug))return <AiLesson data={data}/>
+  // The surrounding source page shell (header/sidebar/layout) is included in D1 HTML.
+  // Render these same elements through React instead of changing their hierarchy.
+  return <>{parse(content)}</>
 }
