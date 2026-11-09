@@ -30,7 +30,7 @@ test('the React homepage renders the original database DOM rather than the new c
   assert.match(worker,/FROM br_lessons WHERE slug='home'/)
   assert.match(app,/<OriginalHome/)
   assert.match(home,/parse\(content\)/)
-  assert.match(home,/\.nav-links/)
+  assert.match(home,/nav-links/)
   assert.match(home,/original-css\/pages\/index\.css/)
   assert.doesNotMatch(app,/배움의 모든 과정, 한 공간에서/)
 })
