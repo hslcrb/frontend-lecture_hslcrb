@@ -23,3 +23,13 @@ Original lesson files and the teacher's original repository are unchanged. Upstr
 - [Deployment and next steps](docs/DEPLOYMENT.md) | [Security](docs/SECURITY.md)
 
 The original professor's public site and official repository were not changed by this project. Public GitHub hosting does not imply a right to relicense the lectures.
+
+## Student learning platform (2026-11-09 extension)
+
+- Students get a stable `FL-...` ID and private [My Page](https://frontend-lab.rhee.life/me) with scores and activity timeline.
+- Teachers see a [minimal learning dashboard](https://frontend-lab.rhee.life/admin) with student performance metrics, SVG charts, per-student reports, and a structured Quiz Studio.
+- The Quiz Studio adds/edits choice & short-answer questions, options, answer keys, explanations, drafts, published versions and version restore. Original quizzes can be copied into a managed quiz without changing the original HTML/JS.
+- Original unified quiz controller is instrumented at **build time in a copy only**, so legacy quiz scores can also be recorded when the answer catalog is unchanged.
+- Grading is performed in the Worker against server-side answer keys. The original legacy JS still contains answers; scores are for formative practice, not proctored exams.
+
+Detailed [feature design and privacy boundaries](docs/LEARNING_ANALYTICS.md) and [implementation log](docs/FEATURE_LOG_2026-11-09.md). The new features require migration `0003_learning_profiles_quizzes.sql` in the existing D1.
