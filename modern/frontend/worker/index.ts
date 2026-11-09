@@ -23,6 +23,7 @@ const securityHeaders={
   'Referrer-Policy':'strict-origin-when-cross-origin',
   'X-Frame-Options':'SAMEORIGIN',
   'Permissions-Policy':'camera=(), microphone=(), geolocation=()',
+  'X-Robots-Tag':'noindex, nofollow, noarchive',
 }
 function reply(data:unknown,status=200){
   return new Response(JSON.stringify(data),{status,headers:{
