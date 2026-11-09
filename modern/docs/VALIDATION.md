@@ -74,3 +74,12 @@
 **2026-11-09 추가 확인:** 개인 Fork main에 병합 커밋 `4e6db491`로 합쳤고, Cloudflare Workers Builds의 프로덕션 감시 브랜치를 main으로 바꿨습니다. [병합 보고서](RELEASE_2026-11-09.md)를 참고하세요.
 
 **원본 선생님 저장소 Pull Request:** 사용자가 최종적으로 승인하지 않았으므로 만들지 않습니다. 개인 Fork의 main 병합과는 별개의 일입니다.
+
+## E. Blue Renaissance CMS / D1 수업 원본 아카이브 (2026-11-09)
+
+- Cloudflare D1에서 `lab_course_sources` 테이블과 인덱스를 실제 생성했습니다.
+- 기존 강의 HTML 43개 및 홈페이지 본문 1개를 **총 44개** 저장했습니다. D1 집계로 `pages=44`, `kib≈429`, `homepage=1`을 확인했습니다.
+- 원본 D1 저장은 기존 CMS 게시본 테이블(`lab_content`)과 구분해 구성했으며, 기존 학생·점수·교사 세션 데이터를 지우지 않았습니다.
+- Worker 코드의 D1 수업 원본 우선 제공, CMS 원본 목록 및 수업 동기화 로직, Blue Renaissance 브랜드 슬롯에 대한 Node 정적 테스트를 추가했습니다.
+- Cloudflare 자동 빌드 로그에서 **22개 테스트 PASS / 0개 FAIL**, Vite·TypeScript 빌드와 Workers 배포 성공을 확인했습니다.
+- **원본 디자인의 실제 브라우저 시각 회귀, 실사용 Google 계정으로 강의 열람·동기화, 교사 관리자 새 UI, 사용자 제공 SVG 로고 반영은 별도 검증이 필요합니다.**
