@@ -27,7 +27,7 @@ export default function TeacherWorkspace({role}:{role:CmsRole}){
   return <div className="lab-workspace">
     <header className="lab-workspace-head">
       <div><BlueRenaissanceBrand/>
-        <span className="lab-eyebrow">FRONTEND LAB · ${rank}</span>
+        <span className="lab-eyebrow">FRONTEND LAB · {rank}</span>
         <h1>교육 운영 대시보드</h1>
         <p>강의 콘텐츠와 학생 학습 기록을 한 곳에서 관리합니다.</p>
       </div>

@@ -32,12 +32,16 @@
     "CF_ACCESS_AUD": "9223d412d1840b0bd76ae01e4eb4d2ebe44311aebfa633e3eb37e1d7af70c925",
     "TEACHER_EMAIL": "spacejh72@gmail.com",
     "STUDENT_STORAGE": "d1",
-    "EMAIL_FROM": "no-reply@rhee.life"
+    "EMAIL_FROM": "no-reply@rhee.life",
+    "OWNER_EMAIL": "sea35652@gmail.com"
   },
   "send_email": [
     {
       "name": "EMAIL",
-      "destination_address": "spacejh72@gmail.com"
+      "allowed_destination_addresses": [
+        "sea35652@gmail.com",
+        "spacejh72@gmail.com"
+      ]
     }
   ],
   "routes": [
