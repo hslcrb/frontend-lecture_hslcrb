@@ -1,5 +1,5 @@
 import {useEffect,useState,type FormEvent} from 'react'
-import AdminConsole from './Admin'
+import TeacherWorkspace from './TeacherWorkspace'
 
 type Mode='loading'|'setup'|'login'|'forgot'|'reset'|'authorized'|'denied'
 type TeacherStatus={configured:boolean;authenticated:boolean;email:string}
@@ -89,7 +89,7 @@ export default function TeacherGate() {
   if(mode==='authorized')return <><div className="teacher-session">
     <span>관리자 2단계 인증 완료 · {email}</span>
     <button type="button" disabled={busy} onClick={()=>void logout()}>관리자 로그아웃</button>
-  </div><AdminConsole/></>
+  </div><TeacherWorkspace/></>
   if(mode==='loading')return <main className="onboard-shell" aria-live="polite">선생님 인증 상태를 확인하고 있습니다…</main>
   if(mode==='denied')return <main className="onboard-shell"><section className="onboard-panel">
     <span className="onboard-kicker">TEACHER ACCESS</span><h1>관리자 접근 제한</h1>
