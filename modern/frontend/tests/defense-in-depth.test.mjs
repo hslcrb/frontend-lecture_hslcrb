@@ -69,7 +69,7 @@ test('student data and admin editing are server protected',()=>{
 test('teacher password and reset are Google-bound and stored in D1',()=>{
   const auth=read('worker/teacher-auth.ts')
   const api=read('worker/index.ts')
-  assert.match(auth,/getCredential\(env,identity\)/)
+  assert.match(auth,/getCredential\(env,\s*identity\)/)
   assert.match(auth,/PBKDF2/)
   assert.match(auth,/getRandomValues/)
   assert.match(auth,/lab_teacher_credentials/)
