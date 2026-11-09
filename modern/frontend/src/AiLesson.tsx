@@ -44,9 +44,17 @@ function AiFooter({step}:{step:number}){
   </nav>
 }
 interface AiTopic{heading:string;definition:string;analogy:string;example:string;point:string}
-function parseTopics(html:string):{terms:string;blocks:AiTopic[]}{
+interface CaseStudy {title:string;definition:string;exampleLines:string[];ux:string;takeaway:string}
+function parseTopics(html:string):{terms:string;blocks:AiTopic[];special:CaseStudy|null}{
   const documentObject=new DOMParser().parseFromString(html,'text/html')
-  return {terms:documentObject.querySelector('.ai-terms')?.textContent?.trim()??'',
+  const specialNode=documentObject.querySelector('.ai-case-study')
+  const readText=(selector:string)=>specialNode?.querySelector(selector)?.textContent?.trim()??''
+  const special:CaseStudy|null=specialNode?{
+    title:readText('h2'),definition:readText('.definition'),
+    exampleLines:Array.from(specialNode.querySelectorAll('.ai-example p')).map(p=>p.textContent?.trim()??''),
+    ux:readText('.ai-case p'),takeaway:readText('.ai-point p')
+  }:null
+  return {special,terms:documentObject.querySelector('.ai-terms')?.textContent?.trim()??'',
     blocks:Array.from(documentObject.querySelectorAll('.lesson-block')).map(element=>{
       const p=Array.from(element.querySelectorAll(':scope > p')).map(node=>node.textContent?.trim()??'')
       return {heading:element.querySelector('h2')?.textContent?.trim()??'',
@@ -107,6 +115,16 @@ export default function AiLesson({data}:{data:Data}){
         <div className="ai-case"><strong>수업·실무 사례</strong><p>{item.example}</p></div>
         <div className="ai-point"><strong>핵심 기억하기</strong><p>{item.point}</p></div>
       </section>)}
+      {parsed.special&&<section className="ai-topic">
+        <div className="ai-k">CASE STUDY · 실제 AI 서비스</div>
+        <h2>{parsed.special.title}</h2>
+        <p className="definition">{parsed.special.definition}</p>
+        <div className="ai-example"><strong>배운 개념을 연결해 보기</strong>
+          {parsed.special.exampleLines.map((line,i)=><p key={i}>{line}</p>)}
+        </div>
+        <div className="ai-case"><strong>AI UX 관점에서 생각하기</strong><p>{parsed.special.ux}</p></div>
+        <div className="ai-point"><strong>핵심 기억하기</strong><p>{parsed.special.takeaway}</p></div>
+      </section>}
     </>}
     <AiFooter step={step}/>
     <p className="ai-footer">JJinMangGo · Frontend Lab AI Learning</p>
