@@ -131,7 +131,7 @@ export default function Admin() {
   return <main className="cms-shell">
     <header className="cms-head">
       <div><span className="cms-eyebrow">Blue Renaissance CMS</span><h1>강의 자료 관리</h1>
-        <p>Cloudflare Workers Free + D1 · 강의·퀴즈·CSS·JavaScript</p></div>
+        <p>강의·퀴즈·CSS·JavaScript 콘텐츠 관리</p></div>
       <div className="cms-account"><span>{email||'관리자 인증 확인 중'}</span><a href="/">학생 화면</a></div>
     </header>
     {error && <p className="cms-error" role="alert">{error}</p>}

@@ -44,6 +44,6 @@ export default function TeacherWorkspace({role}:{role:CmsRole}){
         selected==='questions'?<QuizStudio/>:
         selected==='roles'&&role==='creator'?<RoleManager/>:<AdminConsole/>}
     </div>
-    <footer className="lab-footer">Blue Renaissance CMS · Cloudflare Workers Free + D1 · 교사 전용 관리 시스템</footer>
+    <footer className="lab-footer">Blue Renaissance CMS · Frontend Lab</footer>
   </div>
 }
