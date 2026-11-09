@@ -1,0 +1,11 @@
+/* Reset: browser defaults only, not lesson demo styling */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0}
+img,svg,video,canvas{max-width:100%}
+img,video{height:auto}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus,#3455d1);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
