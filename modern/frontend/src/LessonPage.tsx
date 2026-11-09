@@ -23,7 +23,9 @@ export function safeLessonHtml(html:string,sourcePath:string,catalog:Catalogue|n
     'script,iframe,object,embed,style,link,meta,base,template,foreignObject,animate,set'
   ).forEach(el=>el.remove())
   for(const form of Array.from(doc.querySelectorAll('form'))){
-    form.replaceWith(...Array.from(form.childNodes))
+    form.removeAttribute('action')
+    form.removeAttribute('method')
+    form.removeAttribute('target')
   }
   const lookup=new Map<string,string>()
   for(const item of catalog?.lessons??[])lookup.set(item.source_path,'/learn/'+item.slug)

@@ -244,7 +244,8 @@ export default function OriginalDemos({html,sourcePath}:{html:string;sourcePath:
   },[html])
 
   return <div ref={ref} style={{display:'contents'}} onInputCapture={onInput}
-    onChangeCapture={onChange} onClickCapture={onClick}>
+    onChangeCapture={onChange} onClickCapture={onClick}
+    onSubmitCapture={event=>event.preventDefault()}>
     {parse(html)}
   </div>
 }
