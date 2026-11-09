@@ -20,7 +20,7 @@
   "d1_databases": [
     {
       "binding": "D1",
-      "database_id": "DATABASE_ID",
+      "database_id": "84a90c4b-fdc4-4bc0-9030-acf7ba26f069",
       "database_name": "frontend-lab-cms",
       "remote": true,
     },
@@ -52,7 +52,7 @@
   //     "d1_databases": [
   //       {
   //         "binding": "D1",
-  //         "database_id": "DATABASE_ID",
+  //         "database_id": "84a90c4b-fdc4-4bc0-9030-acf7ba26f069",
   //         "database_name": "my-app-staging",
   //         "remote": true
   //       }
