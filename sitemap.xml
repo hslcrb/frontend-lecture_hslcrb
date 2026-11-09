@@ -1,118 +1,175 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- 메인 -->
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://learn.jjinmango.kr/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/index.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <loc>https://learn.jjinmango.kr/ai/index.html</loc>
+    <priority>0.9</priority>
   </url>
-
-  <!-- CSS Grid -->
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/grid/grid-lecture.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://learn.jjinmango.kr/ai/quiz-01.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/ai/quiz-02.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/ai/quiz-03.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/ai/quiz-04.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/ai/quiz-05.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/ai/quiz-06.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/ai/step-01.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/grid/css-grid-quiz.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- CSS Flex -->
-  <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/flex/flex-lecture.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://learn.jjinmango.kr/ai/step-02.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/flex/css-flex-quiz.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- CSS Position -->
-  <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/position/position-lecture.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://learn.jjinmango.kr/ai/step-03.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/position/css-position-quiz.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://learn.jjinmango.kr/ai/step-04.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/ai/step-05.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/ai/step-06.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/flex/css-flex-quiz.html</loc>
     <priority>0.7</priority>
   </url>
-
-  <!-- HTML 퀴즈 -->
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/html_quiz1.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://learn.jjinmango.kr/flex/flex-lecture.html</loc>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/html_quiz2.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- CSS 퀴즈 -->
-  <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css-text-color-quiz.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://learn.jjinmango.kr/grid/css-grid-quiz.html</loc>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css-font-quiz.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://learn.jjinmango.kr/grid/grid-lecture.html</loc>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css-unit-quiz.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://learn.jjinmango.kr/javascript/01-history.html</loc>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css-boxmodel-quiz.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://learn.jjinmango.kr/javascript/02-variable.html</loc>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css_background-quiz.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://learn.jjinmango.kr/javascript/03-data-types.html</loc>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css_combinator_quiz.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://learn.jjinmango.kr/javascript/04-operators.html</loc>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jjinmanggo.github.io/frontend-lecture/quiz/css_priority_quiz.html</loc>
-    <lastmod>2025-06-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://learn.jjinmango.kr/javascript/05-scope-hoisting.html</loc>
+    <priority>0.7</priority>
   </url>
-
+  <url>
+    <loc>https://learn.jjinmango.kr/javascript/06-conditionals.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/javascript/07-loops.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/javascript/08-dom.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/javascript/09-objects.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/javascript/js.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/position/css-position-quiz.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/position/position-lecture.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/quiz/css-boxmodel-quiz.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/quiz/css-font-quiz.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/quiz/css-text-color-quiz.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/quiz/css-unit-quiz.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/quiz/css_background-quiz.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/quiz/css_combinator_quiz.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/quiz/css_priority_quiz.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/quiz/html_quiz1.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/quiz/html_quiz2.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/tailwind/tailwind-lecture.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/uiux/gestalt-quiz.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/uiux/gestalt-theory.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://learn.jjinmango.kr/uiux/gestalt.html</loc>
+    <priority>0.7</priority>
+  </url>
 </urlset>

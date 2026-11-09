@@ -1,0 +1,49 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "frontend-lab-web",
+  "workers_dev": false,
+  "preview_urls": false,
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-11-09",
+  "assets": {
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "observability": {
+    "enabled": true,
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.1
+    },
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 0.1
+    }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "frontend-lab-cms",
+      "database_id": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "vars": {
+    "CF_ACCESS_TEAM_DOMAIN": "your-team.cloudflareaccess.com",
+    "CF_ACCESS_AUD": "0000000000000000000000000000000000000000000000000000000000000000",
+    "TEACHER_EMAIL": "instructor@example.com",
+    "STUDENT_STORAGE": "d1",
+    "EMAIL_FROM": "no-reply@rhee.life"
+  },
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "destination_address": "instructor@example.com"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "frontend-lab.rhee.life",
+      "custom_domain": true
+    }
+  ]
+}
