@@ -32,12 +32,16 @@
     "CF_ACCESS_AUD": "0000000000000000000000000000000000000000000000000000000000000000",
     "TEACHER_EMAIL": "instructor@example.com",
     "STUDENT_STORAGE": "d1",
-    "EMAIL_FROM": "no-reply@rhee.life"
+    "EMAIL_FROM": "no-reply@rhee.life",
+    "OWNER_EMAIL": "rheehose@rheehose.com"
   },
   "send_email": [
     {
       "name": "EMAIL",
-      "destination_address": "instructor@example.com"
+      "allowed_destination_addresses": [
+        "rheehose@rheehose.com",
+        "instructor@example.com"
+      ]
     }
   ],
   "routes": [
