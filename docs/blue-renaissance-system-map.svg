@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1080" role="img" aria-labelledby="diagramTitle diagramDesc">
+<title id="diagramTitle">Blue Renaissance × Frontend Lab — 시스템 전체 관계도</title>
+<desc id="diagramDesc">사용자는 Cloudflare Access Google 인증을 거쳐 React 앱을 이용한다. 모든 동적 요청은 Workers에서 권한을 확인하고 D1에서 강의, 퀴즈, 학생, 성적, 권한 데이터를 읽고 쓴다. GitHub main에서 Workers Builds로 자동 배포하며 과거 정적 원본은 별도 보존 브랜치에만 남긴다.</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" markerWidth="8" markerHeight="8" refX="8" refY="5" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#536c9d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="arrsoft" viewBox="0 0 10 10" markerWidth="8" markerHeight="8" refX="8" refY="5" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#8b9bb5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <filter id="shadow" x="-15%" y="-30%" width="130%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="11" flood-color="#233b74" flood-opacity=".065"/></filter>
+  <style>
+    text{font-family:Inter,'Pretendard','Noto Sans KR',ui-sans-serif,system-ui,-apple-system,sans-serif;fill:#1b2a45}
+    .kicker{font-size:16px;letter-spacing:2.1px;font-weight:760;fill:#3455d1}
+    .title{font-size:47px;font-weight:780;letter-spacing:-1.6px}
+    .subtitle{font-size:20px;fill:#566985}
+    .lane{font-size:15px;letter-spacing:2px;font-weight:750;fill:#667c9e}
+    .cardtitle{font-size:25px;font-weight:760;letter-spacing:-.7px}
+    .body{font-size:18px;fill:#576982}
+    .tag{font-size:16px;font-weight:730;fill:#3455d1}
+    .small{font-size:15px;fill:#6d7d94}
+    .arrowText{font-size:16px;font-weight:680;fill:#48628c}
+    .box{fill:#fff;stroke:#dfe5ee;stroke-width:2;filter:url(#shadow)}
+    .blueBox{fill:#edf3ff;stroke:#adc3fb;stroke-width:2;filter:url(#shadow)}
+    .dbBox{fill:#ebf4f6;stroke:#afcdd4;stroke-width:2;filter:url(#shadow)}
+    .line{fill:none;stroke:#536c9d;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+    .soft{fill:none;stroke:#8b9bb5;stroke-width:2.5;stroke-dasharray:7 8;stroke-linecap:round;marker-end:url(#arrsoft)}
+    .pill{fill:#e9effd;stroke:#d5e0fa;stroke-width:1.3}
+  </style>
+</defs>
+<rect width="1700" height="1080" rx="30" fill="#f7f9fc"/>
+<rect x="0" y="0" width="1700" height="12" fill="#3455d1"/>
+<text class="kicker" x="64" y="70">BLUE RENAISSANCE · SYSTEM MAP</text>
+<text class="title" x="64" y="125">Frontend Lab 서비스 전체 관계도</text>
+<text class="subtitle" x="65" y="160">React UI · Cloudflare Workers · D1 콘텐츠 및 학습 데이터 · 독립 GitHub 저장소</text>
+<rect class="pill" x="1385" y="65" width="244" height="50" rx="25"/>
+<circle cx="1416" cy="90" r="7" fill="#3455d1"/>
+<text x="1435" y="97" font-size="17" font-weight="740" fill="#3455d1">D1-NATIVE</text>
+<text class="lane" x="66" y="230">01 · 사용자 요청과 로그인</text>
+<rect class="box" x="64" y="254" width="405" height="198" rx="20"/>
+<rect x="86" y="280" width="48" height="48" rx="14" fill="#e8eefc"/>
+<circle cx="110" cy="294" r="8" fill="none" stroke="#3455d1" stroke-width="2.7"/>
+<path d="M96 315q14-15 28 0" stroke="#3455d1" stroke-width="2.7" fill="none" stroke-linecap="round"/>
+<text class="cardtitle" x="151" y="308">사용자 · 3가지 역할</text>
+<text class="body" x="89" y="359">학생  —  강의·퀴즈·마이페이지</text>
+<text class="body" x="89" y="393">선생님  —  CMS·성적·문항 편집</text>
+<text class="body" x="89" y="427">창조자  —  운영·권한 부여/박탈</text>
+<path class="line" d="M471 352 H539"/>
+<text class="arrowText" x="486" y="335">로그인</text>
+<rect class="blueBox" x="548" y="254" width="435" height="198" rx="20"/>
+<text class="tag" x="580" y="297">IDENTITY LAYER</text>
+<text class="cardtitle" x="580" y="337">Cloudflare Access</text>
+<text class="body" x="580" y="374">Google OAuth · 계정 확인</text>
+<text class="body" x="580" y="409">모든 이용자는 Google 로그인 필요</text>
+<path class="line" d="M985 352 H1035"/>
+<text class="arrowText" x="990" y="335">JWT</text>
+<rect class="box" x="1044" y="254" width="586" height="198" rx="20"/>
+<text class="tag" x="1077" y="297">CLIENT APPLICATION</text>
+<text class="cardtitle" x="1077" y="337">React 19 · Frontend Lab</text>
+<text class="body" x="1077" y="374">홈 / 강의 읽기 / 퀴즈 응시 / 내 기록</text>
+<text class="body" x="1077" y="409">Blue Renaissance 관리자 화면</text>
+<text class="lane" x="66" y="514">02 · 동적 API와 데이터 저장</text>
+<path class="line" d="M1354 452 V530 H1112 V557"/>
+<text class="arrowText" x="1168" y="517">인증된 API 요청</text>
+<rect class="blueBox" x="64" y="558" width="1072" height="226" rx="20"/>
+<text class="tag" x="97" y="603">CLOUDFLARE WORKERS · SERVER</text>
+<text class="cardtitle" x="97" y="644">API · 권한 검사 · 채점 · 콘텐츠 게시</text>
+<rect x="96" y="669" width="304" height="81" rx="12" fill="#fff" stroke="#c8d8fa"/>
+<text x="119" y="702" font-size="19" font-weight="740">Auth &amp; RBAC</text>
+<text class="small" x="119" y="727">JWT · 관리자 비밀번호</text>
+<rect x="420" y="669" width="320" height="81" rx="12" fill="#fff" stroke="#c8d8fa"/>
+<text x="443" y="702" font-size="19" font-weight="740">Content &amp; Quiz</text>
+<text class="small" x="443" y="727">강의 CRUD · 정답 서버 채점</text>
+<rect x="760" y="669" width="342" height="81" rx="12" fill="#fff" stroke="#c8d8fa"/>
+<text x="783" y="702" font-size="19" font-weight="740">Learning Analytics</text>
+<text class="small" x="783" y="727">학생별 점수 · 관리자 통계</text>
+<path class="line" d="M1138 668 H1190"/>
+<text class="arrowText" x="1141" y="648">SQL</text>
+<rect class="dbBox" x="1199" y="558" width="430" height="226" rx="20"/>
+<text class="tag" x="1230" y="601">CLOUDFLARE D1 · SOURCE OF TRUTH</text>
+<text class="cardtitle" x="1230" y="643">서버 데이터베이스</text>
+<text class="body" x="1230" y="678">강의 본문·게시본·버전 이력</text>
+<text class="body" x="1230" y="709">문제·정답·해설·응시 기록</text>
+<text class="body" x="1230" y="740">학생 ID·권한·인증 검증값</text>
+<text class="lane" x="66" y="848">03 · 코드 배포와 원본 보존</text>
+<rect class="box" x="64" y="872" width="454" height="140" rx="18"/>
+<text class="tag" x="92" y="904">SOURCE CONTROL</text>
+<text class="cardtitle" x="92" y="941">GitHub · main</text>
+<text class="body" x="92" y="977">React · Worker 소스 · 테스트 · 문서</text>
+<path class="line" d="M520 940 H591"/>
+<rect class="box" x="600" y="872" width="488" height="140" rx="18"/>
+<text class="tag" x="628" y="904">CONTINUOUS DEPLOYMENT</text>
+<text class="cardtitle" x="628" y="941">Workers Builds</text>
+<text class="body" x="628" y="977">테스트 → Vite 빌드 → Worker 배포</text>
+<path class="line" d="M845 871 V794"/>
+<rect class="box" x="1176" y="872" width="453" height="140" rx="18"/>
+<text class="tag" x="1203" y="904">SOURCE ARCHIVE · ROLLBACK</text>
+<text class="cardtitle" x="1203" y="940">archive/legacy-courses-20261109</text>
+<text class="small" x="1203" y="977">이전 교육 파일, 운영 번들에는 미포함</text>
+<path class="soft" d="M520 988 H586 V1037 H1382 V1015"/>
+<text class="small" x="65" y="1052">© Blue Renaissance · Architecture documented in SVG · No Mermaid · No browser-executable content in diagram</text>
+</svg>

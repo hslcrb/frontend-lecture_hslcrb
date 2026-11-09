@@ -3,42 +3,45 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import path from 'node:path'
 import {fileURLToPath} from 'node:url'
-
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..')
 const read=p=>fs.readFileSync(path.join(root,p),'utf8')
 
-test('Blue Renaissance course migration uses an additive independent D1 archive',()=>{
-  const sql=read('migrations/0004_blue_renaissance_courses.sql')
-  assert.match(sql,/CREATE TABLE IF NOT EXISTS lab_course_sources/)
-  assert.match(sql,/path TEXT PRIMARY KEY/)
-  assert.match(sql,/source_html TEXT NOT NULL/)
-  assert.match(sql,/source_sha TEXT NOT NULL/)
-  assert.doesNotMatch(sql,/\b(?:DROP|DELETE|TRUNCATE)\s+(?:TABLE|FROM)\b/i)
+test('all course and question content is in D1 schemas, not static file imports',()=>{
+  const sql=read('migrations/0007_react_native_lessons.sql')
+  assert.match(sql,/CREATE TABLE IF NOT EXISTS br_lessons/)
+  assert.match(sql,/CREATE TABLE IF NOT EXISTS br_lesson_versions/)
+  assert.match(sql,/CREATE TABLE IF NOT EXISTS br_legacy_quiz_map/)
+  const config=JSON.parse(read('package.json'))
+  assert.equal(config.scripts.prebuild,undefined)
+  assert.equal(config.scripts.predev,undefined)
+  assert.equal(config.scripts['sync:original'],undefined)
 })
-test('lecture worker serves published changes, then archived HTML, then static assets',()=>{
-  const code=read('worker/index.ts')
-  const override=code.indexOf("if(result.state==='published' && result.source!==null)")
-  const archived=code.indexOf("const course=await getCourseSource(env.DB,path)")
-  const assets=code.indexOf("const asset=await env.ASSETS.fetch(staticUrl(request,path))")
-  assert.ok(override>=0&&override<archived&&archived<assets)
-  assert.match(code,/getCourseSource\(env\.DB,'\/'\)/)
-  assert.match(code,/X-Lab-Source/)
+
+test('Worker routes lessons and quizzes to D1 backed React experiences',()=>{
+  const worker=read('worker/index.ts')
+  assert.match(worker,/lookupLegacy\(url,env\)/)
+  assert.match(worker,/studentContentApi\(request,env\)/)
+  assert.match(worker,/handleStudentLearningApi\(request,env,identity\)/)
+  assert.match(worker,/No legacy \.html, \.data\.js/)
 })
-test('teacher CMS prefers archived origin and updates it without replacing published edits',()=>{
-  const api=read('worker/free-cms.ts')
-  const db=read('worker/course-db.ts')
-  assert.match(api,/getCourseSource\(env.DB,path\)/)
-  assert.match(api,/listCourseSources\(env.DB\)/)
-  assert.match(api,/syncCourseFromBuild\(env.DB,request,env.ASSETS,path\)/)
-  assert.match(api,/X-Frontend-Lab/)
-  assert.match(db,/INSERT INTO lab_course_sources/)
-  assert.doesNotMatch(db,/UPDATE lab_content SET published_source/)
+
+test('teacher CMS uses React content and quiz editors, never source file explorer',()=>{
+  const ws=read('src/TeacherWorkspace.tsx')
+  assert.match(ws,/CourseStudio/)
+  assert.match(ws,/QuestionBank/)
+  assert.doesNotMatch(ws,/AdminConsole|QuizStudio/)
+  const q=read('src/QuestionBank.tsx')
+  assert.match(q,/전체 문항/)
+  assert.match(q,/문항 편집/)
+  assert.match(q,/정답/)
+  const c=read('src/CourseStudio.tsx')
+  assert.match(c,/contentEditable/)
+  assert.match(c,/초안 저장/)
+  assert.match(c,/강의 게시/)
 })
-test('CMS brand uses Blue Renaissance and reserves the user-supplied SVG filename',()=>{
+
+test('Blue Renaissance branding is retained',()=>{
   const brand=read('src/BlueRenaissanceBrand.tsx')
-  const workspace=read('src/TeacherWorkspace.tsx')
-  assert.match(brand,/Blue Renaissance/)
   assert.match(brand,/blue-renaissance-logo\.svg/)
-  assert.match(brand,/onError/)
-  assert.match(workspace,/<BlueRenaissanceBrand\/>/)
+  assert.match(read('src/TeacherWorkspace.tsx'),/<BlueRenaissanceBrand\/>/)
 })

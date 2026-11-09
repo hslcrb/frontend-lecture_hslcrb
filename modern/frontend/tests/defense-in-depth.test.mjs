@@ -19,25 +19,23 @@ test('Access JWT is signature checked with remote JWKS',()=>{
   assert.match(s,/algorithms: \['RS256'\]/)
   assert.doesNotMatch(s,/Cf-Access-Authenticated-User-Email/)
 })
-test('optional Supabase student table has strict RLS and zero public grants',()=>{
-  const sql=fs.readFileSync(path.join(modern,'supabase/migrations/20261109000000_frontend_lab_students.sql'),'utf8')
-  assert.match(sql,/enable row level security/)
-  assert.match(sql,/revoke all on table public.frontend_lab_students from public, anon, authenticated/)
-  assert.doesNotMatch(sql,/create policy\s+.*\s+to anon/i)
+test('Blue Renaissance uses Cloudflare D1 as the sole learning database',()=>{
+  const worker=read('worker/index.ts')
+  const config=JSON.parse(read('wrangler.jsonc'))
+  assert.equal(config.d1_databases[0].binding,'DB')
+  assert.doesNotMatch(worker,/lookupStudent|saveStudent|SUPABASE_URL|SUPABASE_SERVICE_ROLE_KEY/)
+  assert.equal(config.vars.STUDENT_STORAGE,'d1')
 })
 test('browser imports no server credentials',()=>{
   for(const x of ['src/main.tsx','src/App.tsx','src/portal.css']){
     assert.doesNotMatch(read(x),/SUPABASE_SERVICE_ROLE_KEY|service_role/)
   }
 })
-test('hand drawn SVG icon exists for each mapped emoji', async()=>{
-  const {iconNames}=await import('../scripts/sync-original.mjs')
-  assert.equal(Object.keys(iconNames).length,31)
-  for(const name of Object.values(iconNames)){
-    const file=path.join(frontend,'public/ui/icons/'+name+'.svg')
-    assert.equal(fs.existsSync(file),true,name)
-    assert.match(fs.readFileSync(file,'utf8'),/^<svg xmlns=/)
-  }
+test('local SVG assets stay under React public design resources',()=>{
+  const icons=fs.readdirSync(path.join(frontend,'public/ui/icons')).filter(x=>x.endsWith('.svg'))
+  assert.equal(icons.length,31)
+  for(const name of icons)assert.match(read('public/ui/icons/'+name),/^<svg xmlns=/)
+  assert.match(read('public/ui/blue-renaissance-logo.svg'),/<svg/)
 })
 
 test('free tier uses D1 binding without CMS service binding or R2',()=>{
@@ -56,14 +54,15 @@ test('student name registration and CMS tables exist in free D1 migration',()=>{
   assert.match(s,/CREATE TABLE IF NOT EXISTS lab_content_versions/)
   assert.match(s,/access_subject TEXT PRIMARY KEY/)
 })
-test('student data and admin editing are server protected',()=>{
+test('React D1 CMS and student data are protected by the Worker',()=>{
   const worker=read('worker/index.ts')
-  const admin=read('worker/free-cms.ts')
+  const cms=read('worker/native-content.ts')
   assert.match(worker,/verifyAccess\(request,env\)/)
   assert.match(worker,/if\(!enrolled\)return error/)
-  assert.match(admin,/role==='student'/)
-  assert.match(admin,/request.headers.get\('Origin'\)!==url.origin/)
-  assert.match(admin,/cms-write/)
+  assert.match(worker,/validTeacherSession\(request,env,identity,role\)/)
+  assert.match(worker,/adminContentApi\(request,env,identity\)/)
+  assert.match(cms,/req.headers.get\('Origin'\)/)
+  assert.match(cms,/course-write/)
 })
 
 test('teacher password and reset are Google-bound and stored in D1',()=>{
