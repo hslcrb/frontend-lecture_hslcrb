@@ -3,7 +3,8 @@ import { getCourseSource } from './course-db'
 import { ensureStudentId } from './learning-db'
 import { handleStudentLearningApi, handleTeacherLearningApi } from './learning-api'
 import { findStudent, upsertStudent, getPublished, pathKind, type D1 } from './free-db'
-import { isTeacher, handleAdminApi } from './free-cms'
+import {handleAdminApi} from './free-cms'
+import {resolveCmsRole,handleRoleAdminApi,canEdit,roleRank,type CmsRole} from './roles'
 import { handleTeacherAction, validTeacherSession } from './teacher-auth'
 
 interface Env {
@@ -12,6 +13,7 @@ interface Env {
   CF_ACCESS_TEAM_DOMAIN?: string
   CF_ACCESS_AUD?: string
   TEACHER_EMAIL?: string
+  OWNER_EMAIL?: string
   EMAIL_FROM?: string
   EMAIL?: {send:(message:{from:string;to:string;subject:string;text:string;html:string})=>Promise<{messageId?:string}>}
 }
@@ -99,23 +101,27 @@ export default {
     }
 
     try {
+      const needsRole=path==='/api/session'||path==='/admin'||path.startsWith('/admin/')||
+        path.startsWith('/api/teacher/')||path.startsWith('/api/admin/')
+      const role:CmsRole=needsRole?await resolveCmsRole(identity,env):'student'
       if(path.startsWith('/api/teacher/')) {
-        const result=await handleTeacherAction(request,env,identity)
+        const result=await handleTeacherAction(request,env,identity,role)
         const response=reply(result.body,result.status)
         if(result.cookie)response.headers.set('Set-Cookie',result.cookie)
         return response
       }
       if(path.startsWith('/api/admin/')) {
-        if(!isTeacher(identity,env))return error('교사 관리자만 접근할 수 있습니다.',403)
-        if(!await validTeacherSession(request,env,identity))return error('선생님 비밀번호 인증이 필요합니다.',401)
+        if(!canEdit(role))return error('관리자 접근 권한이 없습니다.',403)
+        if(!await validTeacherSession(request,env,identity,role))return error('관리자 비밀번호 인증이 필요합니다.',401)
+        if(path==='/api/admin/roles')return wrap(await handleRoleAdminApi(request,env,identity,role))
         if(path==='/api/admin/learning'||path.startsWith('/api/admin/learning/')||
            path.startsWith('/api/admin/quiz')) {
           return wrap(await handleTeacherLearningApi(request,env,identity))
         }
-        return wrap(await handleAdminApi(request,env,identity))
+        return wrap(await handleAdminApi(request,env,identity,role))
       }
       if(path==='/admin' || path.startsWith('/admin/')) {
-        if(!isTeacher(identity,env))return error('관리자 전용입니다.',403)
+        if(!canEdit(role))return error('관리자 전용입니다.',403)
         if(request.method!=='GET' && request.method!=='HEAD')return error('메서드 오류',405)
         return wrap(await env.ASSETS.fetch(staticUrl(request,'/index.html')),'text/html; charset=utf-8')
       }
@@ -127,7 +133,7 @@ export default {
           studentId,
           authenticated:true,registered:Boolean(saved),email:identity.email,
           studentName:saved?.student_name??null,
-          teacher:isTeacher(identity,env),
+          teacher:canEdit(role),role,rank:roleRank(role),
           storage:'d1',
         })
       }
