@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import './admin.css'
 
 type Kind = 'html'|'css'|'js'
@@ -78,7 +78,7 @@ export default function Admin() {
   const status=edited.find(item=>item.path===selected)
   const unsaved=Boolean(page && page.source!==source)
 
-  function createCourse(event:React.FormEvent<HTMLFormElement>) {
+  function createCourse(event:FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError('');setNotice('')
     const path=newCoursePath.trim()
