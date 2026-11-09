@@ -15,6 +15,10 @@ export interface Question {
   options: string[]
   answer: number|string
   explanation: string
+  hint?: string
+  code?: string
+  tree?: string
+  preview?: string
 }
 export interface QuizRow {
   slug: string
@@ -61,7 +65,7 @@ export function validateQuizDraft(raw:unknown):Question[] {
       throw new Error((index+1)+'번 문항 형식이 올바르지 않습니다.')
     const q=entry as Record<string,unknown>
     const prompt=typeof q.prompt==='string'?q.prompt.trim():''
-    if(!prompt||prompt.length>1500)throw new Error((index+1)+'번 문제 본문은 1~1,500자여야 합니다.')
+    if(!prompt||prompt.length>5000)throw new Error((index+1)+'번 문제 본문은 1~5,000자여야 합니다.')
     const kind=q.kind==='short'?'short':q.kind==='single'?'single':null
     if(!kind)throw new Error((index+1)+'번 문항 유형을 선택해 주세요.')
     const category=typeof q.category==='string'?q.category.trim():''
@@ -86,11 +90,17 @@ export function validateQuizDraft(raw:unknown):Question[] {
         throw new Error((index+1)+'번 단답형 정답을 입력해 주세요.')
       answer=q.answer.trim()
     }
-    return {id,kind,prompt,category,options,answer,explanation}
+    const extension:Record<string,string>={}
+    for(const key of ['hint','code','tree','preview'] as const){
+      const value=typeof q[key]==='string'?q[key] as string:''
+      if(value.length>6000)throw new Error((index+1)+'번 문항의 부가 설명이 너무 깁니다.')
+      if(value)extension[key]=value
+    }
+    return {id,kind,prompt,category,options,answer,explanation,...extension}
   })
 }
 export function redactQuestion(q:Question) {
-  return {id:q.id,kind:q.kind,prompt:q.prompt,category:q.category,options:q.options}
+  return {id:q.id,kind:q.kind,prompt:q.prompt,category:q.category,options:q.options,hint:q.hint,code:q.code,tree:q.tree,preview:q.preview}
 }
 export function correctAnswer(expected:number|string, supplied:Answer):boolean {
   if(typeof expected==='number')return typeof supplied==='number' && Number.isInteger(supplied) && supplied===expected
@@ -123,10 +133,11 @@ export async function getQuiz(db:D1,slug:string):Promise<QuizRow|null> {
 export async function listManagedQuizzes(db:D1,publishedOnly=true) {
   const rows=await db.prepare(
     'SELECT slug,title,description,published_version,published_at,updated_at,'+
+    'json_array_length(draft_json) AS question_count,'+
     '(CASE WHEN published_json IS NULL THEN 0 ELSE 1 END) AS is_published FROM lab_quiz_sets '+
     (publishedOnly?'WHERE published_json IS NOT NULL ':'')+
     'ORDER BY updated_at DESC LIMIT 150'
-  ).all<{slug:string;title:string;description:string;published_version:number;published_at:string|null;updated_at:string;is_published:number}>()
+  ).all<{slug:string;title:string;description:string;published_version:number;published_at:string|null;updated_at:string;is_published:number;question_count:number}>()
   return rows.results??[]
 }
 export async function saveQuizDraft(db:D1,input:Record<string,unknown>,actor:string) {

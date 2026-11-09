@@ -1,11 +1,9 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
-import os from 'node:os'
 import path from 'node:path'
 import {fileURLToPath} from 'node:url'
 import ts from 'typescript'
-import {legacyQuizCatalog, syncOriginal} from '../scripts/sync-original.mjs'
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..')
 const sql=fs.readFileSync(path.join(root,'migrations/0003_learning_profiles_quizzes.sql'),'utf8')
@@ -54,43 +52,12 @@ test('student quiz response redacts correct answers and explanations',async()=>{
   assert.equal(result.explanation,undefined)
   assert.deepEqual(result.options,['A','B'])
 })
-test('legacy quiz catalog generates protected answers and importable questions',()=>{
-  const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'fl-quiz-'))
-  const source=path.join(tmp,'repo')
-  const output=path.join(tmp,'output')
-  try{
-    fs.mkdirSync(path.join(source,'quiz'),{recursive:true})
-    fs.mkdirSync(path.join(source,'assets/css'),{recursive:true})
-    fs.mkdirSync(path.join(source,'assets/js'),{recursive:true})
-    fs.writeFileSync(path.join(source,'DESIGN.md'),'# design')
-    fs.writeFileSync(path.join(source,'index.html'),'<body><p>home</p></body>')
-    fs.writeFileSync(path.join(source,'assets/css/tokens.css'),'body {color:#172033;}')
-    fs.writeFileSync(path.join(source,'assets/js/quiz-unified.js'),
-      "let current=0,answers=new Array(arr.length).fill(null),showResult=false;\n"+
-      "function renderScore(){ const review=document.getElementById('quiz-revisit'); }\n"+
-      "const restart=()=>{current=0;answers=new Array(arr.length).fill(null);showResult=false;render()}")
-    fs.writeFileSync(path.join(source,'quiz/sample.html'),
-      '<title>Practice Test</title><script src="sample.data.js"></script><script src="../assets/js/quiz-unified.js"></script>')
-    fs.writeFileSync(path.join(source,'quiz/sample.data.js'),
-      "window.QUIZ_CONFIG={title:'Practice Test'};window.QUIZ_DATA=[{q:'A?',opts:['x','y'],ans:1,ex:'Y'}];")
-    const catalog=legacyQuizCatalog(source)
-    assert.equal(catalog.items.length,1)
-    assert.equal(catalog.items[0].keys[0].answer,1)
-    assert.equal(catalog.items[0].editable?.[0].prompt,'A?')
-    syncOriginal(source,output)
-    const copied=fs.readFileSync(path.join(output,'assets/js/quiz-unified.js'),'utf8')
-    assert.match(copied,/quiz\/legacy\/submit/)
-    const untouched=fs.readFileSync(path.join(source,'assets/js/quiz-unified.js'),'utf8')
-    assert.doesNotMatch(untouched,/quiz\/legacy\/submit/)
-    const secret=JSON.parse(fs.readFileSync(path.join(output,'original-quiz-keys.json'),'utf8'))
-    assert.equal(secret.items.length,1)
-  }finally{fs.rmSync(tmp,{recursive:true,force:true})}
-})
-test('protected original answer catalog and teacher-only analytics routes are server enforced',()=>{
+test('D1-native React quiz and analytics routes are separated by Google Access roles',()=>{
   const worker=fs.readFileSync(path.join(root,'worker/index.ts'),'utf8')
-  assert.match(worker,/path==='\/original-quiz-keys\.json'/)
   assert.match(worker,/validTeacherSession\(request,env,identity,role\)/)
   assert.match(worker,/handleTeacherLearningApi\(request,env,identity\)/)
   assert.match(worker,/handleStudentLearningApi\(request,env,identity\)/)
-  assert.match(worker,/if\(!enrolled\)return error/)
+  assert.match(worker,/studentContentApi\(request,env\)/)
+  assert.match(worker,/adminContentApi\(request,env,identity\)/)
+  assert.match(worker,/br_legacy_quiz_map/)
 })
