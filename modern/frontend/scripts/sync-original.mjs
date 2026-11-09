@@ -138,7 +138,7 @@ function attachLegacyScoreRecorder(publicFolder) {
   if(!js.includes(state)||!js.includes(place)||!js.includes(restart))
     throw new Error('Unified original quiz controller signature changed; score bridge needs review')
   js=js.replace(state,state.replace('showResult=false;','showResult=false,resultSubmitted=false;'))
-  const bridge=String.raw\` 
+  const bridge=String.raw` 
  if(!resultSubmitted){
    resultSubmitted=true;
    const message=document.createElement('p');message.className='quiz-record-note';
@@ -153,7 +153,7 @@ function attachLegacyScoreRecorder(publicFolder) {
      message.textContent='학습 기록이 마이페이지에 저장됐습니다.'
    }).catch(()=>{message.textContent='기록을 저장하지 못했어요. 퀴즈 결과는 그대로 확인할 수 있습니다.'})
  }
-\`;
+`;
   js=js.replace(place,bridge+place)
   js=js.replace(restart,"current=0;answers=new Array(arr.length).fill(null);showResult=false;resultSubmitted=false;render()")
   fs.writeFileSync(script,js,'utf8')
