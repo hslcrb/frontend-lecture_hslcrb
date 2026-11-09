@@ -81,4 +81,14 @@ Cloudflare D1에 `lab_course_sources`를 별도 생성하고, GitHub `main`의 �
 
 로고 SVG가 전달되면 원본을 확인한 후 **`blue-renaissance-logo.svg`** 이름으로 정리해 같은 경로에 추가해야 합니다. 선생님 관리자 화면 헤더는 이미 이 경로를 참조하므로 추가적인 런타임 설정은 불필요합니다.
 
-D1 콘텐츠 및 관리자 인증 기능은 실제 Google 계정을 통한 브라우저 테스트가 추가로 필요합니다. Cloudflare 자동 빌드·정적 테스트 통과는 실제 CMS 운영 E2E 검증과 다릅니다.
+## 7. 배포 검증 결과
+
+2026-11-09 Cloudflare Workers Builds에서 **Node 테스트 22건 전부 통과(실패 0건)**, TypeScript 엄격 검사 및 Vite 프로덕션 빌드, Workers 커스텀 도메인 배포까지 성공했습니다.
+
+- GitHub 병합 커밋: `3ac4a1b80a40d5f41f2735d47eadc184ab9fe6a0`
+- 첫 검증 배포 버전: `317f74a6-7bb2-4a69-974f-02feae18668e`
+- 사이트: https://frontend-lab.rhee.life
+- 서버 제공 우선순위: 교사 게시본 D1 → 원본 D1 → 정적 파일.
+- 실제 로고 이미지 파일은 **미수신**. `blue-renaissance-logo.svg` 자리만 마련하고 영문 텍스트로 대체했습니다. AI 소스 파일이 별도 전달되더라도 실제 사이트에는 SVG만 사용합니다.
+
+**아직 검증하지 못한 것:** 교사 Google 계정으로 관리자 첫 비밀번호 생성·강의 편집·원본 동기화, 학생 Google 계정으로 D1 원본 HTML 확인, 브라우저 전체 퀴즈 채점 및 SVG 실제 적용. 정적 테스트/빌드 성공을 이 과정의 완료로 오해하지 마세요.
