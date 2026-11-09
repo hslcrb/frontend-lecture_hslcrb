@@ -22,7 +22,7 @@ test('Worker routes lessons and quizzes to D1 backed React experiences',()=>{
   assert.match(worker,/lookupLegacy\(url,env\)/)
   assert.match(worker,/studentContentApi\(request,env\)/)
   assert.match(worker,/handleStudentLearningApi\(request,env,identity\)/)
-  assert.match(worker,/if\(path.endsWith\('\.data\.js'\)\)/)
+  assert.match(worker,/No legacy \.html, \.data\.js/)
 })
 
 test('teacher CMS uses React content and quiz editors, never source file explorer',()=>{
