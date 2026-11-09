@@ -2,7 +2,7 @@ import type { D1 } from './free-db'
 import type { VerifiedIdentity } from './auth'
 import {
   ensureStudentId, myLearningSummary, learningOverview, teacherStudentDetail, getQuiz,
-  listManagedQuizzes, validateQuizDraft, gradeAnswers, redactQuestion,
+  listManagedQuizzes, validateQuizDraft, gradeAnswers, redactQuestion, correctAnswer,
   saveQuizDraft, publishQuiz, unpublishQuiz, restoreQuiz, quizVersions,
   saveAttempt, type Answer,
 } from './learning-db'
@@ -61,16 +61,28 @@ export async function handleStudentLearningApi(
         slug:q.slug,title:q.title,description:q.description,version:q.published_version,kind:'managed'
       })),legacy:[]})
     }
-    const managed=url.pathname.match(/^\/api\/quiz\/managed\/([a-z0-9-]{3,60})(?:\/submit)?$/)
+    const managed=url.pathname.match(/^\/api\/quiz\/managed\/([a-z0-9-]{3,60})(?:\/(submit|check))?$/)
     if(managed){
       const slug=managed[1]
       const quiz=await getQuiz(env.DB,slug)
       if(!quiz||quiz.published_json===null)return bad('현재 공개된 문제가 없습니다.',404)
       const questions=validateQuizDraft(JSON.parse(quiz.published_json))
-      if(req.method==='GET' && !url.pathname.endsWith('/submit'))
+      if(req.method==='GET' && !managed[2])
         return json({slug,title:quiz.title,description:quiz.description,version:quiz.published_version,
           questions:questions.map(redactQuestion)})
-      if(req.method==='POST' && url.pathname.endsWith('/submit')){
+      if(req.method==='POST' && managed[2]==='check'){
+        const input=await content(req,1500)
+        if(input.version!==quiz.published_version)return bad('문제가 업데이트됐습니다.',409)
+        const index=input.index
+        if(typeof index!=='number'||!Number.isSafeInteger(index)||index<0||index>=questions.length)
+          return bad('문항 번호가 올바르지 않습니다.',400)
+        const q=questions[index]
+        const answer=toAnswers([input.answer])[0]
+        if(answer===null)return bad('답안을 입력해 주세요.',400)
+        const matched=correctAnswer(q.answer,answer)
+        return json({matched,correct:q.answer,explanation:q.explanation})
+      }
+      if(req.method==='POST' && managed[2]==='submit'){
         const input=await content(req,25000)
         if(input.version!==quiz.published_version)
           return bad('문제가 업데이트됐습니다. 새로고침 후 다시 풀어 주세요.',409)
