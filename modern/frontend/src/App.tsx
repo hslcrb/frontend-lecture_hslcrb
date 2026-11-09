@@ -22,7 +22,7 @@ const iconNames: Record<string,string> = {
 }
 async function requestJSON<T>(path: string, options?: RequestInit): Promise<T> {
   const response = await fetch(path, { credentials:'same-origin', cache:'no-store', ...options })
-  const data = await response.json().catch(() => ({}))
+  const data = await response.json().catch(() => ({})) as Record<string,unknown>
   if (!response.ok) throw new Error(typeof data.error === 'string' ? data.error : '요청 오류: ' + response.status)
   return data as T
 }

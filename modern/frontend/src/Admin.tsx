@@ -13,7 +13,7 @@ interface Version {
 }
 async function api<T>(path:string,init?:RequestInit):Promise<T> {
   const response=await fetch(path,{credentials:'same-origin',cache:'no-store',...init})
-  const json=await response.json().catch(()=>({}))
+  const json=await response.json().catch(()=>({})) as Record<string,unknown>
   if(!response.ok)throw new Error(typeof json.error==='string'?json.error:'요청이 실패했습니다 ('+response.status+')')
   return json as T
 }
