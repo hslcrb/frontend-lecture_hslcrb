@@ -3,7 +3,8 @@ import TeacherWorkspace from './TeacherWorkspace'
 import BlueRenaissanceBrand from './BlueRenaissanceBrand'
 
 type Mode='loading'|'setup'|'login'|'forgot'|'reset'|'authorized'|'denied'
-type TeacherStatus={configured:boolean;authenticated:boolean;email:string}
+type CmsRole='creator'|'teacher'|'admin'
+type TeacherStatus={configured:boolean;authenticated:boolean;email:string;role:CmsRole;rank:number}
 async function call<T>(route:string, payload?:Record<string,unknown>):Promise<T> {
   const result=await fetch(route,{
     method:payload?'POST':'GET',credentials:'same-origin',cache:'no-store',
@@ -23,6 +24,7 @@ export default function TeacherGate() {
   },[])
   const [mode,setMode]=useState<Mode>('loading')
   const [email,setEmail]=useState('')
+  const [role,setRole]=useState<CmsRole>('teacher')
   const [password,setPassword]=useState('')
   const [confirm,setConfirm]=useState('')
   const [busy,setBusy]=useState(false)
@@ -36,6 +38,7 @@ export default function TeacherGate() {
         const status=await call<TeacherStatus>('/api/teacher/status')
         if(closed)return
         setEmail(status.email)
+        setRole(status.role)
         const fragment=new URLSearchParams(window.location.hash.slice(1))
         const token=fragment.get('reset')
         if(token&&/^[a-zA-Z0-9_-]{40,50}$/.test(token)){
@@ -93,9 +96,9 @@ export default function TeacherGate() {
     finally{setBusy(false)}
   }
   if(mode==='authorized')return <><div className="teacher-session">
-    <span>관리자 2단계 인증 완료 · {email}</span>
+    <span>{role==='creator'?'0순위 창조자':role==='teacher'?'1순위 선생님':'임명 관리자'} · 2차 인증 완료 · {email}</span>
     <button type="button" disabled={busy} onClick={()=>void logout()}>관리자 로그아웃</button>
-  </div><TeacherWorkspace/></>
+  </div><TeacherWorkspace role={role}/></>
   if(mode==='loading')return <main className="onboard-shell" aria-live="polite">선생님 인증 상태를 확인하고 있습니다…</main>
   if(mode==='denied')return <main className="onboard-shell"><section className="onboard-panel">
     <BlueRenaissanceBrand/><h1>관리자 접근 제한</h1>
