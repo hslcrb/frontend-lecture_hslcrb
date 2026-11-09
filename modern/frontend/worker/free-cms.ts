@@ -124,7 +124,7 @@ export async function handleAdminApi(
     const entry=await findEntry(env.DB,path)
     return reply({ok:true,path,action,updatedAt:entry?.updated_at??null})
   } catch(e) {
-    console.error('Free CMS error:',e instanceof Error?e.message:'unknown')
+    console.error('Blue Renaissance CMS error:',e instanceof Error?e.message:'unknown')
     return reply({error:'작업을 완료하지 못했습니다. D1 연결과 데이터베이스 마이그레이션을 확인해 주세요.'},503)
   }
 }
