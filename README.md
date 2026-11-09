@@ -29,7 +29,8 @@
 2. [시스템 설계와 데이터 흐름](modern/docs/ARCHITECTURE.md) — 인증, React, Workers, D1, 편집 이력, 기존 파일과의 결합 방식.
 3. [운영·배포·복구 실행서](modern/docs/OPERATIONS.md) — Cloudflare 연결, 환경변수, 데이터 보존, 롤백, 교사 인수인계.
 4. [검증 결과와 미해결 사항](modern/docs/VALIDATION.md) — 실제로 확인한 테스트와 아직 확인하지 못한 흐름.
-5. [배포 설정](modern/docs/DEPLOYMENT.md) / [보안·개인정보](modern/docs/SECURITY.md).
+5. [2026-11-09 main 병합 보고서](modern/docs/RELEASE_2026-11-09.md) — 병합 SHA·변경 범위·Cloudflare 감시 브랜치 검증.
+6. [배포 설정](modern/docs/DEPLOYMENT.md) / [보안·개인정보](modern/docs/SECURITY.md).
 
 > **주의:** Worker 빌드·배포 성공이나 12개 자동 테스트 통과만으로 실제 Google 로그인, 첫 교사 비밀번호 설정, 메일 재설정 및 전 강의 브라우저 검증 완료를 의미하지 않습니다. 교사 메일 수신 주소 인증 및 학교 운영·개인정보 고지가 남아 있습니다.
 

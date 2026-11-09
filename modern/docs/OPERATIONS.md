@@ -23,7 +23,7 @@
 | Access 앱 | `Frontend Lab — Google login` |
 | Preview, workers.dev | 비활성 |
 
-**릴리스 전 브랜치 정리:** 실제 개발은 `feat/cloudflare-free-d1-cms-20261109`에서 진행했으며, 이 문서화 작업에서 **개인 Fork의 main으로 합치고 Workers Builds의 감시 브랜치도 main으로 변경**하도록 계획했습니다. 변경이 완료되었는지 Cloudflare 대시보드에서 최종 확인해야 합니다.
+**2026-11-09 병합 완료:** 실제 개발은 `feat/cloudflare-free-d1-cms-20261109`에서 진행했고, **개인 Fork main에 병합 커밋 `4e6db491`로 병합했습니다. Workers Builds 감시 브랜치도 main으로 변경하고 API 조회로 재확인했습니다.** [병합 기록](RELEASE_2026-11-09.md)에 변경 근거가 있습니다.
 
 ## 2. 새 운영자가 개발 환경을 재현하는 절차
 
