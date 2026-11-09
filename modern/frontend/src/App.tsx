@@ -1,5 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import TeacherGate from './TeacherGate'
+import MyPage from './MyPage'
+import PracticeQuiz from './PracticeQuiz'
 import parse, { Element } from 'html-react-parser'
 
 interface Session {
@@ -7,6 +9,8 @@ interface Session {
   registered: boolean
   email: string
   studentName: string | null
+  studentId?: string | null
+  teacher?: boolean
 }
 type Phase = 'loading' | 'register' | 'home' | 'error'
 
@@ -57,6 +61,10 @@ function StudentApp() {
         if (abandoned) return
         setSession(next)
         if (!next.registered) { setPhase('register'); return }
+        if(window.location.pathname!=='/'&&window.location.pathname!=='/index.html'){
+          if(!abandoned)setPhase('home')
+          return
+        }
         const page = await requestJSON<{ html: string }>('/api/home')
         if (!abandoned) { setHome(page.html); setPhase('home') }
       } catch(e) {
@@ -108,7 +116,9 @@ function StudentApp() {
     </form>
     <p className="onboard-help">등록된 이름은 학습 운영 목적으로 저장됩니다. 실제 이름을 입력해 주세요.</p>
   </section></main>
-  return <>{originalBody(home)}</>
+  if(window.location.pathname==='/me')return <MyPage/>
+  if(window.location.pathname.startsWith('/practice/'))return <PracticeQuiz/>
+  return <><nav className="student-quicknav" aria-label="학습 메뉴"><a href="/me">내 마이페이지</a>{session?.teacher&&<a href="/admin">선생님 관리</a>}</nav>{originalBody(home)}</>
 }
 
 export default function App() {
