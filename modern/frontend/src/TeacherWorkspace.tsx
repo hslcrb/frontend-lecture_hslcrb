@@ -1,8 +1,8 @@
 import {useEffect,useState} from 'react'
 import BlueRenaissanceBrand from './BlueRenaissanceBrand'
 import TeacherAnalytics from './TeacherAnalytics'
-import QuizStudio from './QuizStudio'
-import AdminConsole from './Admin'
+import QuestionBank from './QuestionBank'
+import CourseStudio from './CourseStudio'
 import RoleManager from './RoleManager'
 import './learning.css'
 
@@ -10,11 +10,11 @@ type CmsRole='creator'|'teacher'|'admin'
 type Tab='analytics'|'questions'|'files'|'roles'
 const tabs:Array<{id:Tab;label:string;description:string}>=[
   {id:'analytics',label:'학습 현황',description:'학생별 점수·통계'},
-  {id:'questions',label:'문제 관리',description:'문항 추가·수정·게시'},
-  {id:'files',label:'강의 라이브러리',description:'강의·파일·버전 관리'},
+  {id:'questions',label:'문제은행',description:'문항 목록·직접 편집'},
+  {id:'files',label:'강의 관리',description:'본문 편집·게시·버전 관리'},
 ]
 export default function TeacherWorkspace({role}:{role:CmsRole}){
-  const [selected,setSelected]=useState<Tab>('analytics')
+  const [selected,setSelected]=useState<Tab>('questions')
   const availableTabs=role==='creator'
     ? [...tabs,{id:'roles' as const,label:'권한 관리',description:'관리자 임명·박탈'}]
     : tabs
@@ -41,8 +41,8 @@ export default function TeacherWorkspace({role}:{role:CmsRole}){
     </nav>
     <div className="lab-workspace-content">
       {selected==='analytics'?<TeacherAnalytics/>:
-        selected==='questions'?<QuizStudio/>:
-        selected==='roles'&&role==='creator'?<RoleManager/>:<AdminConsole/>}
+        selected==='questions'?<QuestionBank/>:
+        selected==='roles'&&role==='creator'?<RoleManager/>:<CourseStudio/>}
     </div>
     <footer className="lab-footer">Blue Renaissance CMS · Frontend Lab</footer>
   </div>
