@@ -11,7 +11,7 @@
 - Supabase는 다른 프로젝트를 임의 변경하지 않음. 나중에 `STUDENT_STORAGE=supabase`로 전환 가능.
 - 독립된 Payload 서버와 R2 비용이 들지 않음.
 
-현재 무료 할당량: Cloudflare Workers 일 100,000 요청, D1 일 5,000,000 행 읽기 / 100,000 행 쓰기, 5GB 저장(계정 총합), DB 10개. 무료 한도 초과 시 요청 실패 가능.
+현재 무료 할당량: Cloudflare Workers 일 100,000 요청, D1 일 5,000,000 행 읽기 / 100,000 행 쓰기, 5GB 저장(계정 총합), **데이터베이스 1개당 최대 500MB**, DB 10개. 무료 한도 초과 시 요청 실패 가능.
 https://developers.cloudflare.com/workers/platform/pricing/
 https://developers.cloudflare.com/d1/platform/pricing/
 
@@ -89,7 +89,7 @@ Cloudflare Workers Builds를 GitHub와 연결하면 GitHub Actions 없이 빌드
 ## 5. 강의 편집
 
 - `https://<본인 도메인>/admin`: 선생님 관리자 페이지.
-- 초안 저장 → 게시 → 학생에게 반영. 편집·복원 내역은 D1에 저장됩니다.
+- 초안 저장 → 게시 → 학생에게 반영. 편집·복원 내역은 D1에 저장됩니다. 선생님 관리 화면에서 D1에 등록된 학생 이름·이메일도 확인할 수 있습니다.
 - 이미지·영상 파일은 무료 버전에서 GitHub 원본 파일로 유지(용량 큰 CMS 미디어 업로드는 지원하지 않음).
 - 수정이 없는 강의는 기존 HTML, HTML 퀴즈, 인터랙티브 JS 파일을 제공하고 디자인을 그대로 사용합니다.
 
