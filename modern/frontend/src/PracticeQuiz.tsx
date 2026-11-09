@@ -3,7 +3,7 @@ import {learningJson} from './MyPage'
 import './learning.css'
 
 interface Question {
-  id:string;kind:'single'|'short';prompt:string;category:string;options:string[]
+  id:string;kind:'single'|'short';prompt:string;category:string;options:string[];hint?:string;code?:string;tree?:string;preview?:string
 }
 interface Quiz {
   slug:string;title:string;description:string;version:number;questions:Question[]
@@ -76,6 +76,11 @@ export default function PracticeQuiz(){
       <div className="lab-track"><span style={{width:((index+1)/quiz.questions.length*100)+'%'}}/></div>
       {current.category&&<div className="lab-quiz-type">{current.category}</div>}
       <h2>{current.prompt}</h2>
+      {current.hint&&<details className="native-quiz-hint"><summary>힌트 보기</summary><p>{current.hint}</p></details>}
+      {current.tree&&<pre className="native-quiz-code">{current.tree}</pre>}
+      {current.code&&<pre className="native-quiz-code"><code>{current.code}</code></pre>}
+      {current.preview&&<details className="native-quiz-hint"><summary>예시 내용</summary>
+        <pre className="native-quiz-code">{current.preview}</pre></details>}
       {current.kind==='single'?<fieldset className="lab-choice-list"><legend className="lab-visually-hidden">보기 중 정답 하나를 선택하세요.</legend>
         {current.options.map((option,i)=><label className={'lab-choice '+(answers[index]===i?'selected':'')} key={i}>
           <input type="radio" name={'answer-'+current.id} value={i} checked={answers[index]===i} onChange={()=>change(i)}/>
