@@ -1,0 +1,17 @@
+/* Shared quiz components */
+.course-ui.is-quiz{background:var(--page);color:var(--ink)}
+.course-ui.is-quiz .app-header :where(h1,p),.course-ui.is-quiz header :where(h1,p){color:var(--ink)}
+.course-ui.is-quiz .card:not(.demo-card){background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);color:var(--ink)}
+.course-ui.is-quiz .q-text,.course-ui.is-quiz .question-text{font-size:1.04rem;font-weight:700;color:var(--ink)}
+.course-ui.is-quiz .q-num,.course-ui.is-quiz .nav-count{color:var(--ink-muted)}
+.course-ui.is-quiz .q-cat{background:var(--primary-ui-pale);color:var(--primary-ui)}
+.course-ui.is-quiz .opt-btn:not(.correct):not(.wrong){background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:10px;min-height:44px;text-align:left}
+.course-ui.is-quiz .opt-btn:not(:disabled):not(.correct):not(.wrong):hover{border-color:var(--primary-ui);background:var(--primary-ui-pale);color:var(--ink)}
+.course-ui.is-quiz .opt-btn.correct{background:#e9f7ef;border-color:#18794e;color:#135c3a}
+.course-ui.is-quiz .opt-btn.wrong{background:#fff0f2;border-color:#b4233b;color:#8b1a31}
+.course-ui.is-quiz .explanation{background:var(--panel-muted);border-left:4px solid var(--primary-ui);color:var(--ink)}
+.course-ui.is-quiz .score-num{color:var(--primary-ui)}
+.course-ui.is-quiz .score-label{color:var(--ink-sub)}
+.course-ui.is-quiz .prog-fill,.course-ui.is-quiz .progress-fill{background:var(--primary-ui)}
+.course-ui.is-quiz pre.code-block{background:#1e1e2e;color:#dbe4ff}
+.course-ui.is-quiz :where(.hint-box,.q-code){color:var(--ink)}

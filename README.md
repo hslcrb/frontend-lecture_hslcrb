@@ -1,0 +1,55 @@
+# Frontend Lab — 원본 강의와 무료 클라우드 확장판
+
+이 저장소는 [JJinMangGo/frontend-lecture](https://github.com/JJinMangGo/frontend-lecture)에서 Fork한 강의 자료와, 원본 화면과 파일 경로를 보존하면서 별도로 구축한 **React + Cloudflare Workers Free + D1** 버전을 함께 담고 있습니다.
+
+**실제 사이트:** https://frontend-lab.rhee.life
+
+## 두 개의 구역
+
+| 경로 | 용도 |
+| --- | --- |
+| 저장소 최상위 `index.html` · `ai/` · `flex/` · `grid/` · `quiz/` 등 | 선생님 원본 강의·문제·디자인·JavaScript 자료. 무단 재설계하지 않습니다. |
+| [`modern/`](modern/README.md) | React 학생 화면, Google Access, 별도 이름 등록, 무료 D1 CMS와 교사 전용 비밀번호 인증 |
+| [`modern/frontend/`](modern/frontend/) | Cloudflare Workers에 빌드 및 배포하는 실제 웹 애플리케이션 |
+| [`modern/docs/`](modern/docs/) | 전체 제작 일지, 시스템 설계, 운영 가이드, 검증 결과와 보안 문서 |
+
+## 핵심 원칙
+
+- 원본 강의 사이트의 디자인·퀴즈 기능·경로를 보존하고, 빌드할 때 원본을 **복사**하여 새로운 사이트에 포함합니다.
+- 일반 사용자는 **Google 로그인만** 있으면 접근 정책상 계정을 제한하지 않습니다. 강의를 읽기 전 **학생 이름을 별도로 등록**합니다.
+- 교사 관리자 화면은 지정한 Google 계정에 비밀번호 인증을 추가합니다. 비밀번호 원문과 재설정 토큰 원문은 D1에 저장하지 않습니다.
+- 정적 HTML/CSS/JS의 수정본을 D1에서 게시·숨김·복원합니다. 수정하지 않은 자료는 원본을 제공합니다.
+- 유료 Payload CMS나 R2를 요구하지 않는 **무료 플랜 우선** 아키텍처입니다.
+- GitHub Actions는 사용하지 않고 **Cloudflare Workers Builds**로 자동 배포합니다.
+- 선생님 원저작권을 존중합니다. 공개 저장소라고 해서 저작물에 임의로 오픈소스 라이선스를 부여하지 않습니다.
+
+## 제작 기록과 운영 문서
+
+1. [2026-11-09 전체 제작 과정 기록](modern/docs/DEVELOPMENT_HISTORY.md) — 요구사항, 주요 결정, 시행착오, GitHub·Cloudflare 실제 작업.
+2. [시스템 설계와 데이터 흐름](modern/docs/ARCHITECTURE.md) — 인증, React, Workers, D1, 편집 이력, 기존 파일과의 결합 방식.
+3. [운영·배포·복구 실행서](modern/docs/OPERATIONS.md) — Cloudflare 연결, 환경변수, 데이터 보존, 롤백, 교사 인수인계.
+4. [검증 결과와 미해결 사항](modern/docs/VALIDATION.md) — 실제로 확인한 테스트와 아직 확인하지 못한 흐름.
+5. [배포 설정](modern/docs/DEPLOYMENT.md) / [보안·개인정보](modern/docs/SECURITY.md).
+
+> **주의:** Worker 빌드·배포 성공이나 12개 자동 테스트 통과만으로 실제 Google 로그인, 첫 교사 비밀번호 설정, 메일 재설정 및 전 강의 브라우저 검증 완료를 의미하지 않습니다. 교사 메일 수신 주소 인증 및 학교 운영·개인정보 고지가 남아 있습니다.
+
+## 로컬 개발
+
+```bash
+cd modern/frontend
+npm install
+npm test
+npm run db:local
+npm run dev
+npm run build
+```
+
+Node.js, npm 및 Cloudflare Wrangler가 필요합니다. 원본 GitHub 저장소 전체가 같은 체크아웃에 있어야 합니다. 세부 설정은 운영 문서를 참고하세요.
+
+### 저장소 간 관계
+
+- **선생님 공식 원본:** [JJinMangGo/frontend-lecture](https://github.com/JJinMangGo/frontend-lecture).
+- **개인 Fork:** [hslcrb/frontend-lecture_hslcrb](https://github.com/hslcrb/frontend-lecture_hslcrb).
+- **원본 저장소로의 Pull Request:** 별도 승인 전까지 생성하지 않습니다. 여기서 말하는 main 병합은 **개인 Fork 내부의 병합**입니다.
+
+_기록 작성일: 2026-11-09, KST. 이 문서는 민감한 API 키·비밀번호·학생 개인정보를 포함하지 않습니다._

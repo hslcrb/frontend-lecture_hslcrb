@@ -1,0 +1,118 @@
+/* Original quiz questions, answers, hints and explanations */
+window.QUIZ_CONFIG = {"subject":"CSS","title":"CSS 단위 · 반응형 퀴즈"};
+window.QUIZ_DATA = [
+  {
+    type: 'mc',
+    q: '<code>em</code> 단위의 기준은 무엇인가요?',
+    opts: [
+      'html(root) 요소의 font-size',
+      '브라우저 기본 font-size(16px) 고정값',
+      '부모 요소의 font-size',
+      '현재 요소 자신의 font-size'
+    ],
+    answer: 2,
+    explain: '<code>em</code>은 <strong>부모 요소의 font-size</strong>를 1로 기준 삼는 상대 단위입니다. 부모가 20px일 때 <code>2em</code>은 40px이 됩니다. 중첩 구조에서는 부모→자식→손자 순으로 계속 곱해지므로 주의가 필요합니다.'
+  },
+  {
+    type: 'mc',
+    q: '<code>rem</code> 단위의 기준이 되는 요소는?',
+    opts: [
+      'body 태그의 font-size',
+      'html(root) 태그의 font-size',
+      '부모 요소의 font-size',
+      '브라우저 뷰포트 너비'
+    ],
+    answer: 1,
+    explain: '<code>rem</code>은 <strong>문서 최상위(root) 태그인 <code>html</code>의 font-size</strong>를 1로 기준 삼습니다. 중첩 구조와 관계없이 항상 html의 font-size만 참조하므로 em보다 예측이 쉽습니다.'
+  },
+  {
+    type: 'mc',
+    q: '수업 코드에서 <code>html { font-size: 62.5%; }</code>로 설정한 이유는?',
+    opts: [
+      'html의 기본 폰트를 10px로 맞춰 rem 계산을 편하게 하기 위해',
+      '브라우저 기본 글자를 더 크게 보이도록 하기 위해',
+      'em 단위의 중첩 문제를 해결하기 위해',
+      'vw 단위와 충돌을 방지하기 위해'
+    ],
+    answer: 0,
+    explain: '브라우저 기본 font-size는 16px입니다. <code>62.5%</code>를 적용하면 16px × 0.625 = <strong>10px</strong>이 됩니다. 이렇게 하면 <code>1.4rem = 14px</code>처럼 rem 값을 직관적으로 계산할 수 있습니다.'
+  },
+  {
+    type: 'mc',
+    q: '<code>em</code> 단위를 중첩 구조에서 사용할 때 발생하는 문제는?',
+    opts: [
+      '브라우저마다 결과값이 달라진다',
+      '부모 크기가 자식·손자에게 계속 곱해져(복리) 글자가 점점 커지거나 작아진다',
+      'vw 단위와 충돌이 일어난다',
+      'html의 font-size를 덮어써 rem 계산이 틀어진다'
+    ],
+    answer: 1,
+    explain: '<code>em</code>은 부모를 기준으로 하므로, 중첩 구조에서는 <strong>복리이자처럼 계속 곱해집니다.</strong> 예를 들어 각 단계가 <code>0.5em</code>이면 자식은 50%, 손자는 25%가 되어 예상과 다른 크기가 됩니다. 이를 피하려면 <code>rem</code>을 사용합니다.'
+  },
+  {
+    type: 'mc',
+    q: '<code>1vw</code>가 나타내는 크기는?',
+    opts: [
+      '부모 요소 너비의 1%',
+      '브라우저 화면(뷰포트) 가로 폭의 1%',
+      'html font-size의 1%',
+      '화면 대각선 길이의 1%'
+    ],
+    answer: 1,
+    explain: '<code>vw</code>는 <strong>viewport width</strong>의 약자로, 브라우저 화면 가로 폭의 1%입니다. 부모 요소 크기와 전혀 관계없고 오직 브라우저(뷰포트) 기준입니다.'
+  },
+  {
+    type: 'mc',
+    q: '수업 코드의 <code>font-size: max(20px, 5vw)</code>의 동작으로 올바른 것은?',
+    opts: [
+      '항상 20px과 5vw 중 더 작은 값을 사용한다',
+      '화면이 커질 땐 5vw를 따르고, 5vw가 20px보다 작아지면 20px로 고정된다',
+      '화면이 커질 땐 20px로 고정되고, 작아지면 5vw를 따른다',
+      '20px와 5vw의 평균값을 사용한다'
+    ],
+    answer: 1,
+    explain: '<code>max(20px, 5vw)</code>는 두 값 중 <strong>더 큰 값</strong>을 선택합니다. 화면이 넓을 때는 5vw가 20px보다 크므로 5vw를 사용하고, 화면이 좁아져 5vw가 20px 아래로 떨어지면 20px로 고정됩니다. → <strong>최솟값 보장</strong>이 목적입니다.'
+  },
+  {
+    type: 'mc',
+    q: '수업 코드의 <code>font-size: min(40px, 8vw)</code>의 목적으로 올바른 것은?',
+    opts: [
+      '아무리 화면이 커져도 글자가 40px을 넘지 않도록 방어한다',
+      '아무리 화면이 작아져도 글자가 40px 이하로 줄어들지 않게 한다',
+      '모바일에선 40px, 데스크탑에선 8vw를 사용한다',
+      '화면 너비에 상관없이 항상 40px을 유지한다'
+    ],
+    answer: 0,
+    explain: '<code>min(40px, 8vw)</code>는 두 값 중 <strong>더 작은 값</strong>을 선택합니다. 화면이 작을 때는 8vw가 작으므로 8vw를 따르고, 화면이 커져서 8vw가 40px을 초과하면 40px로 고정됩니다. → <strong>최댓값 방어</strong>가 목적입니다.'
+  },
+  {
+    type: 'short',
+    q: '최솟값과 최댓값을 동시에 설정할 수 있는 CSS 함수를 영문으로 쓰시오.<br>사용 형태: <code>font-size: ?(최소, 반응형값, 최대)</code>',
+    answer: 'clamp',
+    explain: '<code>clamp(최소, 선호값, 최대)</code>는 세 값을 받아 선호값이 최솟값보다 작으면 최솟값을, 최댓값보다 크면 최댓값을 반환합니다. 반응형 타이포그래피에 매우 유용합니다.'
+  },
+  {
+    type: 'mc',
+    q: '<code>100vw</code>와 <code>100%</code>의 차이로 올바른 것은?',
+    opts: [
+      '둘은 완전히 동일하다',
+      '100%는 부모 요소 너비, 100vw는 스크롤바 두께까지 포함한 브라우저 전체 가로 폭이다',
+      '100vw는 뷰포트 높이, 100%는 뷰포트 너비다',
+      '100%는 화면 전체, 100vw는 콘텐츠 영역만 포함한다'
+    ],
+    answer: 1,
+    explain: '수업 설명에 따르면, <code>100%</code>는 <strong>스크롤바를 제외한 순수 콘텐츠 영역</strong>이고, <code>100vw</code>는 <strong>스크롤바 두께까지 포함한 브라우저 화면 전체 가로 폭</strong>입니다. 스크롤바가 생기면 두 값이 달라질 수 있습니다.'
+  },
+  {
+    type: 'mc',
+    q: '다음 중 <code>clamp(24px, 4vw, 48px)</code>를 적용했을 때 동작 설명으로 올바른 것은?',
+    opts: [
+      '항상 4vw를 사용하며, 24px과 48px은 무시된다',
+      '화면이 아주 작으면 24px, 평소엔 4vw, 화면이 아주 크면 48px로 고정된다',
+      '24px~48px 범위를 랜덤하게 선택한다',
+      '모바일에서는 48px, 데스크탑에서는 24px이 된다'
+    ],
+    answer: 1,
+    explain: '<code>clamp(24px, 4vw, 48px)</code>: 뷰포트가 좁아 4vw가 24px보다 작으면 → <strong>24px</strong>. 4vw가 24px~48px 사이이면 → <strong>4vw</strong>. 뷰포트가 넓어 4vw가 48px을 초과하면 → <strong>48px</strong>. 최소·최대를 동시에 보장합니다.'
+  }
+];

@@ -1,0 +1,25 @@
+/* The upstream CSS is the visual source of truth; this only styles onboarding and hand-drawn icons. */
+.custom-card-icon{width:1em;height:1em;vertical-align:-.08em;display:inline-block;object-fit:contain}
+.onboard-shell{min-height:100dvh;display:grid;place-items:center;padding:24px;background:#f6f7fb;color:#172033;font-family:Pretendard,'Noto Sans KR',system-ui,sans-serif}
+.onboard-panel{width:min(100%,460px);background:#fff;border:1px solid #dce3ec;border-radius:20px;padding:clamp(24px,5vw,40px);box-shadow:0 18px 55px #16224b12}
+.onboard-kicker{font-size:12px;letter-spacing:.08em;font-weight:800;color:#3455d1}
+.onboard-panel h1{font-size:clamp(26px,5vw,32px);margin:10px 0 12px;letter-spacing:-.04em}
+.onboard-panel p{line-height:1.7;font-size:15px;color:#526079}
+.onboard-account{padding:12px 14px;background:#f6f7fb;border-radius:10px;overflow-wrap:anywhere}
+.onboard-panel form{display:grid;gap:11px;margin-top:26px}
+.onboard-panel label{font-weight:700;font-size:14px}
+.onboard-panel input{font:inherit;font-size:16px;border-radius:10px;border:1px solid #cbd5e1;padding:13px 14px;color:#172033;background:#fff}
+.onboard-panel input:focus-visible,.onboard-panel button:focus-visible{outline:3px solid #a0b4fc;outline-offset:2px}
+.onboard-panel small{font-size:12px;color:#64748b}
+.onboard-panel button{border:0;border-radius:10px;min-height:44px;margin-top:10px;background:#3455d1;color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.onboard-panel button:disabled{cursor:not-allowed;opacity:.55}
+.onboard-panel .onboard-error{color:#b4233b;font-weight:600}
+.onboard-panel .onboard-help{font-size:12px;margin-top:25px}
+
+/* Teacher 2nd factor gate */
+.teacher-options{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-top:22px;font-size:13px}
+.teacher-options a{color:#3455d1;text-decoration:none;font-weight:700}
+.onboard-panel button.teacher-textbutton{background:transparent;color:#3455d1;padding:5px 0;min-height:auto;margin:0;text-align:left}
+.teacher-notice{color:#136849!important;background:#eef9f1;padding:12px;border-radius:8px}
+.teacher-session{padding:10px clamp(16px,3vw,36px);background:#ecf0ff;color:#243b7e;font-size:13px;display:flex;gap:20px;align-items:center;justify-content:space-between}
+.teacher-session button{font:inherit;color:#3455d1;border:1px solid #cad6ff;background:white;padding:8px 13px;border-radius:8px;cursor:pointer}
