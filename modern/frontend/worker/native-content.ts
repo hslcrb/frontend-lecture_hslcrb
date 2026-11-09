@@ -49,8 +49,9 @@ export async function studentContentApi(req:Request,env:Env):Promise<Response>{
         "WHERE published=1 AND (source_path='/' OR source_path NOT LIKE '%quiz%') "+
         'ORDER BY category,sort_order,title LIMIT 150').all(),
       env.DB.prepare(
-        'SELECT slug,title,description,published_version,json_array_length(published_json) AS question_count '+
-        'FROM lab_quiz_sets WHERE published_json IS NOT NULL ORDER BY title LIMIT 150').all()
+        'SELECT q.slug,q.title,q.description,q.published_version,json_array_length(q.published_json) AS question_count,'+
+        'm.legacy_path FROM lab_quiz_sets q LEFT JOIN br_legacy_quiz_map m ON m.quiz_slug=q.slug '+
+        'WHERE q.published_json IS NOT NULL ORDER BY q.title LIMIT 150').all()
     ])
     return reply({lessons:lessons.results??[],quizzes:quizzes.results??[]})
   }
