@@ -16,6 +16,11 @@ async function call<T>(route:string, payload?:Record<string,unknown>):Promise<T>
 }
 
 export default function TeacherGate() {
+  useEffect(()=>{
+    const previous=document.title
+    document.title='Blue Renaissance CMS · Frontend Lab'
+    return()=>{document.title=previous}
+  },[])
   const [mode,setMode]=useState<Mode>('loading')
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
