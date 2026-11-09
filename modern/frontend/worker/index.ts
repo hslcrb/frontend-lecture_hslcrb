@@ -1,4 +1,5 @@
 import { verifyAccess, type VerifiedIdentity } from './auth'
+import {studentContentApi,adminContentApi} from './native-content'
 import { getCourseSource } from './course-db'
 import { ensureStudentId } from './learning-db'
 import { handleStudentLearningApi, handleTeacherLearningApi } from './learning-api'
@@ -114,6 +115,7 @@ export default {
         if(!canEdit(role))return error('관리자 접근 권한이 없습니다.',403)
         if(!await validTeacherSession(request,env,identity,role))return error('관리자 비밀번호 인증이 필요합니다.',401)
         if(path==='/api/admin/roles')return wrap(await handleRoleAdminApi(request,env,identity,role))
+        if(path.startsWith('/api/admin/native/'))return wrap(await adminContentApi(request,env,identity))
         if(path==='/api/admin/learning'||path.startsWith('/api/admin/learning/')||
            path.startsWith('/api/admin/quiz')) {
           return wrap(await handleTeacherLearningApi(request,env,identity))
@@ -160,11 +162,11 @@ export default {
         if(request.method!=='GET' && request.method!=='HEAD')return error('메서드 오류',405)
         return wrap(await env.ASSETS.fetch(request))
       }
-      if(path==='/me'||/^\/practice\/[a-z0-9-]{3,60}\/?$/.test(path)) {
+      if(path==='/me'||/^\/practice\/[a-z0-9-]{3,60}\/?$/.test(path)||/^\/learn\/[a-z0-9-]{3,100}\/?$/.test(path)) {
         if(request.method!=='GET' && request.method!=='HEAD')return error('메서드 오류',405)
         return wrap(await env.ASSETS.fetch(staticUrl(request,'/index.html')),'text/html; charset=utf-8')
       }
-      if(path.startsWith('/api/') && !['/api/home','/api/me'].includes(path) && !path.startsWith('/api/quiz/'))
+      if(path.startsWith('/api/') && !['/api/home','/api/me'].includes(path) && !path.startsWith('/api/quiz/') && !path.startsWith('/api/content/'))
         return error('API를 찾을 수 없습니다.',404)
 
       // Critical: lesson HTML, quiz JavaScript, styles, image assets, and CMS API
@@ -175,6 +177,8 @@ export default {
         return reply({html:await originalHomepage(request,env)})
       if(path==='/api/me'||path.startsWith('/api/quiz/'))
         return wrap(await handleStudentLearningApi(request,env,identity))
+      if(path.startsWith('/api/content/'))
+        return wrap(await studentContentApi(request,env))
       if(request.method!=='GET' && request.method!=='HEAD')
         return error('메서드 오류',405)
 
@@ -182,6 +186,19 @@ export default {
          path==='/original-quiz-keys.json' ||
          path==='/robots.txt' || path.startsWith('/cms-media/'))
         return error('자료를 찾을 수 없습니다.',404)
+      // Legacy URLs remain usable, but are redirects to React pages backed by D1.
+      if(pathKind(path)==='html'){
+        const quiz=await env.DB.prepare(
+          'SELECT quiz_slug FROM br_legacy_quiz_map WHERE legacy_path=?'
+        ).bind(path).first<{quiz_slug:string}>()
+        if(quiz)return Response.redirect(url.origin+'/practice/'+quiz.quiz_slug,302)
+        const lesson=await env.DB.prepare(
+          'SELECT slug FROM br_lessons WHERE source_path=? AND published=1'
+        ).bind(path).first<{slug:string}>()
+        if(lesson)return Response.redirect(url.origin+'/learn/'+lesson.slug,302)
+        return error('강의를 찾을 수 없습니다.',404)
+      }
+      if(path.endsWith('.data.js'))return error('이 데이터는 문제은행에서 관리됩니다.',404)
       if(pathKind(path))return publishedOrFallback(request,env,path)
       return wrap(await env.ASSETS.fetch(request))
     } catch(e) {
