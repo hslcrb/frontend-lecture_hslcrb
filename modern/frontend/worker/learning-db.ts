@@ -33,6 +33,7 @@ export interface LegacyKey {
   dataPath: string
   title: string
   keys: Array<{kind:'single'|'short';answer:number|string}>
+  editable?: Question[]
 }
 
 const slugPattern=/^[a-z0-9][a-z0-9-]{2,59}$/
