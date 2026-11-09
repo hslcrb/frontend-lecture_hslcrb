@@ -49,6 +49,33 @@ function updateCopiedHtml(dir) {
     }
   }
 }
+function manifestEntries(root) {
+  const items = [{path:'/',kind:'html',title:'Frontend Lab · 메인'}]
+  for(const folder of sourceDirs){
+    const top=path.join(root,folder)
+    if(!fs.existsSync(top))continue
+    const stack=[top]
+    while(stack.length){
+      const current=stack.pop()
+      for(const entry of fs.readdirSync(current,{withFileTypes:true})){
+        const file=path.join(current,entry.name)
+        if(entry.isDirectory()){stack.push(file);continue}
+        const ext=path.extname(file).toLowerCase()
+        if(!['.html','.htm','.js','.css'].includes(ext))continue
+        const relative=path.relative(root,file).split(path.sep).join('/')
+        let title=relative
+        if(ext==='.html'||ext==='.htm'){
+          const s=fs.readFileSync(file,'utf8')
+          const m=/<title[^>]*>([\s\S]*?)<\/title>/i.exec(s)
+          if(m)title=m[1].replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').trim().slice(0,120)||relative
+        }
+        items.push({path:'/'+relative,kind:ext==='.css'?'css':ext==='.js'?'js':'html',title})
+      }
+    }
+  }
+  items.sort((a,b)=>a.path.localeCompare(b.path,'ko'))
+  return {items,generatedAt:new Date().toISOString()}
+}
 export function syncOriginal(root,output=defaultOutput) {
   if(!fs.existsSync(path.join(root,'DESIGN.md')))throw new Error('Invalid lecture repo')
   fs.mkdirSync(output,{recursive:true})
@@ -64,6 +91,7 @@ export function syncOriginal(root,output=defaultOutput) {
   const match=/<body\b[^>]*>([\s\S]*?)<\/body>/i.exec(html)
   if(!match)throw new Error('Original homepage body missing')
   fs.writeFileSync(path.join(output,'original-home.html'),match[1],'utf8')
+  fs.writeFileSync(path.join(output,'original-manifest.json'),JSON.stringify(manifestEntries(root),null,2),'utf8')
   return { copied:sourceDirs.filter(x=>fs.existsSync(path.join(root,x))),homeBytes:Buffer.byteLength(match[1]) }
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

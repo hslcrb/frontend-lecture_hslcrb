@@ -34,5 +34,8 @@ test('copies HTML, HTM quiz files, CSS and source homepage without modifying ori
     assert.match(fs.readFileSync(path.join(pub,'javascript/legacy.htm'),'utf8'),/target\.svg/)
     assert.match(fs.readFileSync(path.join(pub,'original-home.html'),'utf8'),/quiz\/x\.html/)
     assert.match(fs.readFileSync(path.join(root,'quiz/x.html'),'utf8'),/🧩/)
+    const manifest=JSON.parse(fs.readFileSync(path.join(pub,'original-manifest.json'),'utf8'))
+    assert.ok(manifest.items.some(x=>x.path==='/quiz/x.html'&&x.kind==='html'))
+    assert.ok(manifest.items.some(x=>x.path==='/javascript/legacy.htm'&&x.kind==='html'))
   } finally {fs.rmSync(tmp,{recursive:true,force:true})}
 })

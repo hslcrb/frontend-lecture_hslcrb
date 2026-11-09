@@ -19,7 +19,7 @@ test('Access JWT is signature checked with remote JWKS',()=>{
   assert.match(s,/algorithms: \['RS256'\]/)
   assert.doesNotMatch(s,/Cf-Access-Authenticated-User-Email/)
 })
-test('student table has strict RLS and zero public grants',()=>{
+test('optional Supabase student table has strict RLS and zero public grants',()=>{
   const sql=fs.readFileSync(path.join(modern,'supabase/migrations/20261109000000_frontend_lab_students.sql'),'utf8')
   assert.match(sql,/enable row level security/)
   assert.match(sql,/revoke all on table public.frontend_lab_students from public, anon, authenticated/)
@@ -38,4 +38,30 @@ test('hand drawn SVG icon exists for each mapped emoji', async()=>{
     assert.equal(fs.existsSync(file),true,name)
     assert.match(fs.readFileSync(file,'utf8'),/^<svg xmlns=/)
   }
+})
+
+test('free tier uses D1 binding without CMS service binding or R2',()=>{
+  const config=JSON.parse(read('wrangler.jsonc'))
+  assert.equal(config.d1_databases[0].binding,'DB')
+  assert.equal(config.d1_databases[0].database_name,'frontend-lab-cms')
+  assert.equal(config.services,undefined)
+  assert.equal(config.r2_buckets,undefined)
+  assert.equal(config.workers_dev,false)
+  assert.equal(config.preview_urls,false)
+})
+test('student name registration and CMS tables exist in free D1 migration',()=>{
+  const s=read('migrations/0001_free_lab.sql')
+  assert.match(s,/CREATE TABLE IF NOT EXISTS lab_students/)
+  assert.match(s,/CREATE TABLE IF NOT EXISTS lab_content/)
+  assert.match(s,/CREATE TABLE IF NOT EXISTS lab_content_versions/)
+  assert.match(s,/access_subject TEXT PRIMARY KEY/)
+})
+test('student data and admin editing are server protected',()=>{
+  const worker=read('worker/index.ts')
+  const admin=read('worker/free-cms.ts')
+  assert.match(worker,/verifyAccess\(request,env\)/)
+  assert.match(worker,/if\(!enrolled\)return error/)
+  assert.match(admin,/isTeacher\(identity,env\)/)
+  assert.match(admin,/request.headers.get\('Origin'\)!==url.origin/)
+  assert.match(admin,/cms-write/)
 })
