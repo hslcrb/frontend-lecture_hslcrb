@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect,useState} from 'react'
 import BlueRenaissanceBrand from './BlueRenaissanceBrand'
 import TeacherAnalytics from './TeacherAnalytics'
 import QuizStudio from './QuizStudio'
@@ -13,6 +13,11 @@ const tabs:Array<{id:Tab;label:string;description:string}>=[
 ]
 export default function TeacherWorkspace(){
   const [selected,setSelected]=useState<Tab>('analytics')
+  useEffect(()=>{
+    const previous=document.title
+    document.title='Blue Renaissance CMS · Frontend Lab'
+    return()=>{document.title=previous}
+  },[])
   return <div className="lab-workspace">
     <header className="lab-workspace-head">
       <div><BlueRenaissanceBrand/>

@@ -86,8 +86,10 @@ export default function Admin() {
       setError('새 강의 경로는 /ai/lesson-name.html 같은 형식으로 입력해 주세요.')
       return
     }
-    if(!files.some(x=>x.path===path))
-      setFiles(prev=>[...prev,{path,kind:'html',title:'새 강의 · '+path}].sort((a,b)=>a.path.localeCompare(b.path,'ko')))
+    if(!files.some(x=>x.path===path)){
+      const newItem:ManifestItem={path,kind:'html',title:'새 강의 · '+path}
+      setFiles(prev=>[...prev,newItem].sort((a,b)=>a.path.localeCompare(b.path,'ko')))
+    }
     setSelected(path)
     setNewCoursePath('')
     setNotice('새 강의 경로를 선택했습니다. HTML을 입력하고 초안 저장 후 게시해 주세요.')

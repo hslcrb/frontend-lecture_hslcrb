@@ -75,7 +75,7 @@ export async function handleAdminApi(
         const response=await env.ASSETS.fetch(new Request(asset.toString()))
         const original=response.ok?await response.json() as {items?:Array<{path:string;kind:string;title:string}>}:{items:[]}
         const courses=await listCourseSources(env.DB)
-        const merged=new Map((original.items??[]).map(item=>[item.path,item]))
+        const merged=new Map<string,{path:string;kind:string;title:string}>((original.items??[]).map(item=>[item.path,item] as const))
         for(const course of courses)merged.set(course.path,{path:course.path,kind:'html',title:course.title})
         return reply({original:{items:[...merged.values()]},edited:await contentList(env.DB),courses})
       }
