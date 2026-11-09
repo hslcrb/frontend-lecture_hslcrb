@@ -1,139 +1,154 @@
 import { verifyAccess, type VerifiedIdentity } from './auth'
 import { lookupStudent, saveStudent } from './supabase'
-import { loadPublishedContent } from './cms'
+import { findStudent, upsertStudent, getPublished, pathKind, type D1 } from './free-db'
+import { isTeacher, handleAdminApi } from './free-cms'
 
 interface Env {
   ASSETS: { fetch: (request: Request) => Promise<Response> }
-  CMS_SERVICE?: { fetch: (request: Request) => Promise<Response> }
+  DB: D1
   CF_ACCESS_TEAM_DOMAIN?: string
   CF_ACCESS_AUD?: string
+  ADMIN_EMAILS?: string
+  STUDENT_STORAGE?: string
   SUPABASE_URL?: string
   SUPABASE_SERVICE_ROLE_KEY?: string
 }
-const safeHeaders = {
+
+const headers = {
   'Cache-Control': 'private, no-store',
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'X-Frame-Options': 'SAMEORIGIN',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
 }
-function json(data: unknown, status=200): Response {
-  return new Response(JSON.stringify(data), { status, headers: {
-    'Content-Type': 'application/json; charset=utf-8', ...safeHeaders,
-  }})
+const boot = (path: string) => /^\/assets\/[^/]+\.(?:js|css|svg|woff2?)$/i.test(path)
+const staticUrl = (request: Request, path: string): Request => {
+  const u = new URL(request.url)
+  u.pathname = path
+  u.search = ''
+  return new Request(u.toString(), { method: request.method === 'HEAD' ? 'HEAD' : 'GET' })
 }
-function error(message: string, status: number): Response { return json({error: message}, status) }
-function decorate(response: Response, type?: string): Response {
-  const headers = new Headers(response.headers)
-  Object.entries(safeHeaders).forEach(([key,value]) => headers.set(key,value))
-  if (type) headers.set('Content-Type', type)
-  return new Response(response.body, { status: response.status, headers })
+function reply(obj: unknown, status = 200): Response {
+  return new Response(JSON.stringify(obj),{
+    status,headers:{...headers,'Content-Type':'application/json; charset=utf-8'},
+  })
 }
-const isHtml = (path: string) =>
-  /^\/(?:ai|grid|flex|position|tailwind|javascript|quiz|uiux)\/(?:[\w.-]+\/)*[\w.-]+\.html?$/i.test(path)
-const isAsset = (path: string) =>
-  /^\/(?:ai|assets|quiz|grid|flex|position|tailwind|javascript|uiux)\/(?:[\w.-]+\/)*[\w.-]+\.(?:css|js)$/i.test(path)
-const isBoot = (path: string) => /^\/assets\/[^/]+\.(?:js|css|svg|woff2?)$/i.test(path)
-
-async function student(env: Env, identity: VerifiedIdentity) {
-  return lookupStudent(env, identity)
+function error(message: string,status: number): Response { return reply({error:message},status) }
+function wrap(response:Response, contentType?:string):Response {
+  const newHeaders = new Headers(response.headers)
+  Object.entries(headers).forEach(([key,value])=>newHeaders.set(key,value))
+  if(contentType)newHeaders.set('Content-Type',contentType)
+  return new Response(response.body,{status:response.status,headers:newHeaders})
 }
-async function lesson(req: Request, env: Env, path: string): Promise<Response> {
-  try {
-    const changed = await loadPublishedContent(env, 'lecture-pages', path)
-    if (typeof changed?.html === 'string' && changed.html.trim()) {
-      return decorate(new Response(changed.html), 'text/html; charset=utf-8')
-    }
-  } catch(e) { console.warn('CMS unavailable; using bundled lesson') }
-  const fallback = await env.ASSETS.fetch(req)
-  if (!fallback.ok) return error('강의 페이지가 없습니다.', 404)
-  return decorate(fallback, 'text/html; charset=utf-8')
+async function profile(env: Env, identity: VerifiedIdentity) {
+  return env.STUDENT_STORAGE==='supabase'
+    ? lookupStudent(env,identity)
+    : findStudent(env.DB,identity)
 }
-async function asset(req: Request, env: Env, path: string): Promise<Response> {
-  try {
-    const changed = await loadPublishedContent(env, 'lecture-assets', path)
-    if (typeof changed?.source === 'string' && changed.source.trim()) {
-      return decorate(new Response(changed.source),
-        path.endsWith('.js') ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8')
-    }
-  } catch(e) { console.warn('CMS unavailable; using bundled asset') }
-  const fallback = await env.ASSETS.fetch(req)
-  if (!fallback.ok) return error('학습 자료가 없습니다.', 404)
-  return decorate(fallback)
+async function saveProfile(env:Env,identity:VerifiedIdentity,name:string) {
+  return env.STUDENT_STORAGE==='supabase'
+    ? saveStudent(env,identity,name)
+    : upsertStudent(env.DB,identity,name)
 }
-async function homepage(env: Env): Promise<string> {
-  try {
-    const edited = await loadPublishedContent(env, 'lecture-pages', '/')
-    if (edited?.html) return edited.html
-  } catch(e) { console.warn('CMS unavailable; using original homepage') }
-  const original = await env.ASSETS.fetch(new Request('https://assets.internal/original-home.html'))
-  if (!original.ok) throw new Error('Original homepage not bundled')
+async function publishedOrFallback(
+  request:Request,env:Env,path:string,
+):Promise<Response> {
+  const result=await getPublished(env.DB,path)
+  if(result.state==='hidden')return error('이 자료는 현재 비공개입니다.',404)
+  if(result.state==='published' && result.source!==null) {
+    const kind=pathKind(path)
+    const contentType=kind==='html'?'text/html; charset=utf-8':
+      kind==='css'?'text/css; charset=utf-8':'text/javascript; charset=utf-8'
+    return wrap(new Response(request.method==='HEAD'?null:result.source),contentType)
+  }
+  const asset=await env.ASSETS.fetch(staticUrl(request,path))
+  if(!asset.ok)return error('요청한 강의 자료가 없습니다.',404)
+  return wrap(asset)
+}
+async function originalHomepage(request:Request,env:Env):Promise<string> {
+  const res=await getPublished(env.DB,'/')
+  if(res.state==='hidden')throw new Error('Homepage hidden')
+  if(res.state==='published' && res.source!==null)return res.source
+  const original=await env.ASSETS.fetch(staticUrl(request,'/original-home.html'))
+  if(!original.ok)throw new Error('Original homepage missing')
   return original.text()
 }
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url)
-    const path = url.pathname
-    if (!['GET','HEAD','POST'].includes(request.method)) return error('허용되지 않는 요청입니다.', 405)
+  async fetch(request:Request,env:Env):Promise<Response> {
+    const url=new URL(request.url)
+    const path=url.pathname
+    if(!['GET','HEAD','POST'].includes(request.method))
+      return error('허용되지 않는 메서드입니다.',405)
+
+    // Deny unauthenticated requests regardless of Access edge policy: fail closed.
     let identity: VerifiedIdentity
     try {
-      identity = await verifyAccess(request, env)
-    } catch(e) {
-      return error('Google / Cloudflare Access 인증이 필요합니다.', 
-        e instanceof Error && e.message.includes('configuration') ? 503 : 401)
+      identity=await verifyAccess(request,env)
+    } catch(reason) {
+      const notConfigured=reason instanceof Error && reason.message.includes('configuration')
+      return error(notConfigured?'로그인 설정이 완료되지 않았습니다.':'Google 로그인 인증이 필요합니다.',
+        notConfigured?503:401)
     }
+
     try {
-      if (path === '/api/session' && request.method === 'GET') {
-        const info = await student(env, identity)
-        return json({ authenticated: true, registered: Boolean(info),
-          email: identity.email, studentName: info?.student_name ?? null })
+      if(path.startsWith('/api/admin/'))
+        return wrap(await handleAdminApi(request,env,identity))
+      if(path==='/admin' || path.startsWith('/admin/')) {
+        if(!isTeacher(identity,env))return error('관리자 전용입니다.',403)
+        if(request.method!=='GET' && request.method!=='HEAD')return error('메서드 오류',405)
+        return wrap(await env.ASSETS.fetch(staticUrl(request,'/index.html')),'text/html; charset=utf-8')
       }
-      if (path === '/api/profile' && request.method === 'POST') {
-        if (request.headers.get('Origin') !== url.origin ||
-            request.headers.get('X-Frontend-Lab') !== 'profile' ||
-            !request.headers.get('Content-Type')?.startsWith('application/json')) {
-          return error('잘못된 등록 요청입니다.', 403)
-        }
-        const raw = await request.text()
-        if (raw.length > 500) return error('입력 길이를 초과했습니다.', 413)
-        const payload = (() => { try { return JSON.parse(raw) } catch { return null } })()
-        const name = typeof payload?.studentName === 'string'
-          ? payload.studentName.trim().replace(/\s+/g,' ') : ''
-        if ([...name].length < 2 || [...name].length > 40 || /[<>\u0000-\u001f]/.test(name)) {
-          return error('이름은 2~40자로 입력해 주세요.', 400)
-        }
-        const saved = await saveStudent(env, identity, name)
-        return json({ registered: true, studentName: saved.student_name })
+
+      if(path==='/api/session' && request.method==='GET') {
+        const saved=await profile(env,identity)
+        return reply({
+          authenticated:true,registered:Boolean(saved),email:identity.email,
+          studentName:saved?.student_name??null,
+          teacher:isTeacher(identity,env),
+          storage:env.STUDENT_STORAGE==='supabase'?'supabase':'d1',
+        })
       }
-      if (path.startsWith('/api/') && path !== '/api/home') return error('API가 없습니다.', 404)
-      // React bootstrap code and the registration form must be accessible before the name step.
-      if (path === '/' || path === '/index.html' || isBoot(path) || path === '/favicon.ico') {
-        if (!['GET','HEAD'].includes(request.method)) return error('허용되지 않는 요청입니다.', 405)
-        return decorate(await env.ASSETS.fetch(request))
+      if(path==='/api/profile' && request.method==='POST') {
+        if(request.headers.get('Origin')!==url.origin ||
+           request.headers.get('X-Frontend-Lab')!=='profile' ||
+           !request.headers.get('Content-Type')?.toLowerCase().startsWith('application/json'))
+          return error('유효하지 않은 등록 요청입니다.',403)
+        const body=await request.text()
+        if(body.length>500)return error('입력 크기가 너무 큽니다.',413)
+        let data:unknown
+        try { data=JSON.parse(body) } catch {return error('올바른 JSON을 보내주세요.',400)}
+        const raw=data && typeof data==='object' && 'studentName' in data
+          ? (data as {studentName:unknown}).studentName:undefined
+        const name=typeof raw==='string'?raw.trim().replace(/\s+/g,' '):''
+        if([...name].length<2 || [...name].length>40 || /[<>\u0000-\u001f]/.test(name))
+          return error('이름은 2~40자로 입력해 주세요.',400)
+        const saved=await saveProfile(env,identity,name)
+        return reply({registered:true,studentName:saved.student_name})
       }
-      const profile = await student(env, identity)
-      if (!profile) return error('학생 이름 등록 후 강의를 이용할 수 있습니다.', 403)
-      if (path === '/api/home' && request.method === 'GET') return json({ html: await homepage(env) })
-      if (!['GET','HEAD'].includes(request.method)) return error('허용되지 않는 요청입니다.', 405)
-      if (path.startsWith('/cms-media/')) {
-        if (!env.CMS_SERVICE) return error('미디어 저장소가 준비되지 않았습니다.', 503)
-        const encoded=path.slice('/cms-media/'.length)
-        let decoded: string
-        try { decoded=decodeURIComponent(encoded) } catch { return error('잘못된 미디어 경로입니다.', 400) }
-        if (!decoded || decoded.includes('..') || !/^[\w.\-\/]+$/.test(decoded)) {
-          return error('잘못된 미디어 경로입니다.', 400)
-        }
-        const uri=new URL('https://cms.internal/api/media/file/'+encoded)
-        return decorate(await env.CMS_SERVICE.fetch(new Request(uri,{headers:{Accept:'*/*'}})))
+      // The login/onboarding SPA shell must load BEFORE a name is registered.
+      if(path==='/' || path==='/index.html' || path==='/favicon.ico' || boot(path)){
+        if(request.method!=='GET' && request.method!=='HEAD')return error('메서드 오류',405)
+        return wrap(await env.ASSETS.fetch(request))
       }
-      if (isHtml(path)) return lesson(request, env, path)
-      if (isAsset(path)) return asset(request, env, path)
-      if (path === '/original-home.html' || path === '/robots.txt') return error('Not found', 404)
-      // All fallback assets still require signed Access JWT and student registration.
-      return decorate(await env.ASSETS.fetch(request))
-    } catch (e) {
-      console.error('Frontend Lab error', e instanceof Error ? e.message : 'unknown')
-      return error('서버 연결이 준비되지 않았습니다.', 503)
+      if(path.startsWith('/api/') && path!=='/api/home')return error('API를 찾을 수 없습니다.',404)
+
+      // Critical: lesson HTML, quiz JavaScript, styles, image assets, and CMS API
+      // all require BOTH signed Access JWT + a separately registered student name.
+      const enrolled=await profile(env,identity)
+      if(!enrolled)return error('학생 이름을 등록해야 강의를 이용할 수 있습니다.',403)
+      if(path==='/api/home' && request.method==='GET')
+        return reply({html:await originalHomepage(request,env)})
+      if(request.method!=='GET' && request.method!=='HEAD')
+        return error('메서드 오류',405)
+
+      if(path==='/original-home.html' || path==='/original-manifest.json' ||
+         path==='/robots.txt' || path.startsWith('/cms-media/'))
+        return error('자료를 찾을 수 없습니다.',404)
+      if(pathKind(path))return publishedOrFallback(request,env,path)
+      return wrap(await env.ASSETS.fetch(request))
+    } catch(e) {
+      console.error('Frontend Lab request failed',e instanceof Error?e.message:'unknown')
+      return error('서버 데이터베이스 연결 상태를 확인해 주세요.',503)
     }
   },
 }

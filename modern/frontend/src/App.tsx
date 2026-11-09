@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import Admin from './Admin'
 import parse, { Element } from 'html-react-parser'
 
 interface Session {
@@ -41,7 +42,7 @@ function originalBody(html: string) {
     },
   })
 }
-export default function App() {
+function StudentApp() {
   const [phase,setPhase] = useState<Phase>('loading')
   const [session,setSession] = useState<Session|null>(null)
   const [name,setName] = useState('')
@@ -92,7 +93,7 @@ export default function App() {
   if (phase==='register') return <main className="onboard-shell"><section className="onboard-panel" aria-labelledby="name-title">
     <p className="onboard-kicker">JJinMangGo · Frontend Lab</p>
     <h1 id="name-title">학생 이름 등록</h1>
-    <p>Google 로그인은 완료되었습니다. 강의실에서 사용할 이름을 별도로 입력해 주세요.</p>
+    <p>로그인은 완료되었습니다. 강의실에서 사용할 이름을 별도로 입력해 주세요.</p>
     <p className="onboard-account">로그인 계정: <strong>{session?.email}</strong></p>
     <form onSubmit={register}>
       <label htmlFor="studentName">학생 이름</label>
@@ -108,4 +109,8 @@ export default function App() {
     <p className="onboard-help">등록된 이름은 학습 운영 목적으로 저장됩니다. 실제 이름을 입력해 주세요.</p>
   </section></main>
   return <>{originalBody(home)}</>
+}
+
+export default function App() {
+  return window.location.pathname.startsWith("/admin") ? <Admin/> : <StudentApp/>
 }

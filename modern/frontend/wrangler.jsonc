@@ -9,8 +9,14 @@
     "binding": "ASSETS",
     "run_worker_first": true
   },
-  "services": [
-    { "binding": "CMS_SERVICE", "service": "frontend-lab-cms" }
-  ],
-  "observability": { "enabled": false }
+  "observability": {
+    "enabled": false
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "frontend-lab-cms",
+      "database_id": "84a90c4b-fdc4-4bc0-9030-acf7ba26f069"
+    }
+  ]
 }

@@ -1,5 +1,10 @@
-# Never commit real secrets. The Worker refuses access until both fields are configured.
-CF_ACCESS_TEAM_DOMAIN=your-team.cloudflareaccess.com
-CF_ACCESS_AUD=your-cloudflare-access-application-audience
-SUPABASE_URL=https://your-dedicated-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=local-only-service-secret
+# For local development only. DO NOT commit .dev.vars with real credentials.
+CF_ACCESS_TEAM_DOMAIN=long-flower-8d9c.cloudflareaccess.com
+CF_ACCESS_AUD=YOUR_GOOGLE_ACCESS_APP_AUDIENCE
+# Comma-separated exact verified Google emails of authorized teachers.
+ADMIN_EMAILS=teacher@example.com
+# Defaults to d1. Supabase is optional; do not configure unless a dedicated project is approved.
+STUDENT_STORAGE=d1
+# STUDENT_STORAGE=supabase
+# SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+# SUPABASE_SERVICE_ROLE_KEY=SECRET_SERVER_ONLY

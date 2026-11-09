@@ -1,6 +1,6 @@
 {
   "name": "frontend-lab-web",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,9 @@
     "prebuild": "npm run sync:original",
     "build": "tsc --noEmit && vite build",
     "deploy": "npm run build && wrangler deploy",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "db:local": "wrangler d1 migrations apply frontend-lab-cms --local",
+    "db:remote": "wrangler d1 migrations apply frontend-lab-cms --remote"
   },
   "dependencies": {
     "html-react-parser": "6.1.9",
