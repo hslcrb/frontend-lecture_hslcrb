@@ -115,11 +115,21 @@ export function legacyQuizCatalog(root) {
             if(typeof ans!=='number'||!Number.isInteger(ans))throw new Error('Unsupported choice answer')
             return {kind:'single',answer:ans}
           })
+          const editable=questions.map((q,i)=>({
+            id:'q'+(i+1),
+            kind:q.type==='short'?'short':'single',
+            prompt:String(q.q||q.question||'').slice(0,1500),
+            category:String(q.cat||q.category||'').slice(0,100),
+            options:q.type==='short'?[]:(q.opts||q.options||[]).map(o=>
+              String(typeof o==='object'&&o!==null?o.text:o).slice(0,600)),
+            answer:q.ans!==undefined?q.ans:q.answer,
+            explanation:String(q.ex||q.explain||q.feedback||'').slice(0,2500)
+          }))
           const config=scope.window.QUIZ_CONFIG||{}
           const title=String(config.title||(/<title[^>]*>([\s\S]*?)<\/title>/i.exec(html)||[])[1]||e.name).replace(/<[^>]+>/g,'').slice(0,120)
           items.push({path:'/'+path.relative(root,htmlFile).split(path.sep).join('/'),
             dataPath:'/'+path.relative(root,full).split(path.sep).join('/'),
-            title,keys})
+            title,keys,editable})
         }catch(e){
           console.warn('Skipping unsupported original quiz:',path.relative(root,full),e.message)
         }
