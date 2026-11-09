@@ -1,0 +1,5 @@
+# Never commit real secrets. The Worker refuses access until both fields are configured.
+CF_ACCESS_TEAM_DOMAIN=your-team.cloudflareaccess.com
+CF_ACCESS_AUD=your-cloudflare-access-application-audience
+SUPABASE_URL=https://your-dedicated-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=local-only-service-secret
