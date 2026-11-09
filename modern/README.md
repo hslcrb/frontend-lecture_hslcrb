@@ -33,3 +33,14 @@ The original professor's public site and official repository were not changed by
 - Grading is performed in the Worker against server-side answer keys. The original legacy JS still contains answers; scores are for formative practice, not proctored exams.
 
 Detailed [feature design and privacy boundaries](docs/LEARNING_ANALYTICS.md) and [implementation log](docs/FEATURE_LOG_2026-11-09.md). The new features require migration `0003_learning_profiles_quizzes.sql` in the existing D1.
+
+## Blue Renaissance CMS — D1 course library
+
+**Blue Renaissance** is the internal CMS name. It manages the Frontend Lab course pages, teacher revisions, Quiz Studio and learning analytics.
+
+- Original **44 HTML pages** (43 lesson/quiz pages plus homepage body) have been imported into the existing Cloudflare D1 `frontend-lab-cms` database under `lab_course_sources`. Aggregate verified D1 source length: approximately 429 KiB.
+- The Worker resolves course HTML in this order: **teacher-published override (D1)** → **archived course original (D1)** → **bundled static HTML**. React, CSS, JavaScript, images and the original quiz engine stay as static assets.
+- Teacher CMS shows course storage status, can create a new HTML lecture, save drafts/publish/restore, and sync an individual bundled source into the D1 course library without overwriting published edits.
+- Branding: the teacher console top left displays **Blue Renaissance CMS** in the original minimal design system. The requested SVG file path is `modern/frontend/public/ui/blue-renaissance-logo.svg`. **The user's actual SVG is not yet attached**; a text wordmark is used until then.
+
+See [Blue Renaissance CMS details](docs/BLUE_RENAISSANCE.md), [learning analytics](docs/LEARNING_ANALYTICS.md), and [operations](docs/OPERATIONS.md).
