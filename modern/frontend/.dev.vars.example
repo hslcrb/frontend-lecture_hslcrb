@@ -8,3 +8,6 @@ STUDENT_STORAGE=d1
 # STUDENT_STORAGE=supabase
 # SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 # SUPABASE_SERVICE_ROLE_KEY=SECRET_SERVER_ONLY
+
+# Required server-only HMAC pepper (64 lowercase hex chars; never commit a real value).
+AUTH_PEPPER=REPLACE_WITH_64_RANDOM_HEX_CHARACTERS
