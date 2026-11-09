@@ -1,16 +1,9 @@
-# Frontend Lab — 무료 클라우드 확장 프로젝트
+# Blue Renaissance · React + Cloudflare D1
 
-프로젝트 진입: [README.md](README.md)  
-사이트: https://frontend-lab.rhee.life  
-실제 소스: [modern/README.md](modern/README.md)
+운영 사이트: https://frontend-lab.rhee.life
 
-## 개발과 운영
-- [2026-11-09 전체 제작 과정](modern/docs/DEVELOPMENT_HISTORY.md)
-- [시스템 설계와 D1 데이터 흐름](modern/docs/ARCHITECTURE.md)
-- [운영·배포·복구](modern/docs/OPERATIONS.md)
-- [실제 테스트와 남은 검증](modern/docs/VALIDATION.md)
-- [보안 및 개인정보](modern/docs/SECURITY.md)
+이 저장소는 Google Access 인증, React 학습 화면과 CMS, Cloudflare Workers 동적 API 및 D1 데이터베이스를 사용하는 **독립 학습 서비스**입니다.
 
-React + Cloudflare Workers Free + D1을 사용하고, Google 계정 로그인 후 학생 이름을 별도로 받습니다. 교사 `spacejh72@gmail.com` 계정에만 관리자 비밀번호 2차 인증을 적용합니다. 유료 Payload CMS/R2는 사용하지 않습니다.
+과거 정적 강의 HTML과 문항 JavaScript는 운영 브랜치에서 삭제했으며, 원본 커밋은 `archive/legacy-courses-20261109`에 보존합니다. React 진입용 `modern/frontend/index.html`은 런타임 시작에 필요한 HTML 셸로 유지합니다.
 
-**중요:** 기존 선생님 강의 소스·디자인은 원본 그대로 유지하고 `modern/`에서 확장합니다. Cloudflare 배포 성공과 실제 Google 로그인/교사 메일 복구·모든 퀴즈의 브라우저 검증은 별개의 단계입니다. 선생님 원본 저장소로의 PR은 허가 전까지 만들지 않습니다.
+[전체 서비스 구조도](docs/blue-renaissance-system-map.svg) · [README](README.md) · [개발 전환 기록](modern/docs/REACT_D1_REBUILD.md)
