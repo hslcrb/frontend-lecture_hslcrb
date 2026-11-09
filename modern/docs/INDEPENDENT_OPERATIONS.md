@@ -1,6 +1,23 @@
-# 저장소 독립 운영 및 Fork 관계 해제 계획
+# 저장소 독립 운영 및 Fork 관계 해제 결과
 
-작성일: 2026-11-09. 이 문서는 **GitHub Fork 네트워크 연결 해제 전**에 작성된 운영 가이드입니다. 이 문서의 커밋 자체는 GitHub의 `fork` 메타데이터를 변경하지 않습니다.
+작성일: 2026-11-09. GitHub 설정에서 사용자가 **Leave fork network를 직접 완료한 뒤**, GitHub 및 Cloudflare API로 검증한 운영 기록입니다. 이 문서의 커밋은 Fork 메타데이터를 변경하지 않으며, 실제 연결 해제는 GitHub 설정 기능으로 처리되었습니다.
+
+## 0. 연결 해제 성공 검증 (2026-11-09)
+
+| 확인 항목 | 검증된 상태 |
+| --- | --- |
+| 저장소 | `hslcrb/frontend-lecture_hslcrb` |
+| GitHub `fork` | **`false`** |
+| GitHub `parent`, `source` | **둘 다 없음** |
+| GitHub 저장소 ID | **`1374351563` — 변경 없음** |
+| 기본 브랜치 | **`main` 유지** |
+| 브랜치 | `main` 및 2개의 기존 개발 브랜치 유지 |
+| 코드·문서 | 원본 `index.html`, 현대화 Worker 소스, README 및 제작 문서 존재 확인 |
+| Cloudflare Workers Builds | 저장소 ID `1374351563`, 브랜치 `main`, 루트 `modern/frontend` 유지 |
+| 배포 확인 | Fork 해제 후 실행된 빌드에서 **12개 테스트 통과, 배포 성공** 확인. 버전 `dfff98b9-f66a-42a3-aa40-7ab6aa3e7577` |
+| 도메인 | `frontend-lab.rhee.life` → `frontend-lab-web` Worker 유지 |
+
+**결과:** GitHub의 Fork 네트워크에서 공식 분리되었고 Git 커밋과 배포 연결도 유지되었습니다. 이후 새로운 커밋의 빌드·배포는 별도 로그를 확인해야 합니다. 학생 로그인·교사 비밀번호·메일 복구는 자동 빌드 결과만으로 검증 완료가 되지 않습니다.
 
 ## 1. 운영 주체와 역할
 
@@ -18,7 +35,7 @@
 
 **공개(Public) 저장소가 곧 자유롭게 재배포·상용화할 수 있는 허락을 뜻하지는 않습니다.** 원본 저장소의 명시적 라이선스를 확인하지 못했다면 기존 강의 자료를 계속 호스팅·복제·변경하는 부분은 원저작자에게 사용 범위를 확인하는 것이 좋습니다. '독립 운영'과 '저작권 양도'는 별개입니다.
 
-## 3. GitHub의 공식 분리 절차
+## 3. GitHub에서 사용자가 실행한 공식 분리 절차 (참고용)
 
 GitHub 문서: https://docs.github.com/en/pull-requests/how-tos/work-with-forks/detaching-a-fork
 
@@ -29,7 +46,7 @@ GitHub 문서: https://docs.github.com/en/pull-requests/how-tos/work-with-forks/
 - 연결한 계정에 저장소 관리자 권한 있음
 - 연결 원본: `JJinMangGo/frontend-lecture`
 
-따라서 **Leave fork network** 기능을 사용할 자격은 충족해 보입니다. 다만 화면의 기능 제공 여부와 GitHub 자체 최종 판정은 GitHub가 결정합니다.
+위 조건을 확인한 뒤 사용자가 **Leave fork network**를 직접 실행했습니다. 사후 API에서 `fork: false`와 상위 저장소 연결이 없음을 확인했습니다.
 
 1. https://github.com/hslcrb/frontend-lecture_hslcrb/settings 로 이동합니다.
 2. **General → Danger Zone → Leave fork network**를 선택합니다.
@@ -56,6 +73,6 @@ GitHub의 Fork 해제는 Cloudflare D1의 데이터를 옮기거나 인프라 �
 
 ## 5. 완료 기준
 
-저장소 API로 `fork: false`를 확인하고, 기본 브랜치와 Cloudflare Builds를 재확인해야만 'Fork 관계 분리 완료'라고 기록합니다. 웹사이트가 이미 독립 인프라에서 운영된다는 점은 이 GitHub 상태 확인을 대신하지 않습니다.
+**완료:** GitHub API에서 `fork: false`, `parent` 없음, 저장소 ID 유지, `main` 및 기존 개발 브랜치 보존을 확인했습니다. Cloudflare Workers Builds 저장소 연결·브랜치도 유지되었고, 해제 이후 빌드 로그에서 배포 성공과 12/12 테스트 통과를 확인했습니다.
 
 원본 강의 자료의 출처 표기와 원저작권 존중은 Fork 해제 이후에도 유지합니다.

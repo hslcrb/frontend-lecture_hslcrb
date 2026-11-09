@@ -1,6 +1,6 @@
 # Frontend Lab — 원본 강의와 무료 클라우드 확장판
 
-이 저장소는 [JJinMangGo/frontend-lecture](https://github.com/JJinMangGo/frontend-lecture)에서 Fork한 강의 자료와, 원본 화면과 파일 경로를 보존하면서 별도로 구축한 **React + Cloudflare Workers Free + D1** 버전을 함께 담고 있습니다.
+이 저장소는 현재 **독립된 공개 GitHub 저장소**입니다. 처음에는 [JJinMangGo/frontend-lecture](https://github.com/JJinMangGo/frontend-lecture)의 Fork로 시작했으나, 2026년 11월 9일 GitHub의 **Leave fork network** 기능을 통해 관계를 공식 해제했습니다. 기존 강의 자료의 출처와 원저작권을 유지하며, 원본 화면과 파일 경로를 보존하는 **React + Cloudflare Workers Free + D1** 버전을 함께 담고 있습니다.
 
 **실제 사이트:** https://frontend-lab.rhee.life
 
@@ -29,7 +29,7 @@
 2. [시스템 설계와 데이터 흐름](modern/docs/ARCHITECTURE.md) — 인증, React, Workers, D1, 편집 이력, 기존 파일과의 결합 방식.
 3. [운영·배포·복구 실행서](modern/docs/OPERATIONS.md) — Cloudflare 연결, 환경변수, 데이터 보존, 롤백, 교사 인수인계.
 4. [검증 결과와 미해결 사항](modern/docs/VALIDATION.md) — 실제로 확인한 테스트와 아직 확인하지 못한 흐름.
-5. [Fork 관계 해제와 독립 운영 안내](modern/docs/INDEPENDENT_OPERATIONS.md) — 운영자·교사 역할, 공식 해제 절차, 해제 후 Cloudflare 점검.
+5. [독립 운영·Fork 관계 해제 결과](modern/docs/INDEPENDENT_OPERATIONS.md) — 공식 해제 성공, 저장소 ID·브랜치·Cloudflare 자동 배포 검증.
 6. [2026-11-09 main 병합 보고서](modern/docs/RELEASE_2026-11-09.md) — 병합 SHA·변경 범위·Cloudflare 감시 브랜치 검증.
 7. [배포 설정](modern/docs/DEPLOYMENT.md) / [보안·개인정보](modern/docs/SECURITY.md).
 
@@ -51,7 +51,7 @@ Node.js, npm 및 Cloudflare Wrangler가 필요합니다. 원본 GitHub 저장소
 ### 저장소 간 관계
 
 - **선생님 공식 원본:** [JJinMangGo/frontend-lecture](https://github.com/JJinMangGo/frontend-lecture).
-- **개인 Fork:** [hslcrb/frontend-lecture_hslcrb](https://github.com/hslcrb/frontend-lecture_hslcrb).
-- **원본 저장소로의 Pull Request:** 별도 승인 전까지 생성하지 않습니다. 여기서 말하는 main 병합은 **개인 Fork 내부의 병합**입니다.
+- **독립 운영 저장소:** [hslcrb/frontend-lecture_hslcrb](https://github.com/hslcrb/frontend-lecture_hslcrb) (`fork: false`, 원본 네트워크 관계 해제).
+- **원본 저장소로의 Pull Request:** 별도 승인 전까지 생성하지 않습니다. 이 프로젝트의 `main` 병합은 **독립된 본 저장소 내부의 병합**입니다.
 
 _기록 작성일: 2026-11-09, KST. 이 문서는 민감한 API 키·비밀번호·학생 개인정보를 포함하지 않습니다._
