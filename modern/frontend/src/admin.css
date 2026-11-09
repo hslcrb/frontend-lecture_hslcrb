@@ -48,3 +48,10 @@
 .cms-roster ul{margin:0;padding:0;list-style:none;max-height:200px;overflow:auto}
 .cms-roster li{display:grid;gap:2px;border-bottom:1px solid #eef2f7;padding:8px 2px;font-size:13px}
 .cms-roster small{color:#64748b;overflow-wrap:anywhere}
+
+.cms-db-info{margin:2px 0 14px;font-size:12px;color:#526079;line-height:1.55}
+.cms-create-course{display:grid;gap:8px;margin:0 0 18px;padding:14px;border:1px solid #dce3ec;border-radius:9px;background:#f9fafc}
+.cms-create-course label{font-size:12px;color:#526079;font-weight:750}
+.cms-create-course input{margin:0;font-size:12px;padding:9px 10px;background:white;color:#172033}
+.cms-create-course button{background:#fff;color:#3455d1;border:1px solid #cdd9ee;border-radius:7px;padding:9px 11px;font-size:12px;font-weight:750;cursor:pointer}
+.cms-create-course button:disabled{opacity:.45}

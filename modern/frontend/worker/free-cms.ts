@@ -1,6 +1,7 @@
 import type { D1 } from './free-db'
 import type { VerifiedIdentity } from './auth'
 import { teacherMatches } from './teacher-auth'
+import { getCourseSource, listCourseSources, isCoursePath, syncCourseFromBuild } from './course-db'
 import {
   pathKind,findEntry,contentHistory,contentList,saveDraft,
   publishDraft,setHidden,restoreVersion,
@@ -25,6 +26,8 @@ export function isTeacher(identity: VerifiedIdentity, env: AdminEnv): boolean {
 }
 
 async function originalSource(request: Request, env: AdminEnv, path: string):Promise<string> {
+  const archived=await getCourseSource(env.DB,path)
+  if(archived)return archived.source_html
   const location=path==='/'?'/original-home.html':path
   const url=new URL(request.url)
   url.pathname=location
@@ -42,6 +45,7 @@ async function viewEntry(request: Request, env: AdminEnv, path:string) {
     hidden:Boolean(entry?.hidden),
     hasDraft:entry!==null && entry.draft_source!==entry.published_source,
     originalExists:original.length>0,
+    originalStorage:(await getCourseSource(env.DB,path))?'d1':'static',
     updatedAt:entry?.updated_at??null,
     publishedAt:entry?.published_at??null,
     originalLength:original.length,
@@ -64,11 +68,16 @@ export async function handleAdminApi(
         ).all()
         return reply({students:records.results??[],storage:'d1'})
       }
+      if(route==='/api/admin/courses')
+        return reply({courses:await listCourseSources(env.DB)})
       if(route==='/api/admin/manifest') {
         const asset=new URL('/original-manifest.json',url)
         const response=await env.ASSETS.fetch(new Request(asset.toString()))
-        const original=response.ok?await response.json():{items:[]}
-        return reply({original,edited:await contentList(env.DB)})
+        const original=response.ok?await response.json() as {items?:Array<{path:string;kind:string;title:string}>}:{items:[]}
+        const courses=await listCourseSources(env.DB)
+        const merged=new Map<string,{path:string;kind:string;title:string}>((original.items??[]).map(item=>[item.path,item] as const))
+        for(const course of courses)merged.set(course.path,{path:course.path,kind:'html',title:course.title})
+        return reply({original:{items:[...merged.values()]},edited:await contentList(env.DB),courses})
       }
       const path=url.searchParams.get('path')??'/'
       if(!pathKind(path))return reply({error:'잘못된 경로입니다.'},400)
@@ -76,7 +85,7 @@ export async function handleAdminApi(
       if(route==='/api/admin/history')return reply({versions:await contentHistory(env.DB,path)})
       return reply({error:'관리자 API 경로가 없습니다.'},404)
     }
-    if(request.method!=='POST' || route!=='/api/admin/content')
+    if(request.method!=='POST' || (route!=='/api/admin/content' && route!=='/api/admin/course/sync'))
       return reply({error:'지원하지 않는 관리자 요청입니다.'},405)
     // Access cookies are ambient. Strict same-origin + non-simple header protect mutations.
     if(request.headers.get('Origin')!==url.origin ||
@@ -92,6 +101,11 @@ export async function handleAdminApi(
       data=parsed
     } catch {return reply({error:'JSON 형식이 올바르지 않습니다.'},400)}
     const path=typeof data.path==='string'?data.path:''
+    if(route==='/api/admin/course/sync') {
+      if(!isCoursePath(path))return reply({error:'HTML 강의 경로만 동기화할 수 있습니다.'},400)
+      const result=await syncCourseFromBuild(env.DB,request,env.ASSETS,path)
+      return reply({ok:true,...result})
+    }
     if(!pathKind(path))return reply({error:'지원하지 않는 강의 경로입니다.'},400)
     const action=data.action
     if(action==='saveDraft') {

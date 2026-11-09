@@ -1,4 +1,5 @@
 import { verifyAccess, type VerifiedIdentity } from './auth'
+import { getCourseSource } from './course-db'
 import { ensureStudentId } from './learning-db'
 import { handleStudentLearningApi, handleTeacherLearningApi } from './learning-api'
 import { findStudent, upsertStudent, getPublished, pathKind, type D1 } from './free-db'
@@ -58,6 +59,14 @@ async function publishedOrFallback(
       kind==='css'?'text/css; charset=utf-8':'text/javascript; charset=utf-8'
     return wrap(new Response(request.method==='HEAD'?null:result.source),contentType)
   }
+  if(pathKind(path)==='html'){
+    const course=await getCourseSource(env.DB,path)
+    if(course){
+      const answer=wrap(new Response(request.method==='HEAD'?null:course.source_html),'text/html; charset=utf-8')
+      answer.headers.set('X-Lab-Source','d1-course-library')
+      return answer
+    }
+  }
   const asset=await env.ASSETS.fetch(staticUrl(request,path))
   if(!asset.ok)return error('요청한 강의 자료가 없습니다.',404)
   return wrap(asset)
@@ -66,6 +75,8 @@ async function originalHomepage(request:Request,env:Env):Promise<string> {
   const res=await getPublished(env.DB,'/')
   if(res.state==='hidden')throw new Error('Homepage hidden')
   if(res.state==='published' && res.source!==null)return res.source
+  const archived=await getCourseSource(env.DB,'/')
+  if(archived)return archived.source_html
   const original=await env.ASSETS.fetch(staticUrl(request,'/original-home.html'))
   if(!original.ok)throw new Error('Original homepage missing')
   return original.text()

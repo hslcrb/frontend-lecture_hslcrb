@@ -156,3 +156,12 @@
 @media(max-width:1050px){.lab-studio-grid{grid-template-columns:1fr}.lab-studio-side{position:static}}
 @media(max-width:760px){.lab-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.lab-two{grid-template-columns:1fr}.lab-workspace-head{align-items:flex-start;flex-direction:column}.lab-form-grid{grid-template-columns:1fr}.lab-panel{padding:17px}.lab-profile-card{padding:17px}.lab-admin-tab{flex:1;min-width:125px}.lab-studio-side{position:static}}
 @media(max-width:420px){.lab-metrics{gap:9px}.lab-metric{padding:14px;min-height:118px}.lab-student-id{font-size:12px}.lab-question-editor{padding:12px}.lab-option-row{gap:4px}.lab-option-row button{font-size:11px}}
+
+/* Blue Renaissance CMS brand: plain, unornamented, matching the original ink/blue palette. */
+.br-brand{display:flex;align-items:center;gap:11px;min-height:40px;margin-bottom:19px;width:max-content;max-width:100%}
+.br-logo{max-width:min(250px,75vw);height:39px;object-fit:contain;object-position:left center}
+.br-wordmark{color:#172033;font-size:21px;font-weight:780;letter-spacing:-.05em;line-height:1.15}
+.br-edition{font-size:10px;color:#3455d1;font-weight:800;letter-spacing:.07em;border:1px solid #dce3ec;border-radius:5px;padding:4px 7px;white-space:nowrap}
+.lab-workspace-head .lab-eyebrow{font-size:10px}
+.lab-workspace-head .br-brand{margin-bottom:20px}
+.onboard-panel .br-brand{margin-bottom:22px}
