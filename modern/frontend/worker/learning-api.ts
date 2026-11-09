@@ -133,6 +133,20 @@ export async function handleTeacherLearningApi(
       const found=await teacherStudentDetail(env.DB,id)
       return found?json(found):bad('학생을 찾을 수 없습니다.',404)
     }
+    if(url.pathname==='/api/admin/quiz/legacy'&&req.method==='GET'){
+      const entries=await legacyCatalog(env,req)
+      return json({items:entries.map(q=>({path:q.path,title:q.title,count:q.keys.length}))})
+    }
+    if(url.pathname==='/api/admin/quiz/import'&&req.method==='GET'){
+      const path=url.searchParams.get('path')??''
+      const entry=(await legacyCatalog(env,req)).find(q=>q.path===path)
+      if(!entry||!Array.isArray(entry.editable))return bad('원본 문제를 불러올 수 없습니다.',404)
+      const suggested=('original-'+path.replace(/^\//,'').replace(/\.html$/,'').replace(/\//g,'-'))
+        .toLowerCase().replace(/[^a-z0-9-]/g,'-').slice(0,60)
+      return json({slug:suggested,title:entry.title,
+        description:'기존 강의의 문제를 가져와 별도로 편집한 관리형 퀴즈',
+        questions:validateQuizDraft(entry.editable)})
+    }
     if(url.pathname==='/api/admin/quizzes'&&req.method==='GET')
       return json({quizzes:await listManagedQuizzes(env.DB,false)})
     if(url.pathname==='/api/admin/quiz'&&req.method==='GET'){
