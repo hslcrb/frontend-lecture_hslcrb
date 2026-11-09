@@ -165,3 +165,15 @@
 .lab-workspace-head .lab-eyebrow{font-size:10px}
 .lab-workspace-head .br-brand{margin-bottom:20px}
 .onboard-panel .br-brand{margin-bottom:22px}
+
+/* Blue Renaissance CMS — creator role directory. */
+.lab-rank-permanent{margin:0}
+.lab-rank-permanent h3{font-size:21px;letter-spacing:-.035em;margin:8px 0}
+.lab-rank-permanent p{font-weight:650;color:#172033;overflow-wrap:anywhere;font-size:14px;margin:0 0 10px}
+.lab-rank-permanent small{font-size:12px;color:#69758a;line-height:1.6}
+.lab-role-label{display:inline-block;border:1px solid #dce3ec;border-radius:6px;padding:4px 8px;font-size:12px;white-space:nowrap;font-weight:650;color:#526079}
+.lab-role-label.creator{border-color:#97aaf0;background:#edf0ff;color:#263f9e}
+.lab-role-label.teacher{border-color:#c8d3e7;background:#f5f7fb;color:#31425b}
+.lab-role-label.admin{border-color:#c7d7ef;background:#f5f8fd;color:#3455d1}
+.lab-role-revoke{border-color:#edbec7!important;color:#a52d44!important}
+.lab-role-manager .lab-panel{box-shadow:none}
