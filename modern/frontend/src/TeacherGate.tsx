@@ -108,10 +108,10 @@ export default function TeacherGate() {
   return <main className="onboard-shell">
     <section className="onboard-panel" aria-labelledby="teacher-title">
       <BlueRenaissanceBrand/>
-      <h1 id="teacher-title">{mode==='setup'?'관리자 비밀번호 최초 설정':mode==='reset'?'비밀번호 재설정':mode==='forgot'?'이메일 인증':'선생님 2차 인증'}</h1>
+      <h1 id="teacher-title">{mode==='setup'?'관리자 비밀번호 최초 설정':mode==='reset'?'비밀번호 재설정':mode==='forgot'?'이메일 인증':'관리자 2차 인증'}</h1>
       <p>{mode==='setup'?'Google 계정 확인이 끝났습니다. 관리자 비밀번호를 처음 한 번 설정하면 D1에 해시로 저장됩니다.':
          mode==='reset'?'선생님 이메일로 발급받은 일회용 링크입니다. 새 비밀번호를 입력해 주세요.':
-         mode==='forgot'?'등록된 선생님 이메일로 일회용 확인 링크를 보내드립니다. 링크는 15분 동안 한 번만 사용할 수 있습니다.':
+         mode==='forgot'?'등록된 관리자 Google 이메일로 일회용 확인 링크를 보내드립니다. 링크는 15분 동안 한 번만 사용할 수 있습니다.':
          '관리자 페이지에 들어가려면 Google 로그인 외에 비밀번호가 한 번 더 필요합니다.'}</p>
       <p className="onboard-account">Google 인증 계정: <strong>{email}</strong></p>
       {mode!=='forgot'?<form onSubmit={submit}>
