@@ -2,13 +2,16 @@ import { verifyAccess, type VerifiedIdentity } from './auth'
 import { lookupStudent, saveStudent } from './supabase'
 import { findStudent, upsertStudent, getPublished, pathKind, type D1 } from './free-db'
 import { isTeacher, handleAdminApi } from './free-cms'
+import { handleTeacherAction, validTeacherSession } from './teacher-auth'
 
 interface Env {
   ASSETS: { fetch: (request: Request) => Promise<Response> }
   DB: D1
   CF_ACCESS_TEAM_DOMAIN?: string
   CF_ACCESS_AUD?: string
-  ADMIN_EMAILS?: string
+  TEACHER_EMAIL?: string
+  EMAIL_FROM?: string
+  EMAIL?: {send:(message:{from:string;to:string;subject:string;text:string;html:string})=>Promise<{messageId?:string}>}
   STUDENT_STORAGE?: string
   SUPABASE_URL?: string
   SUPABASE_SERVICE_ROLE_KEY?: string
@@ -91,8 +94,17 @@ export default {
     }
 
     try {
-      if(path.startsWith('/api/admin/'))
+      if(path.startsWith('/api/teacher/')) {
+        const result=await handleTeacherAction(request,env,identity)
+        const response=reply(result.body,result.status)
+        if(result.cookie)response.headers.set('Set-Cookie',result.cookie)
+        return response
+      }
+      if(path.startsWith('/api/admin/')) {
+        if(!isTeacher(identity,env))return error('교사 관리자만 접근할 수 있습니다.',403)
+        if(!await validTeacherSession(request,env,identity))return error('선생님 비밀번호 인증이 필요합니다.',401)
         return wrap(await handleAdminApi(request,env,identity))
+      }
       if(path==='/admin' || path.startsWith('/admin/')) {
         if(!isTeacher(identity,env))return error('관리자 전용입니다.',403)
         if(request.method!=='GET' && request.method!=='HEAD')return error('메서드 오류',405)

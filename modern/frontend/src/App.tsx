@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import Admin from './Admin'
+import TeacherGate from './TeacherGate'
 import parse, { Element } from 'html-react-parser'
 
 interface Session {
@@ -112,5 +112,5 @@ function StudentApp() {
 }
 
 export default function App() {
-  return window.location.pathname.startsWith("/admin") ? <Admin/> : <StudentApp/>
+  return window.location.pathname.startsWith("/admin") ? <TeacherGate/> : <StudentApp/>
 }

@@ -1,5 +1,6 @@
 import type { D1 } from './free-db'
 import type { VerifiedIdentity } from './auth'
+import { teacherMatches } from './teacher-auth'
 import {
   pathKind,findEntry,contentHistory,contentList,saveDraft,
   publishDraft,setHidden,restoreVersion,
@@ -8,7 +9,7 @@ import {
 interface AdminEnv {
   DB: D1
   ASSETS: {fetch:(request:Request)=>Promise<Response>}
-  ADMIN_EMAILS?: string
+  TEACHER_EMAIL?: string
 }
 
 function reply(data: unknown,status=200):Response {
@@ -20,8 +21,7 @@ function reply(data: unknown,status=200):Response {
 }
 
 export function isTeacher(identity: VerifiedIdentity, env: AdminEnv): boolean {
-  const allowed=(env.ADMIN_EMAILS??'').split(',').map(v=>v.trim().toLowerCase()).filter(Boolean)
-  return allowed.length>0 && allowed.includes(identity.email.toLowerCase())
+  return teacherMatches(identity,env)
 }
 
 async function originalSource(request: Request, env: AdminEnv, path: string):Promise<string> {
