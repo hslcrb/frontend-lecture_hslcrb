@@ -5,6 +5,12 @@
 
 > 운영 서비스는 **React UI + Workers 동적 API + D1 데이터베이스**를 중심으로 구성됩니다. 기존 수업별 정적 HTML 및 `.data.js` 문제 파일은 운영 저장소에서 삭제했고, 교육 자료는 D1에 이관했습니다. 원본은 별도 보존 브랜치에 남아 있습니다.
 
+## 원본 Frontend Lab UI를 React로 복원
+
+원래의 내비게이션·히어로·섹션별 카드·퀴즈 패널·AI 단계 학습·강의 페이지 CSS를 **보존 브랜치 기준으로 복원**하고 React 컴포넌트에 적용했습니다. 수업 콘텐츠는 여전히 D1에서 제공하며, 독립 정적 수업 HTML/JavaScript 페이지는 운영 브랜치로 복구하지 않습니다.
+
+[원본 대비 복원 설계 및 검증 범위](modern/docs/VISUAL_PARITY_2026-11-09.md)
+
 ## 서비스 전체 구조도
 
 ![Blue Renaissance · Frontend Lab 전체 시스템 관계도 — GitHub, Cloudflare Access, React, Workers, D1, 관리자 권한, 지속적 배포](docs/blue-renaissance-system-map.svg)
