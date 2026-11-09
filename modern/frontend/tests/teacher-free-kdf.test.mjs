@@ -41,10 +41,10 @@ class FakeD1 {
         }else if(sql.includes('INSERT INTO lab_teacher_sessions')){
           this.sessions.set(args[0],{session_hash:args[0],email:args[1],
             access_subject:args[2],created_at:args[3],expires_at:args[4]})
-        }else if(sql.includes('UPDATE lab_teacher_credentials SET failed_attempts')){
-          const row=this.credentials.get(args[2]);row.failed_attempts=args[0];row.locked_until=args[1]
         }else if(sql.includes('UPDATE lab_teacher_credentials SET failed_attempts=0')){
           const row=this.credentials.get(args[0]);row.failed_attempts=0;row.locked_until=0
+        }else if(sql.includes('UPDATE lab_teacher_credentials SET failed_attempts')){
+          const row=this.credentials.get(args[2]);row.failed_attempts=args[0];row.locked_until=args[1]
         }
         return {success:true}
       }
