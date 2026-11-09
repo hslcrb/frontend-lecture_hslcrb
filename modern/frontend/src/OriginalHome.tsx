@@ -33,24 +33,12 @@ export default function OriginalHome({teacher}:{teacher:boolean}){
   const content=useMemo(()=>{
     if(!home)return ''
     const safe=safeLessonHtml(home.html,'/',catalog)
-    const doc=new DOMParser().parseFromString(safe,'text/html')
-    // Preserve the original header and card layouts; extend existing nav-link UI only.
-    const nav=doc.querySelector('.nav-links')
-    if(nav){
-      const myPage=doc.createElement('a')
-      myPage.className='nav-link'
-      myPage.href='/me'
-      myPage.textContent='마이페이지'
-      nav.append(myPage)
-      if(teacher){
-        const admin=doc.createElement('a')
-        admin.className='nav-link'
-        admin.href='/admin'
-        admin.textContent='강의 관리'
-        nav.append(admin)
-      }
-    }
-    return doc.body.innerHTML
+    // Only append vetted static links to the existing original navigation.
+    // Avoid mutating foreign DOM implementations in Worker + browser type unions.
+    const extra='<a class="nav-link" href="/me">마이페이지</a>'+
+      (teacher?'<a class="nav-link" href="/admin">강의 관리</a>':'')
+    return safe.replace(/(<nav\b[^>]*class=["'][^"']*nav-links[^"']*["'][^>]*>[\s\S]*?)(<\/nav>)/i,
+      (_,begin,end)=>begin+extra+end)
   },[home,catalog,teacher])
   if(error)return <main className="onboard-shell" role="alert">{error}</main>
   if(!ready)return <main className="onboard-shell" aria-live="polite">Frontend Lab을 불러오는 중입니다…</main>
