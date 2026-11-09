@@ -1,5 +1,6 @@
 import type { D1 } from './free-db'
 import type { VerifiedIdentity } from './auth'
+import {roleRank,type CmsRole} from './roles'
 
 export const TEACHER_COOKIE='__Host-FLTeacher'
 export const SESSION_SECONDS=12*60*60
@@ -10,6 +11,7 @@ const encoder=new TextEncoder()
 export interface TeacherEnv {
   DB:D1
   TEACHER_EMAIL?:string
+  OWNER_EMAIL?:string
   EMAIL_FROM?:string
   EMAIL?:{send:(message:{from:string;to:string;subject:string;text:string;html:string})=>Promise<{messageId?:string}>}
 }
@@ -50,8 +52,10 @@ function validatePassword(password:unknown):password is string {
 }
 
 export function teacherMatches(identity:VerifiedIdentity,env:TeacherEnv):boolean {
-  const expected=(env.TEACHER_EMAIL??'').trim().toLowerCase()
-  return expected.length>0 && expected===identity.email.toLowerCase()
+  const email=identity.email.toLowerCase()
+  const teacher=(env.TEACHER_EMAIL??'').trim().toLowerCase()
+  const creator=(env.OWNER_EMAIL??'').trim().toLowerCase()
+  return (!!creator&&email===creator)||(!!teacher&&email===teacher)
 }
 function cookieToken(request:Request):string|null {
   const cookie=request.headers.get('Cookie')??''
@@ -62,12 +66,12 @@ function sessionCookie(token:string,age:number):string {
   return TEACHER_COOKIE+'='+token+'; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age='+age
 }
 export function clearSessionCookie():string {return sessionCookie('',0)}
-export async function getCredential(env:TeacherEnv):Promise<Credential|null>{
+export async function getCredential(env:TeacherEnv,identity:VerifiedIdentity):Promise<Credential|null>{
   return await env.DB.prepare('SELECT salt,password_hash,hash_iterations,failed_attempts,locked_until FROM lab_teacher_credentials WHERE email=?')
-    .bind(env.TEACHER_EMAIL?.trim().toLowerCase()??'').first<Credential>()
+    .bind(identity.email.toLowerCase()).first<Credential>()
 }
-export async function validTeacherSession(request:Request,env:TeacherEnv,identity:VerifiedIdentity):Promise<boolean>{
-  if(!teacherMatches(identity,env))return false
+export async function validTeacherSession(request:Request,env:TeacherEnv,identity:VerifiedIdentity,role:CmsRole):Promise<boolean>{
+  if(role==='student')return false
   const token=cookieToken(request)
   if(!token)return false
   const digest=await sha256(token)
@@ -87,14 +91,15 @@ const success=(body:Record<string,unknown>,cookie?:string):TeacherActionResult=>
 const fail=(message:string,status=400):TeacherActionResult=>({body:{error:message},status})
 
 export async function handleTeacherAction(
-  req:Request,env:TeacherEnv,identity:VerifiedIdentity,
+  req:Request,env:TeacherEnv,identity:VerifiedIdentity,role:CmsRole,
 ):Promise<TeacherActionResult>{
-  if(!teacherMatches(identity,env))return fail('선생님 계정만 이용할 수 있습니다.',403)
+  if(role==='student')return fail('관리자로 승인된 계정만 이용할 수 있습니다.',403)
   const url=new URL(req.url)
   if(req.method==='GET'&&url.pathname==='/api/teacher/status') {
-    const cred=await getCredential(env)
-    const loggedIn=Boolean(cred)&&await validTeacherSession(req,env,identity)
-    return success({teacher:true,email:identity.email,configured:!!cred,authenticated:loggedIn,resetEmail:identity.email})
+    const cred=await getCredential(env,identity)
+    const loggedIn=Boolean(cred)&&await validTeacherSession(req,env,identity,role)
+    return success({teacher:role==='teacher',role,rank:roleRank(role),email:identity.email,
+      configured:!!cred,authenticated:loggedIn,resetEmail:identity.email})
   }
   if(req.method!=='POST')return fail('지원하지 않는 작업입니다.',405)
   if(req.headers.get('Origin')!==url.origin||
@@ -108,10 +113,10 @@ export async function handleTeacherAction(
     if(!payload||typeof payload!=='object'||Array.isArray(payload))return fail('요청 형식이 올바르지 않습니다.')
   }catch{return fail('JSON 형식이 잘못되었습니다.')}
   const action=url.pathname
-  const cred=await getCredential(env)
+  const cred=await getCredential(env,identity)
 
   if(action==='/api/teacher/setup') {
-    // Only the verified Google teacher identity can bootstrap an unconfigured account.
+    // Only a signed Google identity that currently holds a CMS role can bootstrap its own password.
     if(cred)return fail('관리자 비밀번호가 이미 설정되어 있습니다.',409)
     if(!validatePassword(payload.password))return fail('비밀번호는 12~128자로 설정해 주세요.')
     const salt=randomSecret(16)
@@ -156,16 +161,16 @@ export async function handleTeacherAction(
     try {
       await env.EMAIL.send({
         from:address,to:identity.email,
-        subject:'Frontend Lab 관리자 비밀번호 재설정',
+        subject:'Blue Renaissance CMS 관리자 비밀번호 재설정',
         text:'요청하신 관리자 비밀번호 재설정 링크입니다.\n\n'+link+'\n\n15분 동안 한 번만 사용할 수 있습니다. 요청하지 않았다면 이 메일을 무시하세요.',
         html:'<p>Frontend Lab 관리자 비밀번호 재설정 요청입니다.</p><p><a href="'+link+'">비밀번호 재설정하기</a></p><p>15분간 유효하며 한 번만 사용할 수 있습니다.</p>',
       })
     } catch(e) {
       await env.DB.prepare('DELETE FROM lab_teacher_reset_tokens WHERE token_hash=?').bind(hash).run()
       console.error('Teacher reset mail delivery failed',e instanceof Error?e.message:'unknown')
-      return fail('메일 발송이 아직 불가능합니다. 선생님이 Cloudflare 수신 주소 인증을 완료했는지 확인해 주세요.',503)
+      return fail('메일 발송이 아직 불가능합니다. Cloudflare에서 해당 수신 주소 인증과 발송 허용 목록을 확인해 주세요.',503)
     }
-    return success({ok:true,message:'선생님 이메일로 비밀번호 재설정 링크를 보냈습니다.'})
+    return success({ok:true,message:'인증된 Google 이메일로 비밀번호 재설정 링크를 보냈습니다.'})
   }
   if(action==='/api/teacher/reset/confirm') {
     if(!cred)return fail('관리자 비밀번호가 아직 설정되지 않았습니다.',409)
