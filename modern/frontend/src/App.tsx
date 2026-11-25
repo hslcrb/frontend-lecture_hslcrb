@@ -5,6 +5,7 @@ import MyPage,{learningJson} from './MyPage'
 import PracticeQuiz from './PracticeQuiz'
 import LessonPage from './LessonPage'
 import './native.css'
+import GithubRepoBadge from './GithubRepoBadge'
 
 interface Session {
   authenticated:boolean;registered:boolean;email:string;studentName:string|null;
@@ -75,5 +76,5 @@ function StudentApp(){
   return <LibraryHome session={session}/>
 }
 export default function App(){
-  return window.location.pathname.startsWith('/admin')?<TeacherGate/>:<StudentApp/>
+  return <><GithubRepoBadge/>{window.location.pathname.startsWith('/admin')?<TeacherGate/>:<StudentApp/>}</>
 }
